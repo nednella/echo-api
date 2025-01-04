@@ -16,4 +16,10 @@ public final class ApiConfig {
         public static final String SIGNUP = "/signup";
     }
 
+    public static final class User {
+        public static final String ROOT = API_URL + "/user";
+        public static final String FIND_ALL = "/list";
+        public static final String FIND_BY_USERNAME = "/list/{username}";
+    }
+
 }
