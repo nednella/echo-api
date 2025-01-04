@@ -12,3 +12,6 @@ spring:
             enabled: true
         livereload:
             enabled: true
+
+cors:
+    allowed-origins: http://localhost:5173 # comma-separated values
