@@ -3,5 +3,9 @@ spring:
         name: echo-api
     profiles:
         active: dev
+
+# cors:
+#     allowed-origins: # comma-separated values
+
 server:
     port: 8080
