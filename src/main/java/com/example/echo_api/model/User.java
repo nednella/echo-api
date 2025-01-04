@@ -1,5 +1,6 @@
 package com.example.echo_api.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -27,7 +28,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "\"user\"")
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** Unique identifier */
     @Id
