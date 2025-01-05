@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -45,6 +46,8 @@ public class ContextAwareAuthenticationManager implements AuthenticationManager 
 
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
+    private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
+            .getContextHolderStrategy();
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -52,9 +55,9 @@ public class ContextAwareAuthenticationManager implements AuthenticationManager 
         Authentication result = authenticationManager.authenticate(authentication);
 
         // set the authenticated token in context
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        SecurityContext context = securityContextHolderStrategy.createEmptyContext();
         context.setAuthentication(result);
-        SecurityContextHolder.setContext(context);
+        securityContextHolderStrategy.setContext(context);
 
         // retrieve current http request and response
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
