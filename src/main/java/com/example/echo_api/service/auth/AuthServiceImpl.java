@@ -5,8 +5,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.echo_api.dto.request.SignInRequest;
@@ -24,15 +22,25 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
-    private final AuthenticationManager authManager;
+    private final AuthenticationManager contextAwareAuthenticationManager;
 
     @Override
-    public void signIn(SignInRequest signInRequest) {
+    public void signIn(SignInRequest login) throws UserNotFoundException {
+        authenticate(login.getUsername(), login.getPassword());
+    }
+
+    @Override
+    public void signUp(SignUpReqest signup) throws UserAlreadyExistsException {
+        userService.createUser(signup.getUsername(), signup.getPassword());
+        authenticate(signup.getUsername(), signup.getPassword());
+    }
+
+    private void authenticate(String username, String password) {
         try {
-            Authentication authRequest = new UsernamePasswordAuthenticationToken(signInRequest.getUsername(),
-                    signInRequest.getPassword());
-            Authentication authResponse = authManager.authenticate(authRequest);
-            SecurityContextHolder.getContext().setAuthentication(authResponse);
+            UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
+                    .unauthenticated(username, password);
+
+            contextAwareAuthenticationManager.authenticate(token);
         } catch (UserNotFoundException e) {
             // TODO: test/handle
         } catch (DisabledException e) {
@@ -42,11 +50,6 @@ public class AuthServiceImpl implements AuthService {
         } catch (BadCredentialsException e) {
             // TODO: test/handle
         }
-    }
-
-    @Override
-    public void signUp(SignUpReqest signUpRequest) throws UserAlreadyExistsException {
-        userService.createUser(signUpRequest.getUsername(), signUpRequest.getPassword());
     }
 
 }
