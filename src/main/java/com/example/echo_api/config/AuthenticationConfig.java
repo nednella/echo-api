@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 import com.example.echo_api.exception.user.UserNotFoundException;
 import com.example.echo_api.model.SecurityUser;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationConfig {
 
     private final UserRepository userRepository;
+    private final SecurityContextRepository securityContextRepository;
 
     /**
      * Configures a {@link UserDetailsService} that integrates Spring Security
@@ -87,7 +89,8 @@ public class AuthenticationConfig {
         authProvider.setUserDetailsService(jpaUserDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
 
-        return new ProviderManager(authProvider);
+        AuthenticationManager baseManager = new ProviderManager(authProvider);
+        return new ContextAwareAuthenticationManager(baseManager, securityContextRepository);
     }
 
 }

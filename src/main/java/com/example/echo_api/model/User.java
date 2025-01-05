@@ -1,12 +1,11 @@
 package com.example.echo_api.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,7 +28,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "\"user\"")
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** Unique identifier */
     @Id
@@ -45,9 +46,9 @@ public class User {
     @Column
     private String password;
 
-    /** User authorities related to permissions */
+    /** User role related to permissions */
     @Column
-    private Collection<? extends GrantedAuthority> authorities;
+    private String role;
 
     /** Enabled status */
     @Column
@@ -61,9 +62,10 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public User(String username, String password) {
+    public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     public void setUsername(String username) {
@@ -74,12 +76,12 @@ public class User {
 
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

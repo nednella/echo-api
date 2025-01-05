@@ -4,9 +4,19 @@ spring:
         url: jdbc:postgresql://localhost:5432/echo
         username: admin
         password: pw123
+
+    data:
+        redis:
+            host: http://localhost:6379
+
     sql:
         init:
             mode: always
+
+    docker:
+        compose:
+            lifecycle-management: start-only
+
     devtools:
         restart:
             enabled: true

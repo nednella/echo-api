@@ -4,10 +4,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.echo_api.model.User;
-import com.example.echo_api.repository.UserRepository;
+import com.example.echo_api.service.user.UserService;
 
 @SpringBootApplication
 public class Application {
@@ -17,10 +15,10 @@ public class Application {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder encoder) {
+	CommandLineRunner commandLineRunner(UserService userService) {
 		return args -> {
-			if (!userRepository.existsByUsername("admin")) {
-				userRepository.save(new User("admin", encoder.encode("password")));
+			if (!userService.existsByUsername("admin")) {
+				userService.createUser("admin", "password", "ROLE_ADMIN");
 			}
 		};
 	}
