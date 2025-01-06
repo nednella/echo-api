@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.echo_api.exception.user.UserAlreadyExistsException;
 import com.example.echo_api.exception.user.UserNotFoundException;
-import com.example.echo_api.model.User;
-import com.example.echo_api.repository.UserRepository;
+import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

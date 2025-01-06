@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.example.echo_api.exception.user.UserAlreadyExistsException;
 import com.example.echo_api.exception.user.UserNotFoundException;
-import com.example.echo_api.model.User;
+import com.example.echo_api.persistence.model.User;
 
 public interface UserService {
 

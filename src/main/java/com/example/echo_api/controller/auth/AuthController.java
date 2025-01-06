@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
-import com.example.echo_api.dto.request.SignInRequest;
-import com.example.echo_api.dto.request.SignUpReqest;
+import com.example.echo_api.persistence.dto.request.SignInRequest;
+import com.example.echo_api.persistence.dto.request.SignUpReqest;
 import com.example.echo_api.service.auth.AuthService;
 
 import jakarta.validation.Valid;

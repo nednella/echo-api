@@ -11,8 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 import com.example.echo_api.exception.user.UserNotFoundException;
-import com.example.echo_api.model.SecurityUser;
-import com.example.echo_api.repository.UserRepository;
+import com.example.echo_api.persistence.model.SecurityUser;
+import com.example.echo_api.persistence.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

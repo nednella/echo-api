@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
-import com.example.echo_api.model.User;
+import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.service.user.UserService;
 
 import lombok.RequiredArgsConstructor;
