@@ -7,10 +7,10 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import com.example.echo_api.api.v1.auth.request.SignInRequest;
+import com.example.echo_api.api.v1.auth.request.SignUpReqest;
 import com.example.echo_api.exception.user.UserAlreadyExistsException;
 import com.example.echo_api.exception.user.UserNotFoundException;
-import com.example.echo_api.persistence.dto.request.SignInRequest;
-import com.example.echo_api.persistence.dto.request.SignUpReqest;
 import com.example.echo_api.service.user.UserService;
 
 import jakarta.transaction.Transactional;

@@ -1,4 +1,4 @@
-package com.example.echo_api.controller.api.v1;
+package com.example.echo_api.api.v1.user;
 
 import java.util.List;
 
