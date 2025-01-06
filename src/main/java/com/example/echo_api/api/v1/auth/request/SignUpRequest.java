@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class SignUpReqest {
+public class SignUpRequest {
 
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 15, message = "Username must be between 3 and 15 characters")
