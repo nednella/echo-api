@@ -2,7 +2,6 @@ package com.example.echo_api.api.v1.user;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +29,8 @@ public class UserController {
 
     @GetMapping(ApiConfig.User.FIND_BY_USERNAME)
     public ResponseEntity<User> findByUsername(@PathVariable String username) {
-        return userService.findByUsername(username)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        User user = userService.findByUsername(username);
+        return ResponseEntity.ok(user);
     }
 
 }
