@@ -9,10 +9,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -22,7 +28,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(fl -> fl.disable())
-                .logout(lo -> lo.logoutUrl("/api/v1/auth/logout"))
+                .logout(lo -> lo
+                        .logoutUrl("/api/v1/auth/logout")
+                        .logoutSuccessHandler(customLogoutSuccessHandler))
+                .exceptionHandling(eh -> eh
+                        .authenticationEntryPoint(customAuthenticationEntryPoint))
                 .sessionManagement(sm -> sm
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .sessionFixation(sf -> sf.migrateSession()))
