@@ -5,12 +5,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import com.example.echo_api.api.v1.auth.request.SignInRequest;
-import com.example.echo_api.api.v1.auth.request.SignUpReqest;
-import com.example.echo_api.exception.user.UserAlreadyExistsException;
-import com.example.echo_api.exception.user.UserNotFoundException;
+import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
 import com.example.echo_api.service.user.UserService;
 
 import jakarta.transaction.Transactional;
@@ -25,28 +23,24 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager contextAwareAuthenticationManager;
 
     @Override
-    public void signIn(SignInRequest login) throws UserNotFoundException {
-        authenticate(login.getUsername(), login.getPassword());
+    public void signIn(String username, String password) throws AuthenticationException {
+        authenticate(username, password);
     }
 
     @Override
-    public void signUp(SignUpReqest signup) throws UserAlreadyExistsException {
-        userService.createUser(signup.getUsername(), signup.getPassword());
-        authenticate(signup.getUsername(), signup.getPassword());
+    public void signUp(String username, String password)
+            throws UsernameAlreadyExistsException, AuthenticationException {
+        userService.createUser(username, password);
+        authenticate(username, password);
     }
 
-    private void authenticate(String username, String password) {
+    private void authenticate(String username, String password) throws AuthenticationException {
         try {
             UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
                     .unauthenticated(username, password);
-
             contextAwareAuthenticationManager.authenticate(token);
-        } catch (DisabledException e) {
-            // TODO: test/handle
-        } catch (LockedException e) {
-            // TODO: test/handle
-        } catch (BadCredentialsException e) {
-            // TODO: test/handle
+        } catch (DisabledException | LockedException | BadCredentialsException ex) {
+            throw ex;
         }
     }
 

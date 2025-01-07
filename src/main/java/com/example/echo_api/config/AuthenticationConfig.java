@@ -6,11 +6,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 
-import com.example.echo_api.exception.user.UserNotFoundException;
 import com.example.echo_api.persistence.model.SecurityUser;
 import com.example.echo_api.persistence.repository.UserRepository;
 
@@ -58,7 +58,7 @@ public class AuthenticationConfig {
         return username -> userRepository
                 .findByUsername(username)
                 .map(SecurityUser::new)
-                .orElseThrow(() -> new UserNotFoundException(username));
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     /**
