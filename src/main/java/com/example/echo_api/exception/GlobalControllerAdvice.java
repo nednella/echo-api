@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ControllerAdvice
-public class GlobalExceptionHandlerAdvice extends AbstractControllerAdvice {
+public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     @ExceptionHandler({ InsufficientAuthenticationException.class })
     ResponseEntity<?> handleInsufficientAuthenticationException(HttpServletRequest request, Exception ex) {
