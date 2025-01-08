@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final FilterChainExceptionHandler filterChainExceptionHandler;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -31,12 +32,12 @@ public class SecurityConfig {
                 .logout(lo -> lo
                         .logoutUrl("/api/v1/auth/logout")
                         .logoutSuccessHandler(customLogoutSuccessHandler))
-                .exceptionHandling(eh -> eh
-                        .authenticationEntryPoint(customAuthenticationEntryPoint))
                 .sessionManagement(sm -> sm
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .sessionFixation(sf -> sf.migrateSession()))
-                .securityContext(sc -> sc.requireExplicitSave(false));
+                .securityContext(sc -> sc.requireExplicitSave(false))
+                .exceptionHandling(ex -> ex.disable())
+                .addFilterBefore(filterChainExceptionHandler, LogoutFilter.class);
 
         return http.build();
     }
