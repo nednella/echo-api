@@ -16,6 +16,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Custom {@link OncePerRequestFilter} class to be consumed as part of the
+ * Spring Security filter chain.
+ * 
+ * <p>
+ * The filter is responsible for catching exceptions thrown during the filter
+ * chain process, and delegating their resolution to the
+ * {@link HandlerExceptionResolver}, for consistent handling via the
+ * {@link GlobalControllerAdvice}.
+ * 
+ */
 @Slf4j
 @Component
 public class FilterChainExceptionHandler extends OncePerRequestFilter {
@@ -43,9 +54,12 @@ public class FilterChainExceptionHandler extends OncePerRequestFilter {
              * unauthenticated users.
              * 
              * NOTE: Spring Security creates anonymous authentication objects for
-             * unauthenticated users, which are rejected on the grounds of not having
-             * permissions to access protected endpoints, and not on the grounds of being
-             * unauthenticated.
+             * unauthenticated users. Those users may encounter an
+             * AuthorizationDeniedException when requesting protected endpoints on the
+             * grounds of not having the required permissions (status code 403).
+             * 
+             * The more suitable exception would be an InsufficientAuthenticationException
+             * due to the unauthorised request (status code 401).
              * 
              * For more information, refer to:
              * https://docs.spring.io/spring-security/reference/servlet/authentication/anonymous.html

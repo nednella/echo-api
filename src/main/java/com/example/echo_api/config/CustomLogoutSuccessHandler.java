@@ -10,6 +10,16 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Custom {@link LogoutSuccessHandler} class to be consumed as part of the
+ * Spring Security default {@code /logout} process.
+ * 
+ * <p>
+ * The class ensures that the logout endpoint always returns a 204 status code
+ * instead of a 4xx status code, even though the actual logout request is
+ * successfully processed.
+ * 
+ */
 @Component
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 

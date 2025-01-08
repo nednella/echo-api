@@ -1,7 +1,7 @@
 package com.example.echo_api.config;
 
 /**
- * This class contains the API URL constants used throughout the application..
+ * This class contains the API URL constants used throughout the application.
  * It defines the base URLs for auth and API routes, along with all relevant
  * endpoints.
  */
