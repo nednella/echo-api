@@ -1,4 +1,4 @@
-package com.example.echo_api.config;
+package com.example.echo_api.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -60,9 +60,11 @@ public class ContextAwareAuthenticationManager implements AuthenticationManager 
         securityContextHolderStrategy.setContext(context);
 
         // retrieve current http request and response
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .currentRequestAttributes())
                 .getRequest();
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder
+                .currentRequestAttributes())
                 .getResponse();
 
         // save the context to the http session for persistence

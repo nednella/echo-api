@@ -1,11 +1,12 @@
-package com.example.echo_api.repository;
+package com.example.echo_api.persistence.repository;
 
 import java.util.UUID;
 
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.echo_api.model.User;
+import com.example.echo_api.persistence.model.User;
+
 import java.util.Optional;
 
 @Repository

@@ -1,15 +1,14 @@
 package com.example.echo_api.service.user;
 
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.echo_api.exception.user.UserAlreadyExistsException;
-import com.example.echo_api.exception.user.UserNotFoundException;
-import com.example.echo_api.model.User;
-import com.example.echo_api.repository.UserRepository;
+import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
+import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +27,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User findByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     @Override
@@ -38,48 +38,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(String username, String password, String role) throws UserAlreadyExistsException {
+    public void createUser(String username, String password, String role) throws UsernameAlreadyExistsException {
         if (existsByUsername(username)) {
-            throw new UserAlreadyExistsException(username);
+            throw new UsernameAlreadyExistsException();
         }
 
         User user = new User(username, passwordEncoder.encode(password), role);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void enableUser(String username) throws UserAlreadyExistsException {
-        User user = findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
-
-        user.setEnabled(true);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void disableUser(String username) throws UserAlreadyExistsException {
-        User user = findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
-
-        user.setEnabled(false);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void updateUsername(String username, String newUsername) throws UserNotFoundException {
-        User user = findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
-
-        user.setUsername(newUsername);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void updatePassword(String username, String newPassword) throws UserNotFoundException {
-        User user = findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
-
-        user.setPassword(newPassword);
         userRepository.save(user);
     }
 

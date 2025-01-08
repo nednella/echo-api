@@ -1,4 +1,4 @@
-package com.example.echo_api.config;
+package com.example.echo_api.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,13 +6,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 
-import com.example.echo_api.exception.user.UserNotFoundException;
-import com.example.echo_api.model.SecurityUser;
-import com.example.echo_api.repository.UserRepository;
+import com.example.echo_api.persistence.model.SecurityUser;
+import com.example.echo_api.persistence.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -58,7 +58,7 @@ public class AuthenticationConfig {
         return username -> userRepository
                 .findByUsername(username)
                 .map(SecurityUser::new)
-                .orElseThrow(() -> new UserNotFoundException(username));
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     /**

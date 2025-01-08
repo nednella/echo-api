@@ -1,14 +1,13 @@
 package com.example.echo_api.service.auth;
 
-import com.example.echo_api.dto.request.SignInRequest;
-import com.example.echo_api.dto.request.SignUpReqest;
-import com.example.echo_api.exception.user.UserAlreadyExistsException;
-import com.example.echo_api.exception.user.UserNotFoundException;
+import org.springframework.security.core.AuthenticationException;
+
+import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
 
 public interface AuthService {
 
-    public void signIn(SignInRequest signInRequest) throws UserNotFoundException;
+    public void signIn(String username, String password) throws AuthenticationException;
 
-    public void signUp(SignUpReqest signUpRequest) throws UserAlreadyExistsException;
+    public void signUp(String username, String password) throws UsernameAlreadyExistsException, AuthenticationException;
 
 }
