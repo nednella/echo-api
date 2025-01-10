@@ -1,4 +1,4 @@
-package com.example.echo_api.api.v1.user;
+package com.example.echo_api.controller.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

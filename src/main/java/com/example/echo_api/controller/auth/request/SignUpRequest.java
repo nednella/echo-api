@@ -1,4 +1,4 @@
-package com.example.echo_api.api.v1.auth.request;
+package com.example.echo_api.controller.auth.request;
 
 import com.example.echo_api.config.ValidationConfig;
 
