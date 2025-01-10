@@ -1,4 +1,4 @@
-package com.example.echo_api.exception;
+package com.example.echo_api.persistence.dto.response.error;
 
 import java.time.Instant;
 

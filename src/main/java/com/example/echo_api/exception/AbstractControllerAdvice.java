@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import com.example.echo_api.persistence.dto.response.error.ErrorBody;
+import com.example.echo_api.persistence.dto.response.error.ErrorWrapper;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
