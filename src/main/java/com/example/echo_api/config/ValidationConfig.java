@@ -13,7 +13,7 @@ public class ValidationConfig {
          * </ul>
          */
         public static final String username = "^[a-zA-Z0-9_]{3,15}$";
-        public static final String usernameMessage = "Username may only contain letters, numbers and underscores";
+        public static final String usernameMessage = "username must be 3-15 characters long and can only include alphanumerics or underscores";
 
         /**
          * Password regex pattern
@@ -27,7 +27,7 @@ public class ValidationConfig {
          * </ul>
          */
         public static final String password = "^(?=.*[a-zA-Z])(?=.*\\d)[\\S]{6,}$";
-        public static final String passwordMessage = "Password must contain at least 1 letter, 1 number and 6 characters";
+        public static final String passwordMessage = "password must be at least 6 characters long and contain at least 1 letter and 1 number";
 
     }
 
