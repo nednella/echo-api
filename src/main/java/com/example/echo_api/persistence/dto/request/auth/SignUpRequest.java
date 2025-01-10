@@ -1,4 +1,4 @@
-package com.example.echo_api.controller.auth.request;
+package com.example.echo_api.persistence.dto.request.auth;
 
 import com.example.echo_api.config.ValidationConfig;
 
