@@ -2,6 +2,8 @@ package com.example.echo_api.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -30,6 +32,7 @@ public abstract class AbstractControllerAdvice {
      *          "timestamp": ,
      *          "status": ,
      *          "message": ,
+     *          "details": ,  // optional field that can be omitted with null
      *          "path": ,
      *      }
      * }
@@ -38,6 +41,8 @@ public abstract class AbstractControllerAdvice {
      * @param request The incoming HTTP request that resulted in the exception.
      * @param status  The HTTP status code to be returned in the response.
      * @param message A message describing the error.
+     * @param details An optional object containing additional information on the
+     *                error.
      * @return A {@link ResponseEntity} containing an {@link ErrorWrapper} with the
      *         generated error details.
      * 
@@ -45,13 +50,15 @@ public abstract class AbstractControllerAdvice {
      * @see ErrorWrapper
      */
     protected ResponseEntity<?> createExceptionHandler(
-            HttpServletRequest request,
-            HttpStatus status,
-            String message) {
+            @NonNull HttpServletRequest request,
+            @NonNull HttpStatus status,
+            @NonNull String message,
+            @Nullable Object details) {
 
         ErrorBody error = new ErrorBody(
                 status,
                 message,
+                details,
                 request.getRequestURI());
 
         return ResponseEntity

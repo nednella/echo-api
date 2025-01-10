@@ -20,9 +20,11 @@ public class UserControllerAdvice extends AbstractControllerAdvice {
     ResponseEntity<?> handleUsernameNotFoundException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        return createExceptionHandler(request,
+        return createExceptionHandler(
+                request,
                 HttpStatus.BAD_REQUEST,
-                "username not found");
+                "username not found",
+                null);
     }
 
     // TODO: redundant class. User creation only occurs via AuthControllers
@@ -31,9 +33,11 @@ public class UserControllerAdvice extends AbstractControllerAdvice {
     ResponseEntity<?> handleUsernameAlreadyExistsException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        return createExceptionHandler(request,
+        return createExceptionHandler(
+                request,
                 HttpStatus.BAD_REQUEST,
-                "username already exists");
+                "username already exists",
+                null);
     }
 
 }

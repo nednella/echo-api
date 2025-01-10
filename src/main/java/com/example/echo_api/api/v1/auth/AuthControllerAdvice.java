@@ -22,27 +22,33 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
     ResponseEntity<?> handleAuthenticationException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        return createExceptionHandler(request,
+        return createExceptionHandler(
+                request,
                 HttpStatus.BAD_REQUEST,
-                "username or password is incorrect");
+                "username or password is incorrect",
+                null);
     }
 
     @ExceptionHandler({ UsernameAlreadyExistsException.class })
     ResponseEntity<?> handleUsernameAlreadyExistsException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        return createExceptionHandler(request,
+        return createExceptionHandler(
+                request,
                 HttpStatus.BAD_REQUEST,
-                "username already exists");
+                "username already exists",
+                null);
     }
 
     @ExceptionHandler({ AccountStatusException.class })
     ResponseEntity<?> handleAccountStatusException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        return createExceptionHandler(request,
+        return createExceptionHandler(
+                request,
                 HttpStatus.UNAUTHORIZED,
-                "account is abnormal");
+                "account status is abnormal",
+                ex.getMessage().toLowerCase());
     }
 
 }

@@ -29,9 +29,11 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
     ResponseEntity<?> handleInsufficientAuthenticationException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        return createExceptionHandler(request,
+        return createExceptionHandler(
+                request,
                 HttpStatus.UNAUTHORIZED,
-                "unauthorised request");
+                "Unauthorised request",
+                null);
     }
 
     /** 403 */
@@ -39,9 +41,11 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
     ResponseEntity<?> handleAccessDeniedException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        return createExceptionHandler(request,
+        return createExceptionHandler(
+                request,
                 HttpStatus.FORBIDDEN,
-                "access denied");
+                "Access denied",
+                null);
     }
 
     /** 404 */
@@ -49,9 +53,11 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
     ResponseEntity<?> handleNotFoundException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        return createExceptionHandler(request,
+        return createExceptionHandler(
+                request,
                 HttpStatus.NOT_FOUND,
-                "resource not found");
+                "Resource not found",
+                null);
     }
 
     /** 500 */
@@ -61,7 +67,8 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
         return createExceptionHandler(request,
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "an unexpected error occurred");
+                "An unexpected error occurred",
+                null);
     }
 
 }
