@@ -5,8 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import com.example.echo_api.persistence.dto.response.error.ErrorBody;
-import com.example.echo_api.persistence.dto.response.error.ErrorWrapper;
+import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -23,21 +22,19 @@ import jakarta.servlet.http.HttpServletRequest;
 public abstract class AbstractControllerAdvice {
 
     /**
-     * Creates a custom error response JSON structure, providing uniform responses
-     * across the application.
+     * Creates and returns a custom {@link ErrorResponse}, providing uniform JSON
+     * responses across the application.
      * 
      * <p>
      * The returned error will follow the structure:
      * 
      * <pre>
      * {
-     *      "error": {
-     *          "timestamp": ,
-     *          "status": ,
-     *          "message": ,
-     *          "details": ,  // optional field that can be omitted with null
-     *          "path": ,
-     *      }
+     *      "timestamp": ,
+     *      "status": ,
+     *      "message": ,
+     *      "details": ,  // optional field that can be omitted with null
+     *      "path": 
      * }
      * </pre>
      * 
@@ -49,8 +46,7 @@ public abstract class AbstractControllerAdvice {
      * @return A {@link ResponseEntity} containing an {@link ErrorWrapper} with the
      *         generated error details.
      * 
-     * @see ErrorBody
-     * @see ErrorWrapper
+     * @see ErrorResponse
      */
     protected ResponseEntity<?> createExceptionHandler(
             @NonNull HttpServletRequest request,
@@ -58,7 +54,7 @@ public abstract class AbstractControllerAdvice {
             @NonNull String message,
             @Nullable Object details) {
 
-        ErrorBody error = new ErrorBody(
+        ErrorResponse error = new ErrorResponse(
                 status,
                 message,
                 details,
@@ -66,7 +62,7 @@ public abstract class AbstractControllerAdvice {
 
         return ResponseEntity
                 .status(status)
-                .body(new ErrorWrapper(error));
+                .body(error);
     }
 
 }
