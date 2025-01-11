@@ -32,7 +32,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
         return createExceptionHandler(
                 request,
                 HttpStatus.UNAUTHORIZED,
-                "Unauthorised request",
+                "unauthorised request",
                 null);
     }
 
@@ -44,7 +44,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
         return createExceptionHandler(
                 request,
                 HttpStatus.FORBIDDEN,
-                "Access denied",
+                "access denied",
                 null);
     }
 
@@ -56,7 +56,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
         return createExceptionHandler(
                 request,
                 HttpStatus.NOT_FOUND,
-                "Resource not found",
+                "resource not found",
                 null);
     }
 
@@ -67,7 +67,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
         return createExceptionHandler(request,
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error occurred",
+                "an unexpected error occurred",
                 null);
     }
 

@@ -1,4 +1,4 @@
-package com.example.echo_api.api.v1.auth;
+package com.example.echo_api.controller.auth;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.echo_api.api.v1.auth.request.SignInRequest;
-import com.example.echo_api.api.v1.auth.request.SignUpRequest;
 import com.example.echo_api.config.ApiConfig;
+import com.example.echo_api.persistence.dto.request.auth.SignInRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignUpRequest;
 import com.example.echo_api.service.auth.AuthService;
 
 import jakarta.validation.Valid;

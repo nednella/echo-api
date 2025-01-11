@@ -1,4 +1,4 @@
-package com.example.echo_api.api.v1.auth.request;
+package com.example.echo_api.persistence.dto.request.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

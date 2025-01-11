@@ -1,4 +1,4 @@
-package com.example.echo_api.api.v1.auth;
+package com.example.echo_api.controller.auth;
 
 import java.util.LinkedHashMap;
 import java.util.List;

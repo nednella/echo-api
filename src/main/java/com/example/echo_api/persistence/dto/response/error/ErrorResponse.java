@@ -1,4 +1,4 @@
-package com.example.echo_api.exception;
+package com.example.echo_api.persistence.dto.response.error;
 
 import java.time.Instant;
 
@@ -8,18 +8,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public record ErrorBody(
+public record ErrorResponse(
         String timestamp,
         int status,
         String message,
         Object details,
         String path) {
-    public ErrorBody(
+
+    public ErrorResponse(
             HttpStatus status,
             String message,
             Object details,
             String path) {
-        this(Instant.now().toString(),
+        this(
+                Instant.now().toString(),
                 status.value(),
                 message,
                 details,
