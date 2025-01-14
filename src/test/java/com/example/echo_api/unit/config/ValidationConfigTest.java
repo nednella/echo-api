@@ -26,11 +26,11 @@ public class ValidationConfigTest {
     @BeforeAll
     public static void readFiles() {
         try {
-            validUsernames = readFile("valid_usernames.txt");
-            invalidUsernames = readFile("invalid_usernames.txt");
+            validUsernames = readFile("data/valid_usernames.txt");
+            invalidUsernames = readFile("data/invalid_usernames.txt");
 
-            validPasswords = readFile("valid_passwords.txt");
-            invalidPasswords = readFile("invalid_passwords.txt");
+            validPasswords = readFile("data/valid_passwords.txt");
+            invalidPasswords = readFile("data/invalid_passwords.txt");
         } catch (IOException ex) {
             throw new RuntimeException("Error reading from files", ex);
         }
