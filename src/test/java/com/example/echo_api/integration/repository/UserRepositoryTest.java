@@ -7,81 +7,79 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.example.echo_api.integration.IntegrationTest;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 
+/**
+ * Integration test class for {@link UserRepository}.
+ */
 @DataJpaTest
-@Testcontainers
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class UserRepositoryTest {
-
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
+public class UserRepositoryTest extends IntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
 
     private User testUser;
 
-    @Test
-    public void containerConnectionEstablished() {
-        assertTrue(postgres.isCreated());
-        assertTrue(postgres.isRunning());
-
-    }
-
+    /**
+     * Saves a {@link User} object to the {@link UserRepository} before each test.
+     */
     @BeforeEach
     public void setUp() {
-        // arrange
         testUser = new User("test", "123");
         userRepository.save(testUser);
     }
 
+    /**
+     * Tests the {@link UserRepository#findByUsername(String)} method to
+     * verify that a user can be found by their username.
+     */
     @Test
     public void UserRepository_FindByUsername_ReturnUser() {
-        // act
         Optional<User> foundUser = userRepository.findByUsername(testUser.getUsername());
 
-        // assert
         assertNotNull(foundUser);
         assertTrue(foundUser.isPresent());
         assertEquals(testUser, foundUser.get());
     }
 
+    /**
+     * Tests the {@link UserRepository#findByUsername(String)} method to
+     * verify that searching for a non-existent user returns an empty result.
+     */
     @Test
     public void UserRepository_FindByUsername_ReturnEmpty() {
-        // act
         Optional<User> foundUser = userRepository.findByUsername("nonExistentUser");
 
-        // assert
         assertNotNull(foundUser);
         assertTrue(foundUser.isEmpty());
     }
 
+    /**
+     * Tests the {@link UserRepository#existsByUsername(String)} method to
+     * verify that the repository correctly identifies that a user exists
+     * when searching for a valid username.
+     */
     @Test
     public void UserRepository_ExistsByUsername_ReturnTrue() {
-        // act
         boolean exists = userRepository.existsByUsername(testUser.getUsername());
 
-        // assert
         assertNotNull(exists);
         assertTrue(exists);
     }
 
+    /**
+     * Tests the {@link UserRepository#existsByUsername(String)} method to
+     * verify that the repository correctly identifies that a user does not exist
+     * when searching for a non-existent username.
+     */
     @Test
     public void UserRepository_ExistsByUsername_ReturnFalse() {
-        // act
         boolean exists = userRepository.existsByUsername("nonExistentUser");
 
-        // assert
         assertNotNull(exists);
         assertFalse(exists);
     }
