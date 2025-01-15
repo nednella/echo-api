@@ -22,6 +22,9 @@ import com.example.echo_api.controller.user.UserController;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.service.user.UserService;
 
+/**
+ * Unit test class for {@link UserController}.
+ */
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTest {
@@ -34,6 +37,9 @@ public class UserControllerTest {
 
     private User testUser;
 
+    /**
+     * Sets up a {@link User} object before each test.
+     */
     @BeforeEach
     public void setUp() {
         testUser = new User(

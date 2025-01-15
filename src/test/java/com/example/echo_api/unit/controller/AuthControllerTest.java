@@ -26,6 +26,9 @@ import com.example.echo_api.persistence.dto.request.auth.SignUpRequest;
 import com.example.echo_api.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Unit test class for {@link AuthController}.
+ */
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class AuthControllerTest {
@@ -45,6 +48,10 @@ public class AuthControllerTest {
     private SignUpRequest validSignUpRequest;
     private SignUpRequest invalidSignUpRequest;
 
+    /**
+     * Sets up valid and invalid {@link SignInRequest} {@link SignUpRequest} objects
+     * before each test.
+     */
     @BeforeEach
     public void setUp() {
         validSignInRequest = new SignInRequest("admin", "password");
