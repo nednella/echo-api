@@ -62,7 +62,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignIn_Return200() throws Exception {
+    public void AuthController_SignIn_Return204() throws Exception {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validSignInRequest);
@@ -190,8 +190,8 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignUp_Return200() throws Exception {
-        // api: POST /api/v1/auth/signup ==> 200 : "Registration successful!"
+    public void AuthController_SignUp_Return204() throws Exception {
+        // api: POST /api/v1/auth/signup ==> 204 : No Content
         String endpoint = ApiConfig.Auth.SIGNUP;
         String body = objectMapper.writeValueAsString(validSignUpRequest);
 
