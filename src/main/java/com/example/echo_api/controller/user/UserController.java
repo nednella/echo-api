@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping(ApiConfig.User.FIND_BY_USERNAME)
-    public ResponseEntity<User> findByUsername(@PathVariable String username) {
+    public ResponseEntity<User> findByUsername(@PathVariable("username") String username) {
         User user = userService.findByUsername(username);
         return ResponseEntity.ok(user);
     }
