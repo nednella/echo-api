@@ -64,13 +64,9 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignIn_ReturnVoid() {
-        // arrange mock behaviour
         when(authenticationManager.authenticate(token)).thenReturn(token);
 
-        // act & assert
         assertDoesNotThrow(() -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
-
-        // verify
         verify(authenticationManager, times(1)).authenticate(token);
     }
 
@@ -85,14 +81,10 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignIn_ThrowDisabledException() {
-        // arrange mock behaviour
-        when(authenticationManager.authenticate(token)).thenThrow(DisabledException.class);
+        when(authenticationManager.authenticate(token)).thenThrow(new DisabledException(""));
 
-        // act & assert
         assertThrows(DisabledException.class,
                 () -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
-
-        // verify
         verify(authenticationManager, times(1)).authenticate(token);
     }
 
@@ -107,14 +99,10 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignIn_ThrowLockedException() {
-        // arrange mock behaviour
-        when(authenticationManager.authenticate(token)).thenThrow(LockedException.class);
+        when(authenticationManager.authenticate(token)).thenThrow(new LockedException(""));
 
-        // act & assert
         assertThrows(LockedException.class,
                 () -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
-
-        // verify
         verify(authenticationManager, times(1)).authenticate(token);
     }
 
@@ -129,14 +117,10 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignIn_ThrowBadCredentialsException() {
-        // arrange mock behaviour
-        when(authenticationManager.authenticate(token)).thenThrow(BadCredentialsException.class);
+        when(authenticationManager.authenticate(token)).thenThrow(new BadCredentialsException(""));
 
-        // act & assert
         assertThrows(BadCredentialsException.class,
                 () -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
-
-        // verify
         verify(authenticationManager, times(1)).authenticate(token);
     }
 
@@ -155,17 +139,15 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignUp_ReturnVoid() {
-        // arrange mock behaviour
         doNothing()
                 .when(userService)
                 .createUser(testUser.getUsername(), testUser.getPassword());
+
         when(authenticationManager.authenticate(token))
                 .thenReturn(token);
 
-        // act & assert
         assertDoesNotThrow(() -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        // verify
         verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, times(1)).authenticate(token);
     }
@@ -181,16 +163,13 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignUp_ThrowUsernameAlreadyExists() {
-        // arrange mock behaviour
-        doThrow(UsernameAlreadyExistsException.class)
+        doThrow(new UsernameAlreadyExistsException())
                 .when(userService)
                 .createUser(testUser.getUsername(), testUser.getPassword());
 
-        // act & assert
         assertThrows(UsernameAlreadyExistsException.class,
                 () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        // verify
         verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, never()).authenticate(any());
     }
@@ -210,18 +189,16 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignUp_ThrowDisabledException() {
-        // arrange mock behaviour
         doNothing()
                 .when(userService)
                 .createUser(testUser.getUsername(), testUser.getPassword());
-        when(authenticationManager.authenticate(token))
-                .thenThrow(DisabledException.class);
 
-        // act & assert
+        when(authenticationManager.authenticate(token))
+                .thenThrow(new DisabledException(""));
+
         assertThrows(DisabledException.class,
                 () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        // verify
         verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, times(1)).authenticate(token);
     }
@@ -241,18 +218,16 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignUp_ThrowLockedException() {
-        // arrange mock behaviour
         doNothing()
                 .when(userService)
                 .createUser(testUser.getUsername(), testUser.getPassword());
-        when(authenticationManager.authenticate(token))
-                .thenThrow(LockedException.class);
 
-        // act & assert
+        when(authenticationManager.authenticate(token))
+                .thenThrow(new LockedException(""));
+
         assertThrows(LockedException.class,
                 () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        // verify
         verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, times(1)).authenticate(token);
     }
@@ -272,18 +247,16 @@ public class AuthServiceTest {
      */
     @Test
     public void AuthService_SignUp_ThrowBadCredentialsException() {
-        // arrange mock behaviour
         doNothing()
                 .when(userService)
                 .createUser(testUser.getUsername(), testUser.getPassword());
-        when(authenticationManager.authenticate(token))
-                .thenThrow(BadCredentialsException.class);
 
-        // act & assert
+        when(authenticationManager.authenticate(token))
+                .thenThrow(new BadCredentialsException(""));
+
         assertThrows(BadCredentialsException.class,
                 () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        // verify
         verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, times(1)).authenticate(token);
     }

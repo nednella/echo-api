@@ -58,17 +58,12 @@ public class UserServiceTest {
      */
     @Test
     public void UserService_FindAll_ReturnListOfUser() {
-        // arrange mock behaviour
         when(userRepository.findAll()).thenReturn(List.of(testUser));
 
-        // act
         List<User> users = userService.findAll();
 
-        // assert
         assertEquals(1, users.size());
         assertIterableEquals(List.of(testUser), users);
-
-        // verify
         verify(userRepository, times(1)).findAll();
     }
 
@@ -82,17 +77,12 @@ public class UserServiceTest {
      */
     @Test
     public void UserService_FindAll_ReturnListOfEmpty() {
-        // arrange mock behaviour
         when(userRepository.findAll()).thenReturn(List.of());
 
-        // act
         List<User> users = userService.findAll();
 
-        // assert
         assertEquals(0, users.size());
         assertIterableEquals(List.of(), users);
-
-        // verify
         verify(userRepository, times(1)).findAll();
     }
 
@@ -107,16 +97,11 @@ public class UserServiceTest {
      */
     @Test
     public void UserService_FindByUsername_ReturnUser() {
-        // arrange mock behaviour
         when(userRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
 
-        // act
         User foundUser = userService.findByUsername(testUser.getUsername());
 
-        // assert
         assertEquals(testUser, foundUser);
-
-        // verify
         verify(userRepository, times(1)).findByUsername(testUser.getUsername());
     }
 
@@ -132,14 +117,10 @@ public class UserServiceTest {
      */
     @Test
     public void UserService_FindByUsername_ThrowUsernameNotFound() {
-        // arrange mock behaviour
-        when(userRepository.findByUsername(testUser.getUsername())).thenThrow(UsernameNotFoundException.class);
+        when(userRepository.findByUsername(testUser.getUsername())).thenThrow(new UsernameNotFoundException(""));
 
-        // act & assert
         assertThrows(UsernameNotFoundException.class,
                 () -> userService.findByUsername(testUser.getUsername()));
-
-        // verify
         verify(userRepository, times(1)).findByUsername(testUser.getUsername());
     }
 
@@ -154,16 +135,11 @@ public class UserServiceTest {
      */
     @Test
     public void UserService_ExistsByUsername_ReturnTrue() {
-        // arrange mock behaviour
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
-        // act
         boolean exists = userService.existsByUsername(testUser.getUsername());
 
-        // assert
         assertTrue(exists);
-
-        // verify
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
 
@@ -178,16 +154,11 @@ public class UserServiceTest {
      */
     @Test
     public void UserService_ExistsByUsername_ReturnFalse() {
-        // arrange mock behaviour
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
 
-        // act
         boolean exists = userService.existsByUsername(testUser.getUsername());
 
-        // assert
         assertFalse(exists);
-
-        // verify
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
 
@@ -208,15 +179,12 @@ public class UserServiceTest {
      */
     @Test
     public void UserService_CreateUser_ReturnVoid() {
-        // arrange mock behaviour
         when(userRepository.save(testUser)).thenReturn(testUser);
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        // act
         userService.createUser(testUser.getUsername(), testUser.getPassword());
 
-        // verify
         verify(userRepository, times(1)).save(testUser);
         verify(passwordEncoder, times(1)).encode(testUser.getPassword());
     }
@@ -233,14 +201,10 @@ public class UserServiceTest {
      */
     @Test
     public void UserService_CreateUser_ThrowUsernameAlreadyExists() {
-        // arrange mock behaviour
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
-        // act & assert
         assertThrows(UsernameAlreadyExistsException.class,
                 () -> userService.createUser(testUser.getUsername(), testUser.getPassword()));
-
-        // verify
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
 
