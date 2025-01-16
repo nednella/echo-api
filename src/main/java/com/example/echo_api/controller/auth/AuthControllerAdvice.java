@@ -44,7 +44,7 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
         return createExceptionHandler(
                 request,
                 HttpStatus.BAD_REQUEST,
-                "request is invalid",
+                "invalid request",
                 details);
     }
 
