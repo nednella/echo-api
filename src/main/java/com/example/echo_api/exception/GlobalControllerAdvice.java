@@ -68,7 +68,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
         return createExceptionHandler(request,
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "an unexpected error occurred",
-                null);
+                ex.getMessage());
     }
 
 }
