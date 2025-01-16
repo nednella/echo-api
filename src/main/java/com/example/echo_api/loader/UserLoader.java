@@ -14,17 +14,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UserDataLoader extends AbstractDataLoader<User> {
+public class UserLoader extends AbstractJsonLoader<User> {
 
-    private static final String filePath = "data/users.json";
+    private static final String path = "data/dev-users.json";
 
     private final UserService userService;
 
     @Override
+    protected String getFilePath() {
+        return path;
+    }
+
+    @Override
     protected void loadData() throws IOException {
         if (userService.findAll().isEmpty()) {
-            log.info("USER table is empty. Populating table from path: {}", filePath);
-            List<User> entities = loadJsonFromResourceFile(filePath, User.class);
+            log.info("USER table is empty. Populating table from path: {}", getFilePath());
+            List<User> entities = loadJsonFromResourceFile(getFilePath(), User.class);
             saveToRepository(entities);
         } else {
             log.info("USER table is not empty. Skipping data population.");
