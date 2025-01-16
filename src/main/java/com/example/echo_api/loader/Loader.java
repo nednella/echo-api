@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Loader implements CommandLineRunner {
 
-    private final UserDataLoader userDataLoader;
+    private final UserLoader userLoader;
 
     @Override
     public void run(String... args) throws Exception {
-        userDataLoader.loadData();
+        userLoader.loadData();
     }
 
 }

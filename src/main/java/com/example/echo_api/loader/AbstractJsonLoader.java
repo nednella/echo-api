@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
-public abstract class AbstractDataLoader<T> {
+public abstract class AbstractJsonLoader<T> {
 
     protected ObjectMapper objectMapper;
 
-    public AbstractDataLoader() {
+    public AbstractJsonLoader() {
         this.objectMapper = new ObjectMapper();
     }
 
@@ -24,6 +24,8 @@ public abstract class AbstractDataLoader<T> {
         return objectMapper.readValue(file,
                 objectMapper.getTypeFactory().constructCollectionType(List.class, entity));
     }
+
+    protected abstract String getFilePath();
 
     protected abstract void loadData() throws IOException;
 
