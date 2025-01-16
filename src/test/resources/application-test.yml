@@ -3,6 +3,9 @@ spring:
         init:
             mode: always
 
+cors:
+    allowed-origins: '*' # comma-separated values
+
 logging:
     level:
         org:
