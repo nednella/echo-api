@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserLoader extends AbstractJsonLoader<User> {
 
-    private static final String path = "data/users.json";
+    private static final String path = "data/dev-users.json";
 
     private final UserService userService;
 
