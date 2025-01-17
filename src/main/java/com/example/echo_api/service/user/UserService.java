@@ -17,7 +17,7 @@ public interface UserService {
 
     default void createUser(String username, String password) throws UsernameAlreadyExistsException {
         createUser(username, password, "ROLE_USER");
-    };
+    }
 
     public void createUser(String username, String password, String role) throws UsernameAlreadyExistsException;
 
