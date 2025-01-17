@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void signUp(String username, String password)
-            throws UsernameAlreadyExistsException, AuthenticationException {
+        throws UsernameAlreadyExistsException, AuthenticationException {
         userService.createUser(username, password);
         authenticate(username, password);
     }
@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private void authenticate(String username, String password) throws AuthenticationException {
         try {
             UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
-                    .unauthenticated(username, password);
+                .unauthenticated(username, password);
             contextAwareAuthenticationManager.authenticate(token);
         } catch (DisabledException | LockedException | BadCredentialsException ex) {
             throw ex;

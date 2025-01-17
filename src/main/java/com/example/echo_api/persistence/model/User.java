@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
  * Entity class representing a User in the system.
  * 
  * <p>
- * This class is mapped to the {@code user} table in the database and
- * stores essential account information required for user authentication and
- * account management in the system.
+ * This class is mapped to the {@code user} table in the database and stores
+ * essential account information required for user authentication and account
+ * management in the system.
  *
  * <p>
  * Fields {@code id}, {@code createdAt}, and {@code updatedAt} are

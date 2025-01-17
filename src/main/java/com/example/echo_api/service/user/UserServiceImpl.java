@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+            .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     @Override

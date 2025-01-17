@@ -24,20 +24,20 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(fl -> fl.disable())
-                .logout(lo -> lo
-                        .logoutUrl("/api/v1/auth/logout")
-                        .logoutSuccessHandler(customLogoutSuccessHandler))
-                .sessionManagement(sm -> sm
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .sessionFixation(sf -> sf.migrateSession()))
-                .securityContext(sc -> sc.requireExplicitSave(false))
-                .exceptionHandling(ex -> ex.disable())
-                .addFilterBefore(filterChainExceptionHandler, LogoutFilter.class);
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                .anyRequest().authenticated())
+            .formLogin(fl -> fl.disable())
+            .logout(lo -> lo
+                .logoutUrl("/api/v1/auth/logout")
+                .logoutSuccessHandler(customLogoutSuccessHandler))
+            .sessionManagement(sm -> sm
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionFixation(sf -> sf.migrateSession()))
+            .securityContext(sc -> sc.requireExplicitSave(false))
+            .exceptionHandling(ex -> ex.disable())
+            .addFilterBefore(filterChainExceptionHandler, LogoutFilter.class);
 
         return http.build();
     }

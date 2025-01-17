@@ -43,8 +43,8 @@ public class UserControllerTest {
     @BeforeEach
     public void setUp() {
         testUser = new User(
-                "testUsername",
-                "testPassword");
+            "testUsername",
+            "testPassword");
     }
 
     @Test
@@ -53,13 +53,13 @@ public class UserControllerTest {
         String endpoint = ApiConfig.User.FIND_ALL;
 
         when(userService.findAll())
-                .thenReturn(List.of(testUser));
+            .thenReturn(List.of(testUser));
 
         mockMvc.perform(get(endpoint))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].username").value(testUser.getUsername()));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$[0].username").value(testUser.getUsername()));
     }
 
     @Test
@@ -68,13 +68,13 @@ public class UserControllerTest {
         String endpoint = ApiConfig.User.FIND_ALL;
 
         when(userService.findAll())
-                .thenReturn(List.of());
+            .thenReturn(List.of());
 
         mockMvc.perform(get(endpoint))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string("[]"));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().string("[]"));
     }
 
     @Test
@@ -83,13 +83,13 @@ public class UserControllerTest {
         String endpoint = ApiConfig.User.FIND_ALL + "/" + testUser.getUsername();
 
         when(userService.findByUsername(testUser.getUsername()))
-                .thenReturn(testUser);
+            .thenReturn(testUser);
 
         mockMvc.perform(get(endpoint))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.username").value(testUser.getUsername()));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.username").value(testUser.getUsername()));
 
     }
 
@@ -99,15 +99,15 @@ public class UserControllerTest {
         String endpoint = ApiConfig.User.FIND_ALL + "/" + testUser.getUsername();
 
         when(userService.findByUsername(testUser.getUsername()))
-                .thenThrow(new UsernameNotFoundException(testUser.getUsername()));
+            .thenThrow(new UsernameNotFoundException(testUser.getUsername()));
 
         mockMvc.perform(get(endpoint))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("username not found"))
-                .andExpect(jsonPath("$.path").value(endpoint));
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value("username not found"))
+            .andExpect(jsonPath("$.path").value(endpoint));
     }
 
 }

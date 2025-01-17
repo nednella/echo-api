@@ -1,8 +1,8 @@
 package com.example.echo_api.config;
 
 /**
- * This class contains the path constants used throughout the application.
- * It defines the base URL for the API, along with all relevant endpoints.
+ * This class contains the path constants used throughout the application. It
+ * defines the base URL for the API, along with all relevant endpoints.
  */
 public final class ApiConfig {
 

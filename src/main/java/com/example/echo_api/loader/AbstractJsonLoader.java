@@ -22,7 +22,7 @@ public abstract class AbstractJsonLoader<T> {
         File file = new File(classLoader.getResource(filePath).getFile());
 
         return objectMapper.readValue(file,
-                objectMapper.getTypeFactory().constructCollectionType(List.class, entity));
+            objectMapper.getTypeFactory().constructCollectionType(List.class, entity));
     }
 
     protected abstract String getFilePath();

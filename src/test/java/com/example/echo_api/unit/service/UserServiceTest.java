@@ -44,8 +44,8 @@ public class UserServiceTest {
     @BeforeEach
     public void initUser() {
         testUser = new User(
-                "testUsername",
-                "testPassword");
+            "testUsername",
+            "testPassword");
     }
 
     /**
@@ -120,7 +120,7 @@ public class UserServiceTest {
         when(userRepository.findByUsername(testUser.getUsername())).thenThrow(new UsernameNotFoundException(""));
 
         assertThrows(UsernameNotFoundException.class,
-                () -> userService.findByUsername(testUser.getUsername()));
+            () -> userService.findByUsername(testUser.getUsername()));
         verify(userRepository, times(1)).findByUsername(testUser.getUsername());
     }
 
@@ -204,7 +204,7 @@ public class UserServiceTest {
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
         assertThrows(UsernameAlreadyExistsException.class,
-                () -> userService.createUser(testUser.getUsername(), testUser.getPassword()));
+            () -> userService.createUser(testUser.getUsername(), testUser.getPassword()));
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
 

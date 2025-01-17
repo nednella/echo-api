@@ -21,10 +21,10 @@ public class UserControllerAdvice extends AbstractControllerAdvice {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
-                request,
-                HttpStatus.BAD_REQUEST,
-                "username not found",
-                null);
+            request,
+            HttpStatus.BAD_REQUEST,
+            "username not found",
+            null);
     }
 
     // TODO: redundant class. User creation only occurs via AuthControllers
@@ -34,10 +34,10 @@ public class UserControllerAdvice extends AbstractControllerAdvice {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
-                request,
-                HttpStatus.BAD_REQUEST,
-                "username already exists",
-                null);
+            request,
+            HttpStatus.BAD_REQUEST,
+            "username already exists",
+            null);
     }
 
 }

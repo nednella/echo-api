@@ -49,20 +49,20 @@ public abstract class AbstractControllerAdvice {
      * @see ErrorResponse
      */
     protected ResponseEntity<?> createExceptionHandler(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpStatus status,
-            @NonNull String message,
-            @Nullable Object details) {
+        @NonNull HttpServletRequest request,
+        @NonNull HttpStatus status,
+        @NonNull String message,
+        @Nullable Object details) {
 
         ErrorResponse error = new ErrorResponse(
-                status,
-                message,
-                details,
-                request.getRequestURI());
+            status,
+            message,
+            details,
+            request.getRequestURI());
 
         return ResponseEntity
-                .status(status)
-                .body(error);
+            .status(status)
+            .body(error);
     }
 
 }

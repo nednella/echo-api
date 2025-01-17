@@ -68,15 +68,15 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(validSignInRequest);
 
         doNothing()
-                .when(authService)
-                .signIn(anyString(), anyString());
+            .when(authService)
+            .signIn(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isNoContent());
     }
 
     @Test
@@ -86,19 +86,19 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(invalidSignInRequest);
 
         doNothing()
-                .when(authService)
-                .signIn(anyString(), anyString());
+            .when(authService)
+            .signIn(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("invalid request"))
-                .andExpect(jsonPath("$.path").value(endpoint));
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value("invalid request"))
+            .andExpect(jsonPath("$.path").value(endpoint));
     }
 
     @Test
@@ -108,19 +108,19 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(validSignInRequest);
 
         doThrow(new UsernameNotFoundException(""))
-                .when(authService)
-                .signIn(anyString(), anyString());
+            .when(authService)
+            .signIn(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("username or password is incorrect"))
-                .andExpect(jsonPath("$.path").value(endpoint));
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value("username or password is incorrect"))
+            .andExpect(jsonPath("$.path").value(endpoint));
     }
 
     @Test
@@ -130,19 +130,19 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(validSignInRequest);
 
         doThrow(new BadCredentialsException(""))
-                .when(authService)
-                .signIn(anyString(), anyString());
+            .when(authService)
+            .signIn(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("username or password is incorrect"))
-                .andExpect(jsonPath("$.path").value(endpoint));
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value("username or password is incorrect"))
+            .andExpect(jsonPath("$.path").value(endpoint));
     }
 
     @Test
@@ -152,19 +152,19 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(validSignInRequest);
 
         doThrow(new DisabledException(""))
-                .when(authService)
-                .signIn(anyString(), anyString());
+            .when(authService)
+            .signIn(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(401))
-                .andExpect(jsonPath("$.message").value("account status is abnormal"))
-                .andExpect(jsonPath("$.path").value(endpoint));
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isUnauthorized())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(401))
+            .andExpect(jsonPath("$.message").value("account status is abnormal"))
+            .andExpect(jsonPath("$.path").value(endpoint));
     }
 
     @Test
@@ -174,19 +174,19 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(validSignInRequest);
 
         doThrow(new LockedException(""))
-                .when(authService)
-                .signIn(anyString(), anyString());
+            .when(authService)
+            .signIn(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(401))
-                .andExpect(jsonPath("$.message").value("account status is abnormal"))
-                .andExpect(jsonPath("$.path").value(endpoint));
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isUnauthorized())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(401))
+            .andExpect(jsonPath("$.message").value("account status is abnormal"))
+            .andExpect(jsonPath("$.path").value(endpoint));
     }
 
     @Test
@@ -196,15 +196,15 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(validSignUpRequest);
 
         doNothing()
-                .when(authService)
-                .signUp(anyString(), anyString());
+            .when(authService)
+            .signUp(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isNoContent());
 
     }
 
@@ -215,19 +215,19 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(invalidSignUpRequest);
 
         doNothing()
-                .when(authService)
-                .signUp(anyString(), anyString());
+            .when(authService)
+            .signUp(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("invalid request"))
-                .andExpect(jsonPath("$.path").value(endpoint));
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value("invalid request"))
+            .andExpect(jsonPath("$.path").value(endpoint));
     }
 
     @Test
@@ -237,19 +237,19 @@ public class AuthControllerTest {
         String body = objectMapper.writeValueAsString(validSignUpRequest);
 
         doThrow(new UsernameAlreadyExistsException())
-                .when(authService)
-                .signUp(anyString(), anyString());
+            .when(authService)
+            .signUp(anyString(), anyString());
 
         mockMvc.perform(
-                post(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("username already exists"))
-                .andExpect(jsonPath("$.path").value(endpoint));
+            post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value("username already exists"))
+            .andExpect(jsonPath("$.path").value(endpoint));
     }
 
 }

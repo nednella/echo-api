@@ -34,8 +34,8 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     /**
-     * Tests the {@link UserRepository#findByUsername(String)} method to
-     * verify that a user can be found by their username.
+     * Tests the {@link UserRepository#findByUsername(String)} method to verify that
+     * a user can be found by their username.
      */
     @Test
     public void UserRepository_FindByUsername_ReturnUser() {
@@ -47,8 +47,8 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     /**
-     * Tests the {@link UserRepository#findByUsername(String)} method to
-     * verify that searching for a non-existent user returns an empty result.
+     * Tests the {@link UserRepository#findByUsername(String)} method to verify that
+     * searching for a non-existent user returns an empty result.
      */
     @Test
     public void UserRepository_FindByUsername_ReturnEmpty() {
@@ -59,9 +59,9 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     /**
-     * Tests the {@link UserRepository#existsByUsername(String)} method to
-     * verify that the repository correctly identifies that a user exists
-     * when searching for a valid username.
+     * Tests the {@link UserRepository#existsByUsername(String)} method to verify
+     * that the repository correctly identifies that a user exists when searching
+     * for a valid username.
      */
     @Test
     public void UserRepository_ExistsByUsername_ReturnTrue() {
@@ -72,9 +72,9 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     /**
-     * Tests the {@link UserRepository#existsByUsername(String)} method to
-     * verify that the repository correctly identifies that a user does not exist
-     * when searching for a non-existent username.
+     * Tests the {@link UserRepository#existsByUsername(String)} method to verify
+     * that the repository correctly identifies that a user does not exist when
+     * searching for a non-existent username.
      */
     @Test
     public void UserRepository_ExistsByUsername_ReturnFalse() {

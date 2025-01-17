@@ -30,10 +30,10 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
-                request,
-                HttpStatus.UNAUTHORIZED,
-                "unauthorised request",
-                null);
+            request,
+            HttpStatus.UNAUTHORIZED,
+            "unauthorised request",
+            null);
     }
 
     /** 403 */
@@ -42,10 +42,10 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
-                request,
-                HttpStatus.FORBIDDEN,
-                "access denied",
-                null);
+            request,
+            HttpStatus.FORBIDDEN,
+            "access denied",
+            null);
     }
 
     /** 404 */
@@ -54,10 +54,10 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
-                request,
-                HttpStatus.NOT_FOUND,
-                "resource not found",
-                null);
+            request,
+            HttpStatus.NOT_FOUND,
+            "resource not found",
+            null);
     }
 
     /** 500 */
@@ -66,9 +66,9 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(request,
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "an unexpected error occurred",
-                ex.getMessage());
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "an unexpected error occurred",
+            ex.getMessage());
     }
 
 }

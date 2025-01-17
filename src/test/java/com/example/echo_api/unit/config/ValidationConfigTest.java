@@ -52,7 +52,7 @@ public class ValidationConfigTest {
     public void Regex_Username_ShouldPass() {
         for (String username : validUsernames) {
             assertTrue(username.matches(ValidationConfig.Regex.username),
-                    "Expected username to match regex: " + username);
+                "Expected username to match regex: " + username);
         }
     }
 
@@ -60,7 +60,7 @@ public class ValidationConfigTest {
     public void Regex_Username_ShouldFail() {
         for (String username : invalidUsernames) {
             assertFalse(username.matches(ValidationConfig.Regex.username),
-                    "Expected username to match regex: " + username);
+                "Expected username to match regex: " + username);
         }
     }
 
@@ -68,7 +68,7 @@ public class ValidationConfigTest {
     public void Regex_Password_ShouldPass() {
         for (String password : validPasswords) {
             assertTrue(password.matches(ValidationConfig.Regex.password),
-                    "Expected password to match regex: " + password);
+                "Expected password to match regex: " + password);
         }
     }
 
@@ -76,7 +76,7 @@ public class ValidationConfigTest {
     public void Regex_Password_ShouldFail() {
         for (String password : invalidPasswords) {
             assertFalse(password.matches(ValidationConfig.Regex.password),
-                    "Expected password to match regex: " + password);
+                "Expected password to match regex: " + password);
         }
     }
 
