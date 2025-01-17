@@ -31,10 +31,10 @@ import lombok.RequiredArgsConstructor;
  * By default, Spring Security automatically manages {@link SecurityContext}
  * persistence during form-based authentication via filters, specifically
  * {@link UsernamePasswordAuthenticationFilter} that implements
- * {@link AbstractAuthenticationProcessingFilter}.
- * However, when implementing a custom authentication endpoint, the above
- * process is bypassed. This class reintroduces the missing persistence logic,
- * abstracting it away from the {@link AuthService} to maintain cleaner code.
+ * {@link AbstractAuthenticationProcessingFilter}. However, when implementing a
+ * custom authentication endpoint, the above process is bypassed. This class
+ * reintroduces the missing persistence logic, abstracting it away from the
+ * {@link AuthService} to maintain cleaner code.
  * 
  * <p>
  * For more information, refer to:
@@ -47,7 +47,7 @@ public class ContextAwareAuthenticationManager implements AuthenticationManager 
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
-            .getContextHolderStrategy();
+        .getContextHolderStrategy();
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -61,10 +61,10 @@ public class ContextAwareAuthenticationManager implements AuthenticationManager 
 
         // retrieve current http request and response
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes())
+            .currentRequestAttributes())
                 .getRequest();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes())
+            .currentRequestAttributes())
                 .getResponse();
 
         // save the context to the http session for persistence

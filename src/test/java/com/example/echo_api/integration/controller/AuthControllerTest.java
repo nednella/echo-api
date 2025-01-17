@@ -27,7 +27,7 @@ import com.example.echo_api.service.user.UserService;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AuthControllerTest extends IntegrationTest {
+class AuthControllerTest extends IntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -48,7 +48,7 @@ public class AuthControllerTest extends IntegrationTest {
     }
 
     @Test
-    public void AuthController_SignIn_Return204() throws Exception {
+    void AuthController_SignIn_Return204() {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String endpoint = ApiConfig.Auth.LOGIN;
 
@@ -62,7 +62,7 @@ public class AuthControllerTest extends IntegrationTest {
     }
 
     @Test
-    public void AuthController_SignUp_Return204() throws Exception {
+    void AuthController_SignUp_Return204() throws Exception {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String endpoint = ApiConfig.Auth.SIGNUP;
         SignUpRequest newUser = new SignUpRequest("new_user", "password-1");
@@ -82,7 +82,7 @@ public class AuthControllerTest extends IntegrationTest {
     }
 
     @Test
-    public void AuthController_SignUp_Return400UsernameAlreadyExists() throws Exception {
+    void AuthController_SignUp_Return400UsernameAlreadyExists() {
         // api: POST /api/v1/auth/signup ==> 400 : Username Already Exists
         String endpoint = ApiConfig.Auth.SIGNUP;
         SignUpRequest takenUser = new SignUpRequest(existingUser.username(), existingUser.password());

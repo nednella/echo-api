@@ -56,9 +56,9 @@ public class AuthenticationConfig {
      */
     UserDetailsService jpaUserDetailsService() {
         return username -> userRepository
-                .findByUsername(username)
-                .map(SecurityUser::new)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+            .findByUsername(username)
+            .map(SecurityUser::new)
+            .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     /**

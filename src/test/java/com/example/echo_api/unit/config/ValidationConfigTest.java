@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -44,39 +43,39 @@ public class ValidationConfigTest {
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return reader.lines().collect(Collectors.toList());
+            return reader.lines().toList();
         }
     }
 
     @Test
-    public void Regex_Username_ShouldPass() {
+    void Regex_Username_ShouldPass() {
         for (String username : validUsernames) {
-            assertTrue(username.matches(ValidationConfig.Regex.username),
-                    "Expected username to match regex: " + username);
+            assertTrue(username.matches(ValidationConfig.Regex.USERNAME),
+                "Expected username to match regex: " + username);
         }
     }
 
     @Test
-    public void Regex_Username_ShouldFail() {
+    void Regex_Username_ShouldFail() {
         for (String username : invalidUsernames) {
-            assertFalse(username.matches(ValidationConfig.Regex.username),
-                    "Expected username to match regex: " + username);
+            assertFalse(username.matches(ValidationConfig.Regex.USERNAME),
+                "Expected username to match regex: " + username);
         }
     }
 
     @Test
-    public void Regex_Password_ShouldPass() {
+    void Regex_Password_ShouldPass() {
         for (String password : validPasswords) {
-            assertTrue(password.matches(ValidationConfig.Regex.password),
-                    "Expected password to match regex: " + password);
+            assertTrue(password.matches(ValidationConfig.Regex.PASSWORD),
+                "Expected password to match regex: " + password);
         }
     }
 
     @Test
-    public void Regex_Password_ShouldFail() {
+    void Regex_Password_ShouldFail() {
         for (String password : invalidPasswords) {
-            assertFalse(password.matches(ValidationConfig.Regex.password),
-                    "Expected password to match regex: " + password);
+            assertFalse(password.matches(ValidationConfig.Regex.PASSWORD),
+                "Expected password to match regex: " + password);
         }
     }
 

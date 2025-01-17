@@ -17,7 +17,7 @@ import com.example.echo_api.persistence.repository.UserRepository;
  * Integration test class for {@link UserRepository}.
  */
 @DataJpaTest
-public class UserRepositoryTest extends IntegrationTest {
+class UserRepositoryTest extends IntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -34,11 +34,11 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     /**
-     * Tests the {@link UserRepository#findByUsername(String)} method to
-     * verify that a user can be found by their username.
+     * Tests the {@link UserRepository#findByUsername(String)} method to verify that
+     * a user can be found by their username.
      */
     @Test
-    public void UserRepository_FindByUsername_ReturnUser() {
+    void UserRepository_FindByUsername_ReturnUser() {
         Optional<User> foundUser = userRepository.findByUsername(testUser.getUsername());
 
         assertNotNull(foundUser);
@@ -47,11 +47,11 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     /**
-     * Tests the {@link UserRepository#findByUsername(String)} method to
-     * verify that searching for a non-existent user returns an empty result.
+     * Tests the {@link UserRepository#findByUsername(String)} method to verify that
+     * searching for a non-existent user returns an empty result.
      */
     @Test
-    public void UserRepository_FindByUsername_ReturnEmpty() {
+    void UserRepository_FindByUsername_ReturnEmpty() {
         Optional<User> foundUser = userRepository.findByUsername("nonExistentUser");
 
         assertNotNull(foundUser);
@@ -59,28 +59,26 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     /**
-     * Tests the {@link UserRepository#existsByUsername(String)} method to
-     * verify that the repository correctly identifies that a user exists
-     * when searching for a valid username.
+     * Tests the {@link UserRepository#existsByUsername(String)} method to verify
+     * that the repository correctly identifies that a user exists when searching
+     * for a valid username.
      */
     @Test
-    public void UserRepository_ExistsByUsername_ReturnTrue() {
+    void UserRepository_ExistsByUsername_ReturnTrue() {
         boolean exists = userRepository.existsByUsername(testUser.getUsername());
 
-        assertNotNull(exists);
         assertTrue(exists);
     }
 
     /**
-     * Tests the {@link UserRepository#existsByUsername(String)} method to
-     * verify that the repository correctly identifies that a user does not exist
-     * when searching for a non-existent username.
+     * Tests the {@link UserRepository#existsByUsername(String)} method to verify
+     * that the repository correctly identifies that a user does not exist when
+     * searching for a non-existent username.
      */
     @Test
-    public void UserRepository_ExistsByUsername_ReturnFalse() {
+    void UserRepository_ExistsByUsername_ReturnFalse() {
         boolean exists = userRepository.existsByUsername("nonExistentUser");
 
-        assertNotNull(exists);
         assertFalse(exists);
     }
 

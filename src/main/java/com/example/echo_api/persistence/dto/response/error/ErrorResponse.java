@@ -9,22 +9,23 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
 public record ErrorResponse(
-        String timestamp,
-        int status,
+    String timestamp,
+    int status,
+    String message,
+    Object details,
+    String path) {
+
+    public ErrorResponse(
+        HttpStatus status,
         String message,
         Object details,
         String path) {
-
-    public ErrorResponse(
-            HttpStatus status,
-            String message,
-            Object details,
-            String path) {
         this(
-                Instant.now().toString(),
-                status.value(),
-                message,
-                details,
-                path);
+            Instant.now().toString(),
+            status.value(),
+            message,
+            details,
+            path);
     }
+
 }

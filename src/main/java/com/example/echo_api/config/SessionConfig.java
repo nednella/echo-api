@@ -29,8 +29,8 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 public class SessionConfig extends AbstractHttpSessionApplicationInitializer {
 
     /**
-     * Configures the Redis connection factory using Lettuce.
-     * This factory creates Redis connections used for session management.
+     * Configures the Redis connection factory using Lettuce. This factory creates
+     * Redis connections used for session management.
      * 
      * @return LettuceConnectionFactory for Redis connections
      */
@@ -54,8 +54,8 @@ public class SessionConfig extends AbstractHttpSessionApplicationInitializer {
     }
 
     /**
-     * Configures the SecurityContextRepository to store security contexts
-     * in HTTP sessions managed by Redis for persistence.
+     * Configures the SecurityContextRepository to store security contexts in HTTP
+     * sessions managed by Redis for persistence.
      * 
      * @return HttpSessionSecurityContextRepository
      */

@@ -20,7 +20,7 @@ public abstract class IntegrationTest {
 
     @Container
     @ServiceConnection
-    protected final static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
+    protected static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
     @Test
     public void containerConnectionEstablished() {

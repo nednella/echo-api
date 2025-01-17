@@ -20,13 +20,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(ApiConfig.Auth.LOGIN)
-    public ResponseEntity<?> signIn(@RequestBody @Valid SignInRequest login) {
+    public ResponseEntity<Void> signIn(@RequestBody @Valid SignInRequest login) {
         authService.signIn(login.username(), login.password());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping(ApiConfig.Auth.SIGNUP)
-    public ResponseEntity<?> signUp(@RequestBody @Valid SignUpRequest signup) {
+    public ResponseEntity<Void> signUp(@RequestBody @Valid SignUpRequest signup) {
         authService.signUp(signup.username(), signup.password());
         return ResponseEntity.noContent().build();
     }

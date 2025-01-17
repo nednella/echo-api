@@ -11,13 +11,13 @@ import org.springframework.http.ResponseEntity;
 public class TestUtils {
 
     /**
-     * Creates an {@link HttpEntity} with the specified body and sets the
-     * content type to {@code application/json}.
+     * Creates an {@link HttpEntity} with the specified body and sets the content
+     * type to {@code application/json}.
      *
      * @param body the body of the request, which will be serialized to JSON
      * @param <T>  the type of the body
-     * @return an {@link HttpEntity} containing the specified body and
-     *         headers indicating the content type is JSON
+     * @return an {@link HttpEntity} containing the specified body and headers
+     *         indicating the content type is JSON
      */
     public static <T> HttpEntity<T> createJsonRequestEntity(T body) {
         HttpHeaders headers = new HttpHeaders();
