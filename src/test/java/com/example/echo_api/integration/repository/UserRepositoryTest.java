@@ -17,7 +17,7 @@ import com.example.echo_api.persistence.repository.UserRepository;
  * Integration test class for {@link UserRepository}.
  */
 @DataJpaTest
-public class UserRepositoryTest extends IntegrationTest {
+class UserRepositoryTest extends IntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -38,7 +38,7 @@ public class UserRepositoryTest extends IntegrationTest {
      * a user can be found by their username.
      */
     @Test
-    public void UserRepository_FindByUsername_ReturnUser() {
+    void UserRepository_FindByUsername_ReturnUser() {
         Optional<User> foundUser = userRepository.findByUsername(testUser.getUsername());
 
         assertNotNull(foundUser);
@@ -51,7 +51,7 @@ public class UserRepositoryTest extends IntegrationTest {
      * searching for a non-existent user returns an empty result.
      */
     @Test
-    public void UserRepository_FindByUsername_ReturnEmpty() {
+    void UserRepository_FindByUsername_ReturnEmpty() {
         Optional<User> foundUser = userRepository.findByUsername("nonExistentUser");
 
         assertNotNull(foundUser);
@@ -64,10 +64,9 @@ public class UserRepositoryTest extends IntegrationTest {
      * for a valid username.
      */
     @Test
-    public void UserRepository_ExistsByUsername_ReturnTrue() {
+    void UserRepository_ExistsByUsername_ReturnTrue() {
         boolean exists = userRepository.existsByUsername(testUser.getUsername());
 
-        assertNotNull(exists);
         assertTrue(exists);
     }
 
@@ -77,10 +76,9 @@ public class UserRepositoryTest extends IntegrationTest {
      * searching for a non-existent username.
      */
     @Test
-    public void UserRepository_ExistsByUsername_ReturnFalse() {
+    void UserRepository_ExistsByUsername_ReturnFalse() {
         boolean exists = userRepository.existsByUsername("nonExistentUser");
 
-        assertNotNull(exists);
         assertFalse(exists);
     }
 

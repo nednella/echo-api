@@ -27,7 +27,7 @@ import com.example.echo_api.service.user.UserService;
  */
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class UserControllerTest {
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +48,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void UserController_FindAll_ReturnListOfUser() throws Exception {
+    void UserController_FindAll_ReturnListOfUser() throws Exception {
         // api: GET /api/v1/user/list ==> 200 : List<User>
         String endpoint = ApiConfig.User.FIND_ALL;
 
@@ -63,7 +63,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void UserController_FindAll_ReturnListOfEmpty() throws Exception {
+    void UserController_FindAll_ReturnListOfEmpty() throws Exception {
         // api: GET /api/v1/user/list ==> 200 : No Content
         String endpoint = ApiConfig.User.FIND_ALL;
 
@@ -78,7 +78,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void UserController_FindByUsername_ReturnUser() throws Exception {
+    void UserController_FindByUsername_ReturnUser() throws Exception {
         // api: GET /api/v1/user/list/{username} ==> 200 : User
         String endpoint = ApiConfig.User.FIND_ALL + "/" + testUser.getUsername();
 
@@ -94,7 +94,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void UserController_FindByUsername_Return400UsernameNotFound() throws Exception {
+    void UserController_FindByUsername_Return400UsernameNotFound() throws Exception {
         // api: GET /api/v1/user/list/{username} ==> 400 : Username Not Found
         String endpoint = ApiConfig.User.FIND_ALL + "/" + testUser.getUsername();
 

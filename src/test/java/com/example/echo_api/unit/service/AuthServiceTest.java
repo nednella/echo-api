@@ -25,7 +25,7 @@ import com.example.echo_api.service.user.UserService;
  * Unit test class for {@link AuthService}.
  */
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTest {
+class AuthServiceTest {
 
     @Mock
     private UserService userService;
@@ -63,7 +63,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignIn_ReturnVoid() {
+    void AuthService_SignIn_ReturnVoid() {
         when(authenticationManager.authenticate(token)).thenReturn(token);
 
         assertDoesNotThrow(() -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
@@ -80,7 +80,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignIn_ThrowDisabledException() {
+    void AuthService_SignIn_ThrowDisabledException() {
         when(authenticationManager.authenticate(token)).thenThrow(new DisabledException(""));
 
         assertThrows(DisabledException.class,
@@ -98,7 +98,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignIn_ThrowLockedException() {
+    void AuthService_SignIn_ThrowLockedException() {
         when(authenticationManager.authenticate(token)).thenThrow(new LockedException(""));
 
         assertThrows(LockedException.class,
@@ -116,7 +116,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignIn_ThrowBadCredentialsException() {
+    void AuthService_SignIn_ThrowBadCredentialsException() {
         when(authenticationManager.authenticate(token)).thenThrow(new BadCredentialsException(""));
 
         assertThrows(BadCredentialsException.class,
@@ -138,7 +138,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignUp_ReturnVoid() {
+    void AuthService_SignUp_ReturnVoid() {
         doNothing()
             .when(userService)
             .createUser(testUser.getUsername(), testUser.getPassword());
@@ -162,7 +162,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignUp_ThrowUsernameAlreadyExists() {
+    void AuthService_SignUp_ThrowUsernameAlreadyExists() {
         doThrow(new UsernameAlreadyExistsException())
             .when(userService)
             .createUser(testUser.getUsername(), testUser.getPassword());
@@ -188,7 +188,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignUp_ThrowDisabledException() {
+    void AuthService_SignUp_ThrowDisabledException() {
         doNothing()
             .when(userService)
             .createUser(testUser.getUsername(), testUser.getPassword());
@@ -217,7 +217,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignUp_ThrowLockedException() {
+    void AuthService_SignUp_ThrowLockedException() {
         doNothing()
             .when(userService)
             .createUser(testUser.getUsername(), testUser.getPassword());
@@ -246,7 +246,7 @@ public class AuthServiceTest {
      * 
      */
     @Test
-    public void AuthService_SignUp_ThrowBadCredentialsException() {
+    void AuthService_SignUp_ThrowBadCredentialsException() {
         doNothing()
             .when(userService)
             .createUser(testUser.getUsername(), testUser.getPassword());

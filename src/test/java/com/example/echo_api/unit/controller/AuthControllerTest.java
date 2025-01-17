@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class AuthControllerTest {
+class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -62,7 +62,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignIn_Return204() throws Exception {
+    void AuthController_SignIn_Return204() throws Exception {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validSignInRequest);
@@ -80,7 +80,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignIn_Return400InvalidRequest() throws Exception {
+    void AuthController_SignIn_Return400InvalidRequest() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Invalid Request
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(invalidSignInRequest);
@@ -102,7 +102,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignIn_Return400UsernameNotFound() throws Exception {
+    void AuthController_SignIn_Return400UsernameNotFound() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Username Not Found
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validSignInRequest);
@@ -124,7 +124,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignIn_Return400BadCredentials() throws Exception {
+    void AuthController_SignIn_Return400BadCredentials() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Bad Credentials
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validSignInRequest);
@@ -146,7 +146,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignIn_Return401AccountStatusDisabled() throws Exception {
+    void AuthController_SignIn_Return401AccountStatusDisabled() throws Exception {
         // api: POST /api/v1/auth/login ==> 401 Account Status - Disabled
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validSignInRequest);
@@ -168,7 +168,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignIn_Return401AccountStatusLocked() throws Exception {
+    void AuthController_SignIn_Return401AccountStatusLocked() throws Exception {
         // api: POST /api/v1/auth/login ==> 401 Account Status - Locked
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validSignInRequest);
@@ -190,7 +190,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignUp_Return204() throws Exception {
+    void AuthController_SignUp_Return204() throws Exception {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String endpoint = ApiConfig.Auth.SIGNUP;
         String body = objectMapper.writeValueAsString(validSignUpRequest);
@@ -209,7 +209,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignUp_Return400InvalidRequest() throws Exception {
+    void AuthController_SignUp_Return400InvalidRequest() throws Exception {
         // api: POST /api/v1/auth/signup ==> 400 Invalid Request
         String endpoint = ApiConfig.Auth.SIGNUP;
         String body = objectMapper.writeValueAsString(invalidSignUpRequest);
@@ -231,7 +231,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void AuthController_SignUp_Return400UsernameAlreadyExists() throws Exception {
+    void AuthController_SignUp_Return400UsernameAlreadyExists() throws Exception {
         // api: POST /api/v1/auth/signup ==> 400 Username Already Exists
         String endpoint = ApiConfig.Auth.SIGNUP;
         String body = objectMapper.writeValueAsString(validSignUpRequest);

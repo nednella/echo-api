@@ -25,7 +25,7 @@ import com.example.echo_api.service.user.UserServiceImpl;
  * Unit test class for {@link UserService}.
  */
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -57,7 +57,7 @@ public class UserServiceTest {
      * 
      */
     @Test
-    public void UserService_FindAll_ReturnListOfUser() {
+    void UserService_FindAll_ReturnListOfUser() {
         when(userRepository.findAll()).thenReturn(List.of(testUser));
 
         List<User> users = userService.findAll();
@@ -76,7 +76,7 @@ public class UserServiceTest {
      * 
      */
     @Test
-    public void UserService_FindAll_ReturnListOfEmpty() {
+    void UserService_FindAll_ReturnListOfEmpty() {
         when(userRepository.findAll()).thenReturn(List.of());
 
         List<User> users = userService.findAll();
@@ -96,7 +96,7 @@ public class UserServiceTest {
      * 
      */
     @Test
-    public void UserService_FindByUsername_ReturnUser() {
+    void UserService_FindByUsername_ReturnUser() {
         when(userRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
 
         User foundUser = userService.findByUsername(testUser.getUsername());
@@ -116,7 +116,7 @@ public class UserServiceTest {
      * 
      */
     @Test
-    public void UserService_FindByUsername_ThrowUsernameNotFound() {
+    void UserService_FindByUsername_ThrowUsernameNotFound() {
         when(userRepository.findByUsername(testUser.getUsername())).thenThrow(new UsernameNotFoundException(""));
 
         assertThrows(UsernameNotFoundException.class,
@@ -134,7 +134,7 @@ public class UserServiceTest {
      * 
      */
     @Test
-    public void UserService_ExistsByUsername_ReturnTrue() {
+    void UserService_ExistsByUsername_ReturnTrue() {
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
         boolean exists = userService.existsByUsername(testUser.getUsername());
@@ -153,7 +153,7 @@ public class UserServiceTest {
      * 
      */
     @Test
-    public void UserService_ExistsByUsername_ReturnFalse() {
+    void UserService_ExistsByUsername_ReturnFalse() {
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
 
         boolean exists = userService.existsByUsername(testUser.getUsername());
@@ -178,7 +178,7 @@ public class UserServiceTest {
      * 
      */
     @Test
-    public void UserService_CreateUser_ReturnVoid() {
+    void UserService_CreateUser_ReturnVoid() {
         when(userRepository.save(testUser)).thenReturn(testUser);
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
@@ -200,7 +200,7 @@ public class UserServiceTest {
      * 
      */
     @Test
-    public void UserService_CreateUser_ThrowUsernameAlreadyExists() {
+    void UserService_CreateUser_ThrowUsernameAlreadyExists() {
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
         assertThrows(UsernameAlreadyExistsException.class,
