@@ -13,7 +13,7 @@ public abstract class AbstractJsonLoader<T> {
 
     protected ObjectMapper objectMapper;
 
-    public AbstractJsonLoader() {
+    protected AbstractJsonLoader() {
         this.objectMapper = new ObjectMapper();
     }
 
