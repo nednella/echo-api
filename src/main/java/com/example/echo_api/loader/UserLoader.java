@@ -16,13 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserLoader extends AbstractJsonLoader<User> {
 
-    private static final String path = "data/dev-users.json";
+    private static final String PATH = "data/dev-users.json";
 
     private final UserService userService;
 
     @Override
     protected String getFilePath() {
-        return path;
+        return PATH;
     }
 
     @Override
