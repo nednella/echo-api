@@ -1,9 +1,6 @@
 package com.example.echo_api.service.auth;
 
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
@@ -35,13 +32,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void authenticate(String username, String password) throws AuthenticationException {
-        try {
-            UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
-                .unauthenticated(username, password);
-            contextAwareAuthenticationManager.authenticate(token);
-        } catch (DisabledException | LockedException | BadCredentialsException ex) {
-            throw ex;
-        }
+        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
+            .unauthenticated(username, password);
+        contextAwareAuthenticationManager.authenticate(token);
     }
 
 }
