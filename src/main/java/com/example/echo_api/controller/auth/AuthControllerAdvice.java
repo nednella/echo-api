@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.example.echo_api.exception.AbstractControllerAdvice;
 import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
+import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthControllerAdvice extends AbstractControllerAdvice {
 
     @ExceptionHandler({ MethodArgumentNotValidException.class })
-    ResponseEntity<?> handleInvalidRequestException(HttpServletRequest request, MethodArgumentNotValidException ex) {
+    ResponseEntity<ErrorResponse> handleInvalidRequestException(HttpServletRequest request,
+        MethodArgumentNotValidException ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         // build linked hashmap of MethodArgumentNotValidException field errors to
@@ -49,7 +51,7 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
     }
 
     @ExceptionHandler({ UsernameNotFoundException.class, BadCredentialsException.class })
-    ResponseEntity<?> handleAuthenticationException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorResponse> handleAuthenticationException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -60,7 +62,7 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
     }
 
     @ExceptionHandler({ UsernameAlreadyExistsException.class })
-    ResponseEntity<?> handleUsernameAlreadyExistsException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorResponse> handleUsernameAlreadyExistsException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -71,7 +73,7 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
     }
 
     @ExceptionHandler({ AccountStatusException.class })
-    ResponseEntity<?> handleAccountStatusException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorResponse> handleAccountStatusException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(

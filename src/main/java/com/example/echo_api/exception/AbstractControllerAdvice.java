@@ -48,7 +48,7 @@ public abstract class AbstractControllerAdvice {
      * 
      * @see ErrorResponse
      */
-    protected ResponseEntity<?> createExceptionHandler(
+    protected ResponseEntity<ErrorResponse> createExceptionHandler(
         @NonNull HttpServletRequest request,
         @NonNull HttpStatus status,
         @NonNull String message,

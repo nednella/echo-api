@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +28,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /** 401 */
     @ExceptionHandler({ InsufficientAuthenticationException.class })
-    ResponseEntity<?> handleInsufficientAuthenticationException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorResponse> handleInsufficientAuthenticationException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -38,7 +40,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /** 403 */
     @ExceptionHandler({ AccessDeniedException.class })
-    ResponseEntity<?> handleAccessDeniedException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorResponse> handleAccessDeniedException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -50,7 +52,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /** 404 */
     @ExceptionHandler({ NoResourceFoundException.class })
-    ResponseEntity<?> handleNotFoundException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorResponse> handleNotFoundException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -62,7 +64,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /** 500 */
     @ExceptionHandler({ Exception.class })
-    ResponseEntity<?> handleGenericException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorResponse> handleGenericException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(request,
