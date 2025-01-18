@@ -12,9 +12,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.example.echo_api.config.ValidationConfig;
+import com.example.echo_api.config.RegexConfig;
 
-public class ValidationConfigTest {
+public class RegexConfigTest {
 
     private static List<String> validUsernames;
     private static List<String> invalidUsernames;
@@ -36,7 +36,7 @@ public class ValidationConfigTest {
     }
 
     private static List<String> readFile(String fileName) throws IOException {
-        InputStream inputStream = ValidationConfigTest.class.getClassLoader().getResourceAsStream(fileName);
+        InputStream inputStream = RegexConfigTest.class.getClassLoader().getResourceAsStream(fileName);
 
         if (inputStream == null) {
             throw new FileNotFoundException("File not found in resources: " + fileName);
@@ -48,33 +48,33 @@ public class ValidationConfigTest {
     }
 
     @Test
-    void Regex_Username_ShouldPass() {
+    void RegexConfig_Username_ShouldPass() {
         for (String username : validUsernames) {
-            assertTrue(username.matches(ValidationConfig.Regex.USERNAME),
+            assertTrue(username.matches(RegexConfig.USERNAME),
                 "Expected username to match regex: " + username);
         }
     }
 
     @Test
-    void Regex_Username_ShouldFail() {
+    void RegexConfig_Username_ShouldFail() {
         for (String username : invalidUsernames) {
-            assertFalse(username.matches(ValidationConfig.Regex.USERNAME),
+            assertFalse(username.matches(RegexConfig.USERNAME),
                 "Expected username to match regex: " + username);
         }
     }
 
     @Test
-    void Regex_Password_ShouldPass() {
+    void RegexConfig_Password_ShouldPass() {
         for (String password : validPasswords) {
-            assertTrue(password.matches(ValidationConfig.Regex.PASSWORD),
+            assertTrue(password.matches(RegexConfig.PASSWORD),
                 "Expected password to match regex: " + password);
         }
     }
 
     @Test
-    void Regex_Password_ShouldFail() {
+    void RegexConfig_Password_ShouldFail() {
         for (String password : invalidPasswords) {
-            assertFalse(password.matches(ValidationConfig.Regex.PASSWORD),
+            assertFalse(password.matches(RegexConfig.PASSWORD),
                 "Expected password to match regex: " + password);
         }
     }
