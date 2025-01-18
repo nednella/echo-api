@@ -10,6 +10,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.redis.testcontainers.RedisContainer;
+
 import jakarta.transaction.Transactional;
 
 @ActiveProfiles(value = "test")
@@ -22,10 +24,28 @@ public abstract class IntegrationTest {
     @ServiceConnection
     protected static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
+    @Container
+    @ServiceConnection
+    protected static final RedisContainer redis = new RedisContainer("redis:latest");
+
+    static {
+        redis.start();
+
+        // Dynamically allocate redis host:port
+        System.setProperty("spring.data.redis.host", redis.getHost());
+        System.setProperty("spring.data.redis.port", redis.getMappedPort(6379).toString());
+    }
+
     @Test
-    public void containerConnectionEstablished() {
+    public void postgresConnectionEstablished() {
         assertTrue(postgres.isCreated());
         assertTrue(postgres.isRunning());
+    }
+
+    @Test
+    public void redisConnectionEstablished() {
+        assertTrue(redis.isCreated());
+        assertTrue(redis.isRunning());
     }
 
 }
