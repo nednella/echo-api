@@ -1,5 +1,6 @@
 package com.example.echo_api.config;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -9,6 +10,8 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
+
+import lombok.Setter;
 
 /**
  * Configuration class for Spring Session.
@@ -24,9 +27,14 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
  * {@link https://docs.spring.io/spring-session/reference/configuration/redis.html#finding-all-user-sessions}.
  * 
  */
+@Setter
 @Configuration
 @EnableRedisHttpSession
+@ConfigurationProperties(prefix = "spring.data.redis")
 public class SessionConfig extends AbstractHttpSessionApplicationInitializer {
+
+    private String host;
+    private int port;
 
     /**
      * Configures the Redis connection factory using Lettuce. This factory creates
@@ -36,7 +44,7 @@ public class SessionConfig extends AbstractHttpSessionApplicationInitializer {
      */
     @Bean
     LettuceConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory();
+        return new LettuceConnectionFactory(host, port);
     }
 
     /**
