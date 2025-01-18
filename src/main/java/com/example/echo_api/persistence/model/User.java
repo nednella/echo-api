@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.example.echo_api.validation.Username;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +42,7 @@ public class User implements Serializable {
     private UUID id;
 
     /** Unique username */
+    @Username
     @Column
     private String username;
 
