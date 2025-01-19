@@ -23,16 +23,26 @@ public class AccountController {
 
     private final UserService userService;
 
+    // @formatter:off
     @GetMapping(ApiConfig.Account.UPDATE_USERNAME)
-    public ResponseEntity<Boolean> isUsernameAvailable(@RequestParam @Valid UpdateUsernameRequest username) {
-        return ResponseEntity.ok(userService.existsByUsername(username.username()));
+    public ResponseEntity<Boolean> isUsernameAvailable(
+        @RequestParam("username")
+        @Valid
+        UpdateUsernameRequest username
+    ) {
+        return ResponseEntity.ok(!userService.existsByUsername(username.username()));
     }
 
     @PutMapping(ApiConfig.Account.UPDATE_USERNAME)
-    public ResponseEntity<Void> updateUsername(@RequestParam @Valid UpdateUsernameRequest username) {
+    public ResponseEntity<Void> updateUsername(
+        @RequestParam("username")
+        @Valid
+        UpdateUsernameRequest username
+    ) {
         userService.updateUsername(username.username());
         return ResponseEntity.noContent().build();
     }
+    // @formatter:on
 
     @PutMapping(ApiConfig.Account.UPDATE_PASSWORD)
     public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdatePasswordRequest request) {
