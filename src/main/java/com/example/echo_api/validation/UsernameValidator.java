@@ -1,5 +1,7 @@
 package com.example.echo_api.validation;
 
+import com.example.echo_api.config.RegexConfig;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -16,12 +18,7 @@ import jakarta.validation.ConstraintValidatorContext;
  */
 public class UsernameValidator implements ConstraintValidator<Username, String> {
 
-    private String regexp;
-
-    @Override
-    public void initialize(Username constraintAnnotation) {
-        this.regexp = constraintAnnotation.regexp();
-    }
+    private static final String REGEXP = RegexConfig.USERNAME;
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -29,7 +26,7 @@ public class UsernameValidator implements ConstraintValidator<Username, String> 
             return true; // Null values are valid
         }
 
-        return value.matches(regexp);
+        return value.matches(REGEXP);
     }
 
 }

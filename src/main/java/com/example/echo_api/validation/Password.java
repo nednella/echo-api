@@ -43,11 +43,6 @@ import jakarta.validation.Payload;
 public @interface Password {
 
     /**
-     * @return the regular expression to match
-     */
-    String regexp() default RegexConfig.PASSWORD;
-
-    /**
      * @return the error message template
      */
     String message() default RegexConfig.PASSWORD_MESSAGE;
