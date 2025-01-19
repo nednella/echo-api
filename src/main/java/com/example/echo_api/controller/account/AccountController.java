@@ -1,0 +1,41 @@
+package com.example.echo_api.controller.account;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.echo_api.config.ApiConfig;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdateUsernameRequest;
+import com.example.echo_api.service.user.UserService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Validated
+@RestController
+@RequiredArgsConstructor
+public class AccountController {
+
+    private final UserService userService;
+
+    @GetMapping(ApiConfig.Account.UPDATE_USERNAME)
+    public ResponseEntity<Boolean> isUsernameAvailable(@RequestParam @Valid UpdateUsernameRequest username) {
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(ApiConfig.Account.UPDATE_USERNAME)
+    public ResponseEntity<Void> updateUsername(@RequestParam @Valid UpdateUsernameRequest username) {
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(ApiConfig.Account.UPDATE_PASSWORD)
+    public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdatePasswordRequest request) {
+        return ResponseEntity.noContent().build();
+    }
+
+}
