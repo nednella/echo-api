@@ -2,11 +2,12 @@ package com.example.echo_api.service.user;
 
 import java.util.List;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
+import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
+import com.example.echo_api.exception.custom.username.UsernameException;
+import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 
@@ -27,9 +28,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) throws UsernameNotFoundException {
+    public User findByUsername(String username) throws UsernameException {
         return userRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException(username));
+            .orElseThrow(UsernameNotFoundException::new);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(String username, String password, String role) throws UsernameAlreadyExistsException {
+    public void createUser(String username, String password, String role) throws UsernameException {
         if (existsByUsername(username)) {
             throw new UsernameAlreadyExistsException();
         }

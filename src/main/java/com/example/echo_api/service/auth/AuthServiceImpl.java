@@ -5,7 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
+import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.service.user.UserService;
 
 import jakarta.transaction.Transactional;
@@ -25,8 +25,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void signUp(String username, String password)
-        throws UsernameAlreadyExistsException, AuthenticationException {
+    public void signUp(String username, String password) throws UsernameException, AuthenticationException {
         userService.createUser(username, password);
         authenticate(username, password);
     }

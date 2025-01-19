@@ -12,10 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
+import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
+import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 import com.example.echo_api.service.user.UserService;
@@ -117,7 +117,7 @@ class UserServiceTest {
      */
     @Test
     void UserService_FindByUsername_ThrowUsernameNotFound() {
-        when(userRepository.findByUsername(testUser.getUsername())).thenThrow(new UsernameNotFoundException(""));
+        when(userRepository.findByUsername(testUser.getUsername())).thenThrow(new UsernameNotFoundException());
 
         assertThrows(UsernameNotFoundException.class,
             () -> userService.findByUsername(testUser.getUsername()));

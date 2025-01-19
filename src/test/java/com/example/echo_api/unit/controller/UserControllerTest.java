@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.controller.user.UserController;
+import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.service.user.UserService;
 
@@ -99,14 +99,14 @@ class UserControllerTest {
         String endpoint = ApiConfig.User.FIND_ALL + "/" + testUser.getUsername();
 
         when(userService.findByUsername(testUser.getUsername()))
-            .thenThrow(new UsernameNotFoundException(testUser.getUsername()));
+            .thenThrow(new UsernameNotFoundException());
 
         mockMvc.perform(get(endpoint))
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value("username not found"))
+            .andExpect(jsonPath("$.message").value("Username not found."))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 
