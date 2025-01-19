@@ -19,7 +19,6 @@ import com.example.echo_api.validation.Password;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import lombok.AllArgsConstructor;
 
 /**
  * Unit test class for {@link Password} annotation.
@@ -31,11 +30,14 @@ class PasswordAnnotationTest {
     private static List<String> invalidPasswords;
 
     // Dummy class for validation
-    @AllArgsConstructor
     static class TestUser {
 
         @Password
         private String password;
+
+        public TestUser(String password) {
+            this.password = password;
+        }
 
     }
 

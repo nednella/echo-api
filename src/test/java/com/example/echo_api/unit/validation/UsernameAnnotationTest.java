@@ -19,7 +19,6 @@ import com.example.echo_api.validation.Username;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import lombok.AllArgsConstructor;
 
 /**
  * Unit test class for {@link Username} annotation.
@@ -31,11 +30,14 @@ class UsernameAnnotationTest {
     private static List<String> invalidUsernames;
 
     // Dummy class for validation
-    @AllArgsConstructor
     static class TestUser {
 
         @Username
         private String username;
+
+        public TestUser(String username) {
+            this.username = username;
+        }
 
     }
 
