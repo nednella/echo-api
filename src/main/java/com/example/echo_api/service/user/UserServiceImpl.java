@@ -2,12 +2,20 @@ package com.example.echo_api.service.user;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.echo_api.exception.custom.password.ConfirmationPasswordMismatchException;
+import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
+import com.example.echo_api.exception.custom.password.NewPasswordEqualsOldPasswordException;
+import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.model.SecurityUser;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 
@@ -46,6 +54,59 @@ public class UserServiceImpl implements UserService {
 
         User user = new User(username, passwordEncoder.encode(password), role);
         userRepository.save(user);
+    }
+
+    @Override
+    public void updateUsername(String username) throws UsernameException {
+        if (existsByUsername(username)) {
+            throw new UsernameAlreadyExistsException();
+        }
+
+        User user = getAuthenticatedUser();
+        user.setUsername(username);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordRequest request) throws PasswordException {
+        // validate new == confirmation
+        if (!request.new_password().equals(request.confirmation_password())) {
+            throw new ConfirmationPasswordMismatchException();
+        }
+
+        // validate new != current
+        if (request.new_password().equals(request.current_password())) {
+            throw new NewPasswordEqualsOldPasswordException();
+        }
+
+        // validate current password
+        User user = getAuthenticatedUser();
+        if (!passwordEncoder.matches(request.current_password(), user.getPassword())) {
+            throw new IncorrectCurrentPasswordException();
+        }
+
+        user.setPassword(passwordEncoder.encode(request.new_password()));
+        userRepository.save(user);
+    }
+
+    /**
+     * Retrieves the currently authenticated user from the security context.
+     * 
+     * <p>
+     * This method accesses the Spring Security context to retrieve the
+     * authentication information and then extracts the {@link User} entity
+     * associated to the authentication.
+     *
+     * @return the {@link User} entity of the authenticated user, or {@code null} if
+     *         no user is authenticated
+     */
+    private User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        return ((SecurityUser) authentication.getPrincipal()).getUser();
     }
 
 }
