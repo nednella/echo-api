@@ -2,8 +2,6 @@ package com.example.echo_api.service.user;
 
 import java.util.List;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +13,6 @@ import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsExcep
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
-import com.example.echo_api.persistence.model.SecurityUser;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 
@@ -29,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticatedUserService authenticatedUserService;
 
     @Override
     public List<User> findAll() {
@@ -62,7 +60,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameAlreadyExistsException();
         }
 
-        User user = getAuthenticatedUser();
+        User user = authenticatedUserService.getAuthenticatedUser();
         user.setUsername(username);
         userRepository.save(user);
     }
@@ -80,33 +78,13 @@ public class UserServiceImpl implements UserService {
         }
 
         // validate current password
-        User user = getAuthenticatedUser();
+        User user = authenticatedUserService.getAuthenticatedUser();
         if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new IncorrectCurrentPasswordException();
         }
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));
         userRepository.save(user);
-    }
-
-    /**
-     * Retrieves the currently authenticated user from the security context.
-     * 
-     * <p>
-     * This method accesses the Spring Security context to retrieve the
-     * authentication information and then extracts the {@link User} entity
-     * associated to the authentication.
-     *
-     * @return the {@link User} entity of the authenticated user, or {@code null} if
-     *         no user is authenticated
-     */
-    private User getAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return null;
-        }
-
-        return ((SecurityUser) authentication.getPrincipal()).getUser();
     }
 
 }
