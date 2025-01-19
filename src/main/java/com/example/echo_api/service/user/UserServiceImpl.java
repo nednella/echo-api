@@ -70,22 +70,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePassword(UpdatePasswordRequest request) throws PasswordException {
         // validate new == confirmation
-        if (!request.new_password().equals(request.confirmation_password())) {
+        if (!request.newPassword().equals(request.confirmationPassword())) {
             throw new ConfirmationPasswordMismatchException();
         }
 
         // validate new != current
-        if (request.new_password().equals(request.current_password())) {
+        if (request.newPassword().equals(request.currentPassword())) {
             throw new NewPasswordEqualsOldPasswordException();
         }
 
         // validate current password
         User user = getAuthenticatedUser();
-        if (!passwordEncoder.matches(request.current_password(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new IncorrectCurrentPasswordException();
         }
 
-        user.setPassword(passwordEncoder.encode(request.new_password()));
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
         userRepository.save(user);
     }
 

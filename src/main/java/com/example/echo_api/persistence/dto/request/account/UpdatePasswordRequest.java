@@ -1,6 +1,7 @@
 package com.example.echo_api.persistence.dto.request.account;
 
 import com.example.echo_api.validation.Password;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotEmpty;
 
@@ -8,14 +9,17 @@ import jakarta.validation.constraints.NotEmpty;
 public record UpdatePasswordRequest(
 
     @NotEmpty(message = "Current password is required.")
-    String current_password,
+    @JsonProperty("current_password")
+    String currentPassword,
 
     @Password
     @NotEmpty(message = "New password is required.")
-    String new_password,
+    @JsonProperty("new_password")
+    String newPassword,
 
     @NotEmpty(message = "Confirmation password is required.")
-    String confirmation_password
+    @JsonProperty("confirmation_password")
+    String confirmationPassword
 
 ) {}
 // @formatter:on
