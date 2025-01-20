@@ -3,12 +3,9 @@ package com.example.echo_api.integration.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.*;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -25,34 +22,21 @@ import com.example.echo_api.service.user.UserService;
 /**
  * Integration test class for {@link AuthController}.
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AuthControllerTest extends IntegrationTest {
 
     @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
     private UserService userService;
-
-    private SignInRequest existingUser;
-
-    /**
-     * Set up test environment by initialising {@link SignInRequest} for
-     * {@code existingUser}, and registers {@code existingUser} to the database.
-     */
-    @BeforeAll
-    public void setUp() {
-        existingUser = new SignInRequest("existing_user", "password-1");
-        userService.createUser(existingUser.username(), existingUser.password());
-    }
 
     @Test
     void AuthController_SignIn_Return204() {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String endpoint = ApiConfig.Auth.LOGIN;
 
-        HttpEntity<SignInRequest> request = TestUtils.createJsonRequestEntity(existingUser);
+        // POST a login for the pre-existing testUser
+        SignInRequest loginForm = new SignInRequest(testUser.getUsername(), testUser.getPassword());
+
+        HttpEntity<SignInRequest> request = TestUtils.createJsonRequestEntity(loginForm);
         ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, request, Void.class);
 
         // assert the response
@@ -65,9 +49,11 @@ class AuthControllerTest extends IntegrationTest {
     void AuthController_SignUp_Return204() throws Exception {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String endpoint = ApiConfig.Auth.SIGNUP;
-        SignUpRequest newUser = new SignUpRequest("new_user", "password-1");
 
-        HttpEntity<SignUpRequest> request = TestUtils.createJsonRequestEntity(newUser);
+        // POST a signup for a new user
+        SignUpRequest signupForm = new SignUpRequest("new_user", "password1");
+
+        HttpEntity<SignUpRequest> request = TestUtils.createJsonRequestEntity(signupForm);
         ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, request, Void.class);
 
         // assert response
@@ -76,18 +62,20 @@ class AuthControllerTest extends IntegrationTest {
         TestUtils.assertSetCookieStartsWith(response, "ECHO_SESSION");
 
         // assert db
-        User registeredUser = userService.findByUsername(newUser.username());
+        User registeredUser = userService.findByUsername(signupForm.username());
         assertNotNull(registeredUser);
-        assertEquals(newUser.username(), registeredUser.getUsername());
+        assertEquals(signupForm.username(), registeredUser.getUsername());
     }
 
     @Test
     void AuthController_SignUp_Return400UsernameAlreadyExists() {
         // api: POST /api/v1/auth/signup ==> 400 : Username Already Exists
         String endpoint = ApiConfig.Auth.SIGNUP;
-        SignUpRequest takenUser = new SignUpRequest(existingUser.username(), existingUser.password());
 
-        HttpEntity<SignUpRequest> request = TestUtils.createJsonRequestEntity(takenUser);
+        // POST a signup for the pre-existing testUser
+        SignUpRequest signupForm = new SignUpRequest(testUser.getUsername(), testUser.getPassword());
+
+        HttpEntity<SignUpRequest> request = TestUtils.createJsonRequestEntity(signupForm);
         ResponseEntity<ErrorResponse> response = restTemplate.postForEntity(endpoint, request, ErrorResponse.class);
 
         // assert response
