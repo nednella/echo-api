@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -16,22 +17,23 @@ import com.example.echo_api.persistence.repository.UserRepository;
  * Integration test class for {@link UserRepository}.
  */
 @DataJpaTest
-class UserRepositoryTest extends RepositoryTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class UserRepositoryIT extends RepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
 
     /**
-     * Saves a {@link User} object to the {@link UserRepository} before each test.
+     * Save a {@link User} object to the {@link UserRepository} before commencing.
      */
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    void setUp() {
         testUser = new User("test", "password1");
         userRepository.save(testUser);
     }
 
     /**
-     * Tests the {@link UserRepository#findByUsername(String)} method to verify that
+     * Test the {@link UserRepository#findByUsername(String)} method to verify that
      * a user can be found by their username.
      */
     @Test
@@ -44,7 +46,7 @@ class UserRepositoryTest extends RepositoryTest {
     }
 
     /**
-     * Tests the {@link UserRepository#findByUsername(String)} method to verify that
+     * Test the {@link UserRepository#findByUsername(String)} method to verify that
      * searching for a non-existent user returns an empty result.
      */
     @Test
@@ -56,7 +58,7 @@ class UserRepositoryTest extends RepositoryTest {
     }
 
     /**
-     * Tests the {@link UserRepository#existsByUsername(String)} method to verify
+     * Test the {@link UserRepository#existsByUsername(String)} method to verify
      * that the repository correctly identifies that a user exists when searching
      * for a valid username.
      */
@@ -68,7 +70,7 @@ class UserRepositoryTest extends RepositoryTest {
     }
 
     /**
-     * Tests the {@link UserRepository#existsByUsername(String)} method to verify
+     * Test the {@link UserRepository#existsByUsername(String)} method to verify
      * that the repository correctly identifies that a user does not exist when
      * searching for a non-existent username.
      */
