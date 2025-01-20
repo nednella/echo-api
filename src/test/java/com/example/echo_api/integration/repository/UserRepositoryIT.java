@@ -18,7 +18,7 @@ import com.example.echo_api.persistence.repository.UserRepository;
  */
 @DataJpaTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UserRepositoryTest extends RepositoryTest {
+class UserRepositoryIT extends RepositoryTest {
 
     @Autowired
     private UserRepository userRepository;

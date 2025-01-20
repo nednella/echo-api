@@ -23,7 +23,7 @@ import com.example.echo_api.service.user.UserService;
  * Integration test class for {@link AuthController}.
  */
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class AuthControllerTest extends IntegrationTest {
+class AuthControllerIT extends IntegrationTest {
 
     @Autowired
     private UserService userService;
