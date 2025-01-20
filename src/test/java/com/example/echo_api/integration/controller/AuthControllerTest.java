@@ -5,9 +5,9 @@ import static org.springframework.http.HttpStatus.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.controller.auth.AuthController;
@@ -22,7 +22,7 @@ import com.example.echo_api.service.user.UserService;
 /**
  * Integration test class for {@link AuthController}.
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class AuthControllerTest extends IntegrationTest {
 
     @Autowired
