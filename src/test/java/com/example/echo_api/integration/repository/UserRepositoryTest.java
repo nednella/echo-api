@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.example.echo_api.integration.IntegrationTest;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 
@@ -17,19 +16,17 @@ import com.example.echo_api.persistence.repository.UserRepository;
  * Integration test class for {@link UserRepository}.
  */
 @DataJpaTest
-class UserRepositoryTest extends IntegrationTest {
+class UserRepositoryTest extends RepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    private User testUser;
 
     /**
      * Saves a {@link User} object to the {@link UserRepository} before each test.
      */
     @BeforeEach
     public void setUp() {
-        testUser = new User("test", "123");
+        testUser = new User("test", "password1");
         userRepository.save(testUser);
     }
 
