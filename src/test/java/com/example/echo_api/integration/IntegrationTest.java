@@ -7,13 +7,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -24,47 +26,52 @@ import com.example.echo_api.persistence.model.User;
 import com.redis.testcontainers.RedisContainer;
 
 @ActiveProfiles(value = "test")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Transactional
 @Testcontainers
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class IntegrationTest {
 
     @Container
     @ServiceConnection
-    protected static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
+    protected static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
     @Container
     @ServiceConnection
-    protected static final RedisContainer redis = new RedisContainer("redis:latest");
-
-    @Autowired
-    private SessionCookieInterceptor restTemplateInterceptor;
+    protected static RedisContainer redis = new RedisContainer("redis:latest");
 
     @Autowired
     protected TestRestTemplate restTemplate;
 
+    @Autowired
+    private SessionCookieInterceptor restTemplateInterceptor;
+
     protected User testUser;
 
-    static {
+    /**
+     * Workaround method that supplies the Redis container connection details to the
+     * application context, so that {@link SessionConfig} can correctly relay the
+     * information to the redis {@link LettuceConnectionFactory}.
+     * 
+     * @param registry the property registry to assign to
+     */
+    @DynamicPropertySource
+    public static void redisInit(DynamicPropertyRegistry registry) {
         redis.start();
-
-        // Dynamically allocate redis host:port
-        System.setProperty("spring.data.redis.host", redis.getHost());
-        System.setProperty("spring.data.redis.port", redis.getMappedPort(6379).toString());
+        registry.add("spring.data.redis.host", () -> redis.getHost());
+        registry.add("spring.data.redis.port", () -> redis.getFirstMappedPort());
     }
 
     /**
-     * Initialise the integration test environment by:
+     * Initialise the integration test environment:
      * <ul>
-     * <li>Configuring the {@link TestRestTemplate} with the
+     * <li>Configure {@link TestRestTemplate} with
      * {@link SessionCookieInterceptor}.</li>
-     * <li>Configuring a {@code testUser} for integration testing.</li>
-     * <li>Obtaining an authenticated session for the {@code testUser}.</li>
+     * <li>Configure a {@code testUser} for integration testing.</li>
+     * <li>Obtaining an authenticated session for {@code testUser}.</li>
      * </ul>
      */
     @BeforeAll
-    public void init() {
+    void integrationTestSetup() {
         // Configure rest template
         restTemplate
             .getRestTemplate()
@@ -74,8 +81,8 @@ public abstract class IntegrationTest {
         // Configure test user
         testUser = new User("test", "password1");
 
-        // Authenticate
-        obtainAuthenticatedSession();
+        // Register and authenticate test user
+        obtainAuthenticatedSession(testUser);
     }
 
     /**
@@ -83,7 +90,7 @@ public abstract class IntegrationTest {
      * correctly.
      */
     @Test
-    public void postgresConnectionEstablished() {
+    void postgresConnectionEstablished() {
         assertTrue(postgres.isCreated());
         assertTrue(postgres.isRunning());
     }
@@ -93,20 +100,23 @@ public abstract class IntegrationTest {
      * correctly.
      */
     @Test
-    public void redisConnectionEstablished() {
+    void redisConnectionEstablished() {
         assertTrue(redis.isCreated());
         assertTrue(redis.isRunning());
     }
 
     /**
-     * Registers the configured {@code testUser} by sending a POST request to the
-     * signup endpoint. The user is inserted into the database and an authenticated
-     * session is retrieved from the server.
+     * Registers and authenticates the supplied {@link User} by sending a POST
+     * request to the signup endpoint. The user is inserted into the database and an
+     * authenticated session is retrieved from the server, and stored in
+     * {@link SessionCookieInterceptor}.
+     * 
+     * @param user the user to be authenticated
      */
-    private void obtainAuthenticatedSession() {
+    private void obtainAuthenticatedSession(User user) {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String path = ApiConfig.Auth.SIGNUP;
-        SignUpRequest signupForm = new SignUpRequest(testUser.getUsername(), testUser.getPassword());
+        SignUpRequest signupForm = new SignUpRequest(user.getUsername(), user.getPassword());
 
         HttpEntity<SignUpRequest> request = TestUtils.createJsonRequestEntity(signupForm);
         ResponseEntity<Void> response = restTemplate.postForEntity(path, request, Void.class);
