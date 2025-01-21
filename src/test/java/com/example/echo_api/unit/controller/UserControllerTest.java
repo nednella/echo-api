@@ -17,6 +17,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.echo_api.config.ApiConfig;
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.user.UserController;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.model.User;
@@ -106,7 +107,7 @@ class UserControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value("Username not found."))
+            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.USERNAME_NOT_FOUND))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 

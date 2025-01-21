@@ -1,5 +1,7 @@
 package com.example.echo_api.exception.custom.username;
 
+import com.example.echo_api.config.ErrorMessageConfig;
+
 /**
  * Thrown if a HTTP request is rejected because the supplied username does not
  * exist in the db.
@@ -15,7 +17,7 @@ public class UsernameNotFoundException extends UsernameException {
      * Constructs a {@code UsernameNotFoundException} with the specified message.
      */
     public UsernameNotFoundException() {
-        super("Username not found.");
+        super(ErrorMessageConfig.USERNAME_NOT_FOUND);
     }
 
 }

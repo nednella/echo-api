@@ -1,5 +1,6 @@
 package com.example.echo_api.exception.custom.password;
 
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 
 /**
@@ -13,7 +14,7 @@ public class ConfirmationPasswordMismatchException extends PasswordException {
      * message.
      */
     public ConfirmationPasswordMismatchException() {
-        super("Confirmation password does not match the new password.");
+        super(ErrorMessageConfig.CONFIRMATION_PASSWORD_MISMATCH);
     }
 
 }

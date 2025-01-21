@@ -16,6 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.echo_api.config.ApiConfig;
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.account.AccountController;
 import com.example.echo_api.exception.custom.password.ConfirmationPasswordMismatchException;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
@@ -103,7 +104,7 @@ class AccountControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
         assertEquals(400, error.status());
-        assertEquals("invalid request", error.message());
+        assertEquals(ErrorMessageConfig.INVALID_REQUEST, error.message());
         assertEquals(path, error.path());
     }
 
@@ -139,7 +140,7 @@ class AccountControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
         assertEquals(400, error.status());
-        assertEquals("Username already exists.", error.message());
+        assertEquals(ErrorMessageConfig.USERNAME_ARLEADY_EXISTS, error.message());
         assertEquals(path, error.path());
     }
 
@@ -191,7 +192,7 @@ class AccountControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
         assertEquals(400, error.status());
-        assertEquals("Confirmation password does not match the new password.", error.message());
+        assertEquals(ErrorMessageConfig.CONFIRMATION_PASSWORD_MISMATCH, error.message());
         assertEquals(path, error.path());
     }
 
@@ -221,7 +222,7 @@ class AccountControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
         assertEquals(400, error.status());
-        assertEquals("New password cannot be the same as the current password.", error.message());
+        assertEquals(ErrorMessageConfig.NEW_PASSWORD_EQUALS_OLD_PASSWORD, error.message());
         assertEquals(path, error.path());
     }
 
@@ -251,7 +252,7 @@ class AccountControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
         assertEquals(400, error.status());
-        assertEquals("Incorrect current password.", error.message());
+        assertEquals(ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD, error.message());
         assertEquals(path, error.path());
     }
 

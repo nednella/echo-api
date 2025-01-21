@@ -1,5 +1,6 @@
 package com.example.echo_api.exception.custom.password;
 
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 
 /**
@@ -13,7 +14,7 @@ public class IncorrectCurrentPasswordException extends PasswordException {
      * message.
      */
     public IncorrectCurrentPasswordException() {
-        super("Incorrect current password.");
+        super(ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD);
     }
 
 }
