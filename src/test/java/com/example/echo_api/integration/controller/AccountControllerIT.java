@@ -24,25 +24,25 @@ import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 class AccountControllerIT extends IntegrationTest {
 
     @Test
-    void AccountController_IsUsernameAvailable_Return200True() {
-        // api: GET /api/v1/account/username?username={...} ==> 200 : True
-        String path = ApiConfig.Account.UPDATE_USERNAME + "?username=" + "unique_name_123";
+    void AccountController_UsernameAvailable_Return200True() {
+        // api: GET /api/v1/account/username-available?username={...} ==> 200 : True
+        String path = ApiConfig.Account.USERNAME_AVAILABLE + "?username=" + "unique_name_123";
 
         ResponseEntity<String> response = restTemplate.getForEntity(path, String.class);
 
-        // assert the response
+        // assert response
         assertEquals(OK, response.getStatusCode());
         assertEquals("true", response.getBody());
     }
 
     @Test
-    void AccountController_IsUsernameAvailable_Return200False() {
-        // api: GET /api/v1/account/username?username={...} ==> 200 : False
-        String path = ApiConfig.Account.UPDATE_USERNAME + "?username=" + existingUser.getUsername();
+    void AccountController_UsernameAvailable_Return200False() {
+        // api: GET /api/v1/account/username-available?username={...} ==> 200 : False
+        String path = ApiConfig.Account.USERNAME_AVAILABLE + "?username=" + existingUser.getUsername();
 
         ResponseEntity<String> response = restTemplate.getForEntity(path, String.class);
 
-        // assert the response
+        // assert response
         assertEquals(OK, response.getStatusCode());
         assertEquals("false", response.getBody());
     }
@@ -51,16 +51,17 @@ class AccountControllerIT extends IntegrationTest {
     @Transactional // rollback
     void AccountController_UpdateUsername_Return204() {
         // api: PUT /api/v1/account/username ==> 204 : No Content
-        String path = ApiConfig.Account.UPDATE_USERNAME + "?username=" + "new_username";
+        String putPath = ApiConfig.Account.UPDATE_USERNAME + "?username=" + "new_username";
 
-        // PUT the username update
-        ResponseEntity<Void> response1 = restTemplate.exchange(path, PUT, null, Void.class);
-        assertEquals(NO_CONTENT, response1.getStatusCode());
+        // PUT
+        ResponseEntity<Void> putResponse = restTemplate.exchange(putPath, PUT, null, Void.class);
+        assertEquals(NO_CONTENT, putResponse.getStatusCode());
 
-        // GET the updated username
-        ResponseEntity<String> response2 = restTemplate.getForEntity(path, String.class);
-        assertEquals(OK, response2.getStatusCode());
-        assertEquals("false", response2.getBody());
+        // GET (assert db)
+        String getPath = ApiConfig.Account.USERNAME_AVAILABLE + "?username=" + "new_username";
+        ResponseEntity<String> getResponse = restTemplate.getForEntity(getPath, String.class);
+        assertEquals(OK, getResponse.getStatusCode());
+        assertEquals("false", getResponse.getBody());
     }
 
     @Test
@@ -88,10 +89,20 @@ class AccountControllerIT extends IntegrationTest {
         String path = ApiConfig.Account.UPDATE_PASSWORD;
         UpdatePasswordRequest update = new UpdatePasswordRequest(existingUser.getPassword(), "new-pw1", "new-pw1");
 
+        // PUT 1
         HttpEntity<UpdatePasswordRequest> request = TestUtils.createJsonRequestEntity(update);
-        ResponseEntity<Void> response = restTemplate.exchange(path, PUT, request, Void.class);
+        ResponseEntity<Void> response1 = restTemplate.exchange(path, PUT, request, Void.class);
+        assertEquals(NO_CONTENT, response1.getStatusCode());
 
-        assertEquals(NO_CONTENT, response.getStatusCode());
+        // PUT 2 (assert db)
+        ResponseEntity<ErrorResponse> response2 = restTemplate.exchange(path, PUT, request, ErrorResponse.class);
+        assertEquals(BAD_REQUEST, response2.getStatusCode());
+        assertNotNull(response2.getBody());
+
+        ErrorResponse error = response2.getBody();
+        assertNotNull(error);
+        assertEquals(BAD_REQUEST.value(), error.status());
+        assertEquals("Incorrect current password.", error.message());
     }
 
     @Test
