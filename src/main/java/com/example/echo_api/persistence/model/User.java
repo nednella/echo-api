@@ -52,7 +52,7 @@ public class User implements Serializable {
 
     /** User role related to permissions */
     @Column
-    private String role = "ROLE_USER"; // default = "ROLE_USER"
+    private String role = "USER"; // default = "USER"
 
     /** Enabled status */
     @Column

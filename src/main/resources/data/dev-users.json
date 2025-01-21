@@ -2,7 +2,7 @@
 	{
 		"username": "admin",
 		"password": "password",
-		"role": "ROLE_ADMIN"
+		"role": "ADMIN"
 	},
 	{
 		"username": "john_doe",
