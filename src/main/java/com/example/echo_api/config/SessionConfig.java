@@ -2,8 +2,6 @@ package com.example.echo_api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
@@ -36,17 +34,6 @@ public class SessionConfig extends AbstractHttpSessionApplicationInitializer {
         serializer.setCookiePath("/");
         serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
         return serializer;
-    }
-
-    /**
-     * Configures the SecurityContextRepository to store security contexts in HTTP
-     * sessions managed by Redis for persistence.
-     * 
-     * @return HttpSessionSecurityContextRepository
-     */
-    @Bean
-    SecurityContextRepository securityContextRepository() {
-        return new HttpSessionSecurityContextRepository();
     }
 
 }
