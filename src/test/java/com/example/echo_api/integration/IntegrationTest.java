@@ -43,9 +43,9 @@ public abstract class IntegrationTest {
     protected TestRestTemplate restTemplate;
 
     @Autowired
-    private SessionCookieInterceptor restTemplateInterceptor;
+    protected SessionCookieInterceptor sessionCookieInterceptor;
 
-    protected User testUser;
+    protected User existingUser;
 
     /**
      * Workaround method that supplies the Redis container connection details to the
@@ -76,13 +76,13 @@ public abstract class IntegrationTest {
         restTemplate
             .getRestTemplate()
             .getInterceptors()
-            .add(restTemplateInterceptor);
+            .add(sessionCookieInterceptor);
 
         // Configure test user
-        testUser = new User("test", "password1");
+        existingUser = new User("test", "password1");
 
         // Register and authenticate test user
-        obtainAuthenticatedSession(testUser);
+        obtainAuthenticatedSession(existingUser);
     }
 
     /**

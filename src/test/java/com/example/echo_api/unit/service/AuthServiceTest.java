@@ -15,7 +15,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
+import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.service.auth.AuthServiceImpl;

@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.controller.auth.AuthController;
-import com.example.echo_api.exception.custom.UsernameAlreadyExistsException;
+import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.auth.SignInRequest;
 import com.example.echo_api.persistence.dto.request.auth.SignUpRequest;
 import com.example.echo_api.service.auth.AuthService;
