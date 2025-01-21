@@ -10,5 +10,6 @@ logging:
     level:
         org:
             springframework:
+                web: DEBUG
                 jpa:
                     core: TRACE
