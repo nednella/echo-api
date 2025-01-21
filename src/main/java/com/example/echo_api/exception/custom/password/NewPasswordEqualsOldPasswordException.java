@@ -1,5 +1,6 @@
 package com.example.echo_api.exception.custom.password;
 
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 
 /**
@@ -13,7 +14,7 @@ public class NewPasswordEqualsOldPasswordException extends PasswordException {
      * message.
      */
     public NewPasswordEqualsOldPasswordException() {
-        super("New password cannot be the same as the current password.");
+        super(ErrorMessageConfig.NEW_PASSWORD_EQUALS_OLD_PASSWORD);
     }
 
 }
