@@ -40,7 +40,7 @@ public class UserLoader extends AbstractJsonLoader<User> {
     protected void saveToRepository(List<User> entities) {
         for (User user : entities) {
             try {
-                accountService.createUser(user.getUsername(), user.getPassword(), user.getRole());
+                accountService.registerWithRole(user.getUsername(), user.getPassword(), user.getRole());
             } catch (Exception ex) {
                 log.error("Failed to create user: {}. Reason: {}", user.getUsername(), ex.getMessage(), ex);
             }

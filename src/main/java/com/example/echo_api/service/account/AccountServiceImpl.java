@@ -28,12 +28,12 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void createUser(String username, String password) throws UsernameException {
-        createUser(username, password, null);
+    public void register(String username, String password) throws UsernameException {
+        registerWithRole(username, password, null);
     }
 
     @Override
-    public void createUser(String username, String password, String role) throws UsernameException {
+    public void registerWithRole(String username, String password, String role) throws UsernameException {
         if (existsByUsername(username)) {
             throw new UsernameAlreadyExistsException();
         }

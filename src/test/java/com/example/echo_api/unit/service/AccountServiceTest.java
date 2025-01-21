@@ -78,7 +78,7 @@ class AccountServiceTest {
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        accountService.createUser(testUser.getUsername(), testUser.getPassword());
+        accountService.register(testUser.getUsername(), testUser.getPassword());
 
         verify(userRepository, times(1)).save(testUser);
         verify(passwordEncoder, times(1)).encode(testUser.getPassword());
@@ -98,7 +98,7 @@ class AccountServiceTest {
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
         assertThrows(UsernameAlreadyExistsException.class,
-            () -> accountService.createUser(testUser.getUsername(), testUser.getPassword()));
+            () -> accountService.register(testUser.getUsername(), testUser.getPassword()));
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
 

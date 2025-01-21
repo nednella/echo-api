@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void signUp(String username, String password) throws UsernameException, AuthenticationException {
-        accountService.createUser(username, password);
+        accountService.register(username, password);
         authenticate(username, password);
     }
 

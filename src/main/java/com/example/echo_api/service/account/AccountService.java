@@ -9,9 +9,9 @@ import com.example.echo_api.persistence.model.User;
 
 public interface AccountService {
 
-    public void createUser(String username, String password) throws UsernameException;
+    public void register(String username, String password) throws UsernameException;
 
-    public void createUser(String username, String password, String role) throws UsernameException;
+    public void registerWithRole(String username, String password, String role) throws UsernameException;
 
     public List<User> findAll();
 
