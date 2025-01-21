@@ -15,7 +15,7 @@ import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
-import com.example.echo_api.service.auth.AuthService;
+import com.example.echo_api.service.session.SessionService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private final AuthService authService;
+    private final SessionService sessionService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -64,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
             throw new UsernameAlreadyExistsException();
         }
 
-        User user = authService.getAuthenticatedUser();
+        User user = sessionService.getAuthenticatedUser();
         user.setUsername(username);
         userRepository.save(user);
     }
@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
         }
 
         // validate current password
-        User user = authService.getAuthenticatedUser();
+        User user = sessionService.getAuthenticatedUser();
         if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new IncorrectCurrentPasswordException();
         }

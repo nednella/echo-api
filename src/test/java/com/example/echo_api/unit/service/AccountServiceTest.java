@@ -25,7 +25,7 @@ import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.account.AccountServiceImpl;
-import com.example.echo_api.service.auth.AuthService;
+import com.example.echo_api.service.session.SessionService;
 
 /**
  * Unit test class for {@link AccountService}.
@@ -34,7 +34,7 @@ import com.example.echo_api.service.auth.AuthService;
 class AccountServiceTest {
 
     @Mock
-    private AuthService authService;
+    private SessionService sessionService;
 
     @Mock
     private UserRepository userRepository;
@@ -221,7 +221,7 @@ class AccountServiceTest {
      * false.
      * 
      * <p>
-     * Mocks the {@link AuthService#getAuthenticatedUser()} method to return
+     * Mocks the {@link sessionService#getAuthenticatedUser()} method to return
      * {@code testUser}.
      * 
      * <p>
@@ -231,14 +231,14 @@ class AccountServiceTest {
     @Test
     void accountService_UpdateUsername_Success() {
         when(userRepository.existsByUsername("new_username")).thenReturn(false);
-        when(authService.getAuthenticatedUser()).thenReturn(testUser);
+        when(sessionService.getAuthenticatedUser()).thenReturn(testUser);
         when(userRepository.save(testUser)).thenReturn(testUser);
 
         accountService.updateUsername("new_username");
 
         assertEquals("new_username", testUser.getUsername());
         verify(userRepository, times(1)).existsByUsername("new_username");
-        verify(authService, times(1)).getAuthenticatedUser();
+        verify(sessionService, times(1)).getAuthenticatedUser();
         verify(userRepository, times(1)).save(testUser);
     }
 
@@ -290,7 +290,7 @@ class AccountServiceTest {
 
         String oldPassword = testUser.getPassword();
 
-        when(authService.getAuthenticatedUser()).thenReturn(testUser);
+        when(sessionService.getAuthenticatedUser()).thenReturn(testUser);
         when(passwordEncoder.matches("current", oldPassword)).thenReturn(true);
         when(passwordEncoder.encode("new")).thenReturn("encodedPassword");
         when(userRepository.save(testUser)).thenReturn(testUser);
@@ -298,7 +298,7 @@ class AccountServiceTest {
         accountService.updatePassword(request);
 
         assertEquals("encodedPassword", testUser.getPassword());
-        verify(authService, times(1)).getAuthenticatedUser();
+        verify(sessionService, times(1)).getAuthenticatedUser();
         verify(passwordEncoder, times(1)).matches("current", oldPassword);
         verify(passwordEncoder, times(1)).encode("new");
         verify(userRepository, times(1)).save(testUser);
@@ -359,12 +359,12 @@ class AccountServiceTest {
             "new",
             "new");
 
-        when(authService.getAuthenticatedUser()).thenReturn(testUser);
+        when(sessionService.getAuthenticatedUser()).thenReturn(testUser);
         when(passwordEncoder.matches("wrong_password", testUser.getPassword())).thenReturn(false);
 
         assertThrows(IncorrectCurrentPasswordException.class,
             () -> accountService.updatePassword(request));
-        verify(authService, times(1)).getAuthenticatedUser();
+        verify(sessionService, times(1)).getAuthenticatedUser();
         verify(passwordEncoder, times(1)).matches("wrong_password", testUser.getPassword());
     }
 
