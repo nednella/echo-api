@@ -1,4 +1,4 @@
-package com.example.echo_api.service.user;
+package com.example.echo_api.service.account;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticatedUserServiceImpl implements AuthenticatedUserService {
+public class AccountServiceImpl implements AccountService {
 
     private final UserRepository userRepository;
 
