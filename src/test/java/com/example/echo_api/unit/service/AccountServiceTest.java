@@ -58,6 +58,51 @@ class AccountServiceTest {
     }
 
     /**
+     * This test ensures that the
+     * {@link AccountServiceImpl#register(String, String)} method correctly creates
+     * a new user when the username does not already exist.
+     * 
+     * <p>
+     * Mocks the {@link UserRepository#save(User)} method to return the saved user.
+     * 
+     * <p>
+     * Mocks the {@link UserRepository#existsByUsername(String)} to return false.
+     * 
+     * <p>
+     * Mocks the {@link PasswordEncoder#encode(CharSequence)} to return the string
+     * "encodedPassword".
+     */
+    @Test
+    void accountService_Register_ReturnVoid() {
+        when(userRepository.save(testUser)).thenReturn(testUser);
+        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
+        accountService.createUser(testUser.getUsername(), testUser.getPassword());
+
+        verify(userRepository, times(1)).save(testUser);
+        verify(passwordEncoder, times(1)).encode(testUser.getPassword());
+    }
+
+    /**
+     * This test ensures that the
+     * {@link AccountServiceImpl#register(String, String)} method throws a
+     * {@link UsernameAlreadyExistsException} when the username already exists.
+     * 
+     * <p>
+     * Mocks the {@link UserRepository#existsByUsername(String)} method to return
+     * true.
+     */
+    @Test
+    void accountService_Register_ThrowUsernameAlreadyExists() {
+        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
+
+        assertThrows(UsernameAlreadyExistsException.class,
+            () -> accountService.createUser(testUser.getUsername(), testUser.getPassword()));
+        verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
+    }
+
+    /**
      * This test ensures that the {@link AccountServiceImpl#findAll()} method
      * correctly returns a list of users from the repository.
      * 
@@ -164,51 +209,6 @@ class AccountServiceTest {
         boolean exists = accountService.existsByUsername(testUser.getUsername());
 
         assertFalse(exists);
-        verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
-    }
-
-    /**
-     * This test ensures that the
-     * {@link AccountServiceImpl#createUser(String, String)} method correctly
-     * creates a new user when the username does not already exist.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#save(User)} method to return the saved user.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#existsByUsername(String)} to return false.
-     * 
-     * <p>
-     * Mocks the {@link PasswordEncoder#encode(CharSequence)} to return the string
-     * "encodedPassword".
-     */
-    @Test
-    void accountService_CreateUser_ReturnVoid() {
-        when(userRepository.save(testUser)).thenReturn(testUser);
-        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-
-        accountService.createUser(testUser.getUsername(), testUser.getPassword());
-
-        verify(userRepository, times(1)).save(testUser);
-        verify(passwordEncoder, times(1)).encode(testUser.getPassword());
-    }
-
-    /**
-     * This test ensures that the
-     * {@link AccountServiceImpl#createUser(String, String)} method throws a
-     * {@link UsernameAlreadyExistsException} when the username already exists.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#existsByUsername(String)} method to return
-     * true.
-     */
-    @Test
-    void accountService_CreateUser_ThrowUsernameAlreadyExists() {
-        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
-
-        assertThrows(UsernameAlreadyExistsException.class,
-            () -> accountService.createUser(testUser.getUsername(), testUser.getPassword()));
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
 

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.echo_api.exception.custom.password.ConfirmationPasswordMismatchException;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
@@ -21,13 +20,27 @@ import com.example.echo_api.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
     private final AuthService authService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public void createUser(String username, String password) throws UsernameException {
+        createUser(username, password, null);
+    }
+
+    @Override
+    public void createUser(String username, String password, String role) throws UsernameException {
+        if (existsByUsername(username)) {
+            throw new UsernameAlreadyExistsException();
+        }
+
+        User user = new User(username, passwordEncoder.encode(password), role);
+        userRepository.save(user);
+    }
 
     @Override
     public List<User> findAll() {
@@ -43,16 +56,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
-    }
-
-    @Override
-    public void createUser(String username, String password, String role) throws UsernameException {
-        if (existsByUsername(username)) {
-            throw new UsernameAlreadyExistsException();
-        }
-
-        User user = new User(username, passwordEncoder.encode(password), role);
-        userRepository.save(user);
     }
 
     @Override

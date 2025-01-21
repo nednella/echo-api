@@ -9,17 +9,15 @@ import com.example.echo_api.persistence.model.User;
 
 public interface AccountService {
 
+    public void createUser(String username, String password) throws UsernameException;
+
+    public void createUser(String username, String password, String role) throws UsernameException;
+
     public List<User> findAll();
 
     public User findByUsername(String username) throws UsernameException;
 
     public boolean existsByUsername(String username);
-
-    default void createUser(String username, String password) throws UsernameException {
-        createUser(username, password, "ROLE_USER");
-    }
-
-    public void createUser(String username, String password, String role) throws UsernameException;
 
     public void updateUsername(String username) throws UsernameException;
 
