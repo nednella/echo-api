@@ -56,9 +56,9 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_IsUsernameAvailable_Return200True() throws Exception {
-        // api: GET /api/v1/account/username?username={...} ==> 200 : True
-        String path = ApiConfig.Account.UPDATE_USERNAME;
+    void AccountController_UsernameAvailable_Return200True() throws Exception {
+        // api: GET /api/v1/account/username-available?username={...} ==> 200 : True
+        String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
         when(userService.existsByUsername(testUser.getUsername()))
             .thenReturn(false);
@@ -71,9 +71,9 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_IsUsernameAvailable_Return200False() throws Exception {
-        // api: GET /api/v1/account/username?username={...} ==> 200 : False
-        String path = ApiConfig.Account.UPDATE_USERNAME;
+    void AccountController_UsernameAvailable_Return200False() throws Exception {
+        // api: GET /api/v1/account/username-available?username={...} ==> 200 : False
+        String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
         when(userService.existsByUsername(testUser.getUsername()))
             .thenReturn(true);
@@ -87,9 +87,10 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_IsUsernameAvailable_Throw400InvalidRequest() throws Exception {
-        // api: GET /api/v1/account/username?username={...} ==> 400 : Invalid Request
-        String path = ApiConfig.Account.UPDATE_USERNAME;
+    void AccountController_UsernameAvailable_Throw400InvalidRequest() throws Exception {
+        // api: GET /api/v1/account/username-available?username={...} ==> 400 : Invalid
+        // Request
+        String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
         String response = mockMvc
             .perform(get(path)

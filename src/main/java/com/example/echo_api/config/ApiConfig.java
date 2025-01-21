@@ -22,6 +22,7 @@ public final class ApiConfig {
     @NoArgsConstructor(access = PRIVATE)
     public static final class Account {
         private static final String ROOT = BASE_URL + "/account";
+        public static final String USERNAME_AVAILABLE = ROOT + "/username-available";
         public static final String UPDATE_USERNAME = ROOT + "/username";
         public static final String UPDATE_PASSWORD = ROOT + "/password";
     }

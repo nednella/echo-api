@@ -24,7 +24,7 @@ public class AccountController {
     private final UserService userService;
 
     // @formatter:off
-    @GetMapping(ApiConfig.Account.UPDATE_USERNAME)
+    @GetMapping(ApiConfig.Account.USERNAME_AVAILABLE)
     public ResponseEntity<Boolean> isUsernameAvailable(
         @RequestParam("username")
         @Valid
