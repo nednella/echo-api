@@ -62,14 +62,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignIn_Return204() throws Exception {
+    void AuthController_Login_Return204() throws Exception {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validLogin);
 
         doNothing()
             .when(authService)
-            .signIn(anyString(), anyString());
+            .login(validLogin);
 
         mockMvc.perform(
             post(endpoint)
@@ -80,14 +80,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignIn_Return400InvalidRequest() throws Exception {
+    void AuthController_Login_Return400InvalidRequest() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Invalid Request
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(invalidLogin);
 
         doNothing()
             .when(authService)
-            .signIn(anyString(), anyString());
+            .login(invalidLogin);
 
         mockMvc.perform(
             post(endpoint)
@@ -102,14 +102,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignIn_Return400UsernameNotFound() throws Exception {
+    void AuthController_Login_Return400UsernameNotFound() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Username Not Found
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validLogin);
 
         doThrow(new UsernameNotFoundException(""))
             .when(authService)
-            .signIn(anyString(), anyString());
+            .login(validLogin);
 
         mockMvc.perform(
             post(endpoint)
@@ -124,14 +124,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignIn_Return400BadCredentials() throws Exception {
+    void AuthController_Login_Return400BadCredentials() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Bad Credentials
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validLogin);
 
         doThrow(new BadCredentialsException(""))
             .when(authService)
-            .signIn(anyString(), anyString());
+            .login(validLogin);
 
         mockMvc.perform(
             post(endpoint)
@@ -146,14 +146,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignIn_Return401AccountStatusDisabled() throws Exception {
+    void AuthController_Login_Return401AccountStatusDisabled() throws Exception {
         // api: POST /api/v1/auth/login ==> 401 Account Status - Disabled
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validLogin);
 
         doThrow(new DisabledException(""))
             .when(authService)
-            .signIn(anyString(), anyString());
+            .login(validLogin);
 
         mockMvc.perform(
             post(endpoint)
@@ -168,14 +168,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignIn_Return401AccountStatusLocked() throws Exception {
+    void AuthController_Login_Return401AccountStatusLocked() throws Exception {
         // api: POST /api/v1/auth/login ==> 401 Account Status - Locked
         String endpoint = ApiConfig.Auth.LOGIN;
         String body = objectMapper.writeValueAsString(validLogin);
 
         doThrow(new LockedException(""))
             .when(authService)
-            .signIn(anyString(), anyString());
+            .login(validLogin);
 
         mockMvc.perform(
             post(endpoint)
@@ -190,14 +190,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignUp_Return204() throws Exception {
+    void AuthController_Signup_Return204() throws Exception {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String endpoint = ApiConfig.Auth.SIGNUP;
         String body = objectMapper.writeValueAsString(validSignup);
 
         doNothing()
             .when(authService)
-            .signUp(anyString(), anyString());
+            .signup(validSignup);
 
         mockMvc.perform(
             post(endpoint)
@@ -209,14 +209,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignUp_Return400InvalidRequest() throws Exception {
+    void AuthController_Signup_Return400InvalidRequest() throws Exception {
         // api: POST /api/v1/auth/signup ==> 400 Invalid Request
         String endpoint = ApiConfig.Auth.SIGNUP;
         String body = objectMapper.writeValueAsString(invalidSignup);
 
         doNothing()
             .when(authService)
-            .signUp(anyString(), anyString());
+            .signup(invalidSignup);
 
         mockMvc.perform(
             post(endpoint)
@@ -231,14 +231,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_SignUp_Return400UsernameAlreadyExists() throws Exception {
+    void AuthController_Signup_Return400UsernameAlreadyExists() throws Exception {
         // api: POST /api/v1/auth/signup ==> 400 Username Already Exists
         String endpoint = ApiConfig.Auth.SIGNUP;
         String body = objectMapper.writeValueAsString(validSignup);
 
         doThrow(new UsernameAlreadyExistsException())
             .when(authService)
-            .signUp(anyString(), anyString());
+            .signup(validSignup);
 
         mockMvc.perform(
             post(endpoint)

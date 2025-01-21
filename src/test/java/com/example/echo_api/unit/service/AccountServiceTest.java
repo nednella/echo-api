@@ -52,9 +52,7 @@ class AccountServiceTest {
      */
     @BeforeEach
     public void initUser() {
-        testUser = new User(
-            "testUsername",
-            "testPassword");
+        testUser = new User("testUsername", "testPassword");
     }
 
     /**
