@@ -10,12 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -46,20 +43,6 @@ public abstract class IntegrationTest {
     protected SessionCookieInterceptor sessionCookieInterceptor;
 
     protected User existingUser;
-
-    /**
-     * Workaround method that supplies the Redis container connection details to the
-     * application context, so that {@link SessionConfig} can correctly relay the
-     * information to the redis {@link LettuceConnectionFactory}.
-     * 
-     * @param registry the property registry to assign to
-     */
-    @DynamicPropertySource
-    public static void redisInit(DynamicPropertyRegistry registry) {
-        redis.start();
-        registry.add("spring.data.redis.host", () -> redis.getHost());
-        registry.add("spring.data.redis.port", () -> redis.getFirstMappedPort());
-    }
 
     /**
      * Initialise the integration test environment:
