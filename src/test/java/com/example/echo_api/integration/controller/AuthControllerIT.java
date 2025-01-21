@@ -20,7 +20,7 @@ import com.example.echo_api.persistence.dto.request.auth.SignInRequest;
 import com.example.echo_api.persistence.dto.request.auth.SignUpRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.persistence.model.User;
-import com.example.echo_api.service.user.UserService;
+import com.example.echo_api.service.account.AccountService;
 
 /**
  * Integration test class for {@link AuthController}.
@@ -29,7 +29,7 @@ import com.example.echo_api.service.user.UserService;
 class AuthControllerIT extends IntegrationTest {
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @BeforeAll
     void setUp() {
@@ -75,7 +75,7 @@ class AuthControllerIT extends IntegrationTest {
         TestUtils.assertSetCookieStartsWith(response, "ECHO_SESSION");
 
         // assert db
-        User registeredUser = userService.findByUsername(signupForm.username());
+        User registeredUser = accountService.findByUsername(signupForm.username());
         assertNotNull(registeredUser);
         assertEquals(signupForm.username(), registeredUser.getUsername());
     }

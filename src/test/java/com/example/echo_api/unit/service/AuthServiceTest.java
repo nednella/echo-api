@@ -17,9 +17,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.service.auth.AuthServiceImpl;
-import com.example.echo_api.service.user.UserService;
 
 /**
  * Unit test class for {@link AuthService}.
@@ -28,7 +28,7 @@ import com.example.echo_api.service.user.UserService;
 class AuthServiceTest {
 
     @Mock
-    private UserService userService;
+    private AccountService accountService;
 
     @Mock
     private AuthenticationManager authenticationManager;
@@ -129,7 +129,7 @@ class AuthServiceTest {
      * not throw any exceptions.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to do
+     * Mocks the {@link AccountService#createUser(String, String)} method to do
      * nothing.
      * 
      * <p>
@@ -140,7 +140,7 @@ class AuthServiceTest {
     @Test
     void AuthService_SignUp_ReturnVoid() {
         doNothing()
-            .when(userService)
+            .when(accountService)
             .createUser(testUser.getUsername(), testUser.getPassword());
 
         when(authenticationManager.authenticate(token))
@@ -148,7 +148,7 @@ class AuthServiceTest {
 
         assertDoesNotThrow(() -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, times(1)).authenticate(token);
     }
 
@@ -157,20 +157,20 @@ class AuthServiceTest {
      * throws {@link UsernameAlreadyExistsException}.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to throw
+     * Mocks the {@link AccountService#createUser(String, String)} method to throw
      * {@link UsernameAlreadyExistsException}.
      * 
      */
     @Test
     void AuthService_SignUp_ThrowUsernameAlreadyExists() {
         doThrow(new UsernameAlreadyExistsException())
-            .when(userService)
+            .when(accountService)
             .createUser(testUser.getUsername(), testUser.getPassword());
 
         assertThrows(UsernameAlreadyExistsException.class,
             () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, never()).authenticate(any());
     }
 
@@ -179,7 +179,7 @@ class AuthServiceTest {
      * throws {@link DisabledException}.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to do
+     * Mocks the {@link AccountService#createUser(String, String)} method to do
      * nothing.
      * 
      * <p>
@@ -190,7 +190,7 @@ class AuthServiceTest {
     @Test
     void AuthService_SignUp_ThrowDisabledException() {
         doNothing()
-            .when(userService)
+            .when(accountService)
             .createUser(testUser.getUsername(), testUser.getPassword());
 
         when(authenticationManager.authenticate(token))
@@ -199,7 +199,7 @@ class AuthServiceTest {
         assertThrows(DisabledException.class,
             () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, times(1)).authenticate(token);
     }
 
@@ -208,7 +208,7 @@ class AuthServiceTest {
      * throws {@link LockedException}.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to do
+     * Mocks the {@link AccountService#createUser(String, String)} method to do
      * nothing.
      * 
      * <p>
@@ -219,7 +219,7 @@ class AuthServiceTest {
     @Test
     void AuthService_SignUp_ThrowLockedException() {
         doNothing()
-            .when(userService)
+            .when(accountService)
             .createUser(testUser.getUsername(), testUser.getPassword());
 
         when(authenticationManager.authenticate(token))
@@ -228,7 +228,7 @@ class AuthServiceTest {
         assertThrows(LockedException.class,
             () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, times(1)).authenticate(token);
     }
 
@@ -237,7 +237,7 @@ class AuthServiceTest {
      * throws {@link BadCredentialsException}.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to do
+     * Mocks the {@link AccountService#createUser(String, String)} method to do
      * nothing.
      * 
      * <p>
@@ -248,7 +248,7 @@ class AuthServiceTest {
     @Test
     void AuthService_SignUp_ThrowBadCredentialsException() {
         doNothing()
-            .when(userService)
+            .when(accountService)
             .createUser(testUser.getUsername(), testUser.getPassword());
 
         when(authenticationManager.authenticate(token))
@@ -257,7 +257,7 @@ class AuthServiceTest {
         assertThrows(BadCredentialsException.class,
             () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
 
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
         verify(authenticationManager, times(1)).authenticate(token);
     }
 

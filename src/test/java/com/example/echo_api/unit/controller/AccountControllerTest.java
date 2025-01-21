@@ -25,7 +25,7 @@ import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsExcep
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.persistence.model.User;
-import com.example.echo_api.service.user.UserService;
+import com.example.echo_api.service.account.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -39,7 +39,7 @@ class AccountControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private UserService userService;
+    private AccountService accountService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -61,7 +61,7 @@ class AccountControllerTest {
         // api: GET /api/v1/account/username-available?username={...} ==> 200 : True
         String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
-        when(userService.existsByUsername(testUser.getUsername()))
+        when(accountService.existsByUsername(testUser.getUsername()))
             .thenReturn(false);
 
         mockMvc.perform(get(path)
@@ -76,7 +76,7 @@ class AccountControllerTest {
         // api: GET /api/v1/account/username-available?username={...} ==> 200 : False
         String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
-        when(userService.existsByUsername(testUser.getUsername()))
+        when(accountService.existsByUsername(testUser.getUsername()))
             .thenReturn(true);
 
         mockMvc
@@ -113,7 +113,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/username ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_USERNAME;
 
-        doNothing().when(userService).updateUsername(testUser.getUsername());
+        doNothing().when(accountService).updateUsername(testUser.getUsername());
 
         mockMvc
             .perform(put(path)
@@ -127,7 +127,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/username ==> 400 : UsernameAlreadyExists
         String path = ApiConfig.Account.UPDATE_USERNAME;
 
-        doThrow(new UsernameAlreadyExistsException()).when(userService).updateUsername(testUser.getUsername());
+        doThrow(new UsernameAlreadyExistsException()).when(accountService).updateUsername(testUser.getUsername());
 
         String response = mockMvc
             .perform(put(path)
@@ -156,7 +156,7 @@ class AccountControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(userService).updatePassword(request);
+        doNothing().when(accountService).updatePassword(request);
 
         mockMvc
             .perform(put(path)
@@ -178,7 +178,7 @@ class AccountControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        doThrow(new ConfirmationPasswordMismatchException()).when(userService).updatePassword(request);
+        doThrow(new ConfirmationPasswordMismatchException()).when(accountService).updatePassword(request);
 
         String response = mockMvc
             .perform(put(path)
@@ -208,7 +208,7 @@ class AccountControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        doThrow(new NewPasswordEqualsOldPasswordException()).when(userService).updatePassword(request);
+        doThrow(new NewPasswordEqualsOldPasswordException()).when(accountService).updatePassword(request);
 
         String response = mockMvc
             .perform(put(path)
@@ -238,7 +238,7 @@ class AccountControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        doThrow(new IncorrectCurrentPasswordException()).when(userService).updatePassword(request);
+        doThrow(new IncorrectCurrentPasswordException()).when(accountService).updatePassword(request);
 
         String response = mockMvc
             .perform(put(path)

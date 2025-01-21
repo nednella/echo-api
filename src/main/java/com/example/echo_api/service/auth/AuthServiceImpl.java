@@ -13,7 +13,7 @@ import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.model.SecurityUser;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
-import com.example.echo_api.service.user.UserService;
+import com.example.echo_api.service.account.AccountService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,9 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserService userService;
-    private final AuthenticationManager contextAwareAuthenticationManager;
+    private final AccountService accountService;
     private final UserRepository userRepository;
+    private final AuthenticationManager contextAwareAuthenticationManager;
 
     @Override
     public void signIn(String username, String password) throws AuthenticationException {
@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void signUp(String username, String password) throws UsernameException, AuthenticationException {
-        userService.createUser(username, password);
+        accountService.createUser(username, password);
         authenticate(username, password);
     }
 
