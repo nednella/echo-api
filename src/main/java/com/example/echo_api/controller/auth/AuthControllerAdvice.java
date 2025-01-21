@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.exception.AbstractControllerAdvice;
-import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,18 +26,7 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
         return createExceptionHandler(
             request,
             HttpStatus.BAD_REQUEST,
-            "username or password is incorrect",
-            null);
-    }
-
-    @ExceptionHandler({ UsernameAlreadyExistsException.class })
-    ResponseEntity<ErrorResponse> handleUsernameAlreadyExistsException(HttpServletRequest request, Exception ex) {
-        log.debug("Handling exception: {}", ex.getMessage());
-
-        return createExceptionHandler(
-            request,
-            HttpStatus.BAD_REQUEST,
-            "username already exists",
+            ErrorMessageConfig.USERNAME_OR_PASSWORD_IS_INCORRECT,
             null);
     }
 
@@ -48,7 +37,7 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
         return createExceptionHandler(
             request,
             HttpStatus.UNAUTHORIZED,
-            "account status is abnormal",
+            ErrorMessageConfig.ACCOUNT_STATUS,
             ex.getMessage().toLowerCase());
     }
 
