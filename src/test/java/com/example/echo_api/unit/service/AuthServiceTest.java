@@ -139,9 +139,7 @@ class AuthServiceTest {
      */
     @Test
     void AuthService_SignUp_ReturnVoid() {
-        doNothing()
-            .when(accountService)
-            .register(testUser.getUsername(), testUser.getPassword());
+        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
 
         when(authenticationManager.authenticate(token))
             .thenReturn(token);
@@ -163,9 +161,8 @@ class AuthServiceTest {
      */
     @Test
     void AuthService_SignUp_ThrowUsernameAlreadyExists() {
-        doThrow(new UsernameAlreadyExistsException())
-            .when(accountService)
-            .register(testUser.getUsername(), testUser.getPassword());
+        when(accountService.register(testUser.getUsername(), testUser.getPassword()))
+            .thenThrow(new UsernameAlreadyExistsException());
 
         assertThrows(UsernameAlreadyExistsException.class,
             () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
@@ -189,9 +186,8 @@ class AuthServiceTest {
      */
     @Test
     void AuthService_SignUp_ThrowDisabledException() {
-        doNothing()
-            .when(accountService)
-            .register(testUser.getUsername(), testUser.getPassword());
+        when(accountService.register(testUser.getUsername(), testUser.getPassword()))
+            .thenReturn(testUser);
 
         when(authenticationManager.authenticate(token))
             .thenThrow(new DisabledException(""));
@@ -218,9 +214,8 @@ class AuthServiceTest {
      */
     @Test
     void AuthService_SignUp_ThrowLockedException() {
-        doNothing()
-            .when(accountService)
-            .register(testUser.getUsername(), testUser.getPassword());
+        when(accountService.register(testUser.getUsername(), testUser.getPassword()))
+            .thenReturn(testUser);
 
         when(authenticationManager.authenticate(token))
             .thenThrow(new LockedException(""));
@@ -247,9 +242,8 @@ class AuthServiceTest {
      */
     @Test
     void AuthService_SignUp_ThrowBadCredentialsException() {
-        doNothing()
-            .when(accountService)
-            .register(testUser.getUsername(), testUser.getPassword());
+        when(accountService.register(testUser.getUsername(), testUser.getPassword()))
+            .thenReturn(testUser);
 
         when(authenticationManager.authenticate(token))
             .thenThrow(new BadCredentialsException(""));

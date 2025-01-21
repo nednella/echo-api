@@ -29,18 +29,19 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void register(String username, String password) throws UsernameException {
-        registerWithRole(username, password, Role.USER);
+    public User register(String username, String password) throws UsernameException {
+        return registerWithRole(username, password, Role.USER);
     }
 
     @Override
-    public void registerWithRole(String username, String password, Role role) throws UsernameException {
+    public User registerWithRole(String username, String password, Role role) throws UsernameException {
         if (existsByUsername(username)) {
             throw new UsernameAlreadyExistsException();
         }
 
         User user = new User(username, passwordEncoder.encode(password), role);
         userRepository.save(user);
+        return user;
     }
 
     @Override
