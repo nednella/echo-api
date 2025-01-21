@@ -23,7 +23,7 @@ import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
-import com.example.echo_api.service.user.AuthenticatedUserService;
+import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.service.user.UserService;
 import com.example.echo_api.service.user.UserServiceImpl;
 
@@ -40,7 +40,7 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private AuthenticatedUserService authenticatedUserService;
+    private AuthService authService;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -218,8 +218,8 @@ class UserServiceTest {
      * false.
      * 
      * <p>
-     * Mocks the {@link AuthenticatedUserService#getAuthenticatedUser()} method to
-     * return {@code testUser}.
+     * Mocks the {@link AuthService#getAuthenticatedUser()} method to return
+     * {@code testUser}.
      * 
      * <p>
      * Mocks the {@link UserRepository#save(User)} method to return
@@ -228,14 +228,14 @@ class UserServiceTest {
     @Test
     void UserService_UpdateUsername_Success() {
         when(userRepository.existsByUsername("new_username")).thenReturn(false);
-        when(authenticatedUserService.getAuthenticatedUser()).thenReturn(testUser);
+        when(authService.getAuthenticatedUser()).thenReturn(testUser);
         when(userRepository.save(testUser)).thenReturn(testUser);
 
         userService.updateUsername("new_username");
 
         assertEquals("new_username", testUser.getUsername());
         verify(userRepository, times(1)).existsByUsername("new_username");
-        verify(authenticatedUserService, times(1)).getAuthenticatedUser();
+        verify(authService, times(1)).getAuthenticatedUser();
         verify(userRepository, times(1)).save(testUser);
     }
 
@@ -287,7 +287,7 @@ class UserServiceTest {
 
         String oldPassword = testUser.getPassword();
 
-        when(authenticatedUserService.getAuthenticatedUser()).thenReturn(testUser);
+        when(authService.getAuthenticatedUser()).thenReturn(testUser);
         when(passwordEncoder.matches("current", oldPassword)).thenReturn(true);
         when(passwordEncoder.encode("new")).thenReturn("encodedPassword");
         when(userRepository.save(testUser)).thenReturn(testUser);
@@ -295,7 +295,7 @@ class UserServiceTest {
         userService.updatePassword(request);
 
         assertEquals("encodedPassword", testUser.getPassword());
-        verify(authenticatedUserService, times(1)).getAuthenticatedUser();
+        verify(authService, times(1)).getAuthenticatedUser();
         verify(passwordEncoder, times(1)).matches("current", oldPassword);
         verify(passwordEncoder, times(1)).encode("new");
         verify(userRepository, times(1)).save(testUser);
@@ -356,12 +356,12 @@ class UserServiceTest {
             "new",
             "new");
 
-        when(authenticatedUserService.getAuthenticatedUser()).thenReturn(testUser);
+        when(authService.getAuthenticatedUser()).thenReturn(testUser);
         when(passwordEncoder.matches("wrong_password", testUser.getPassword())).thenReturn(false);
 
         assertThrows(IncorrectCurrentPasswordException.class,
             () -> userService.updatePassword(request));
-        verify(authenticatedUserService, times(1)).getAuthenticatedUser();
+        verify(authService, times(1)).getAuthenticatedUser();
         verify(passwordEncoder, times(1)).matches("wrong_password", testUser.getPassword());
     }
 
