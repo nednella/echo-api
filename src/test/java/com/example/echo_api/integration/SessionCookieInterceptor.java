@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionCookieInterceptor implements ClientHttpRequestInterceptor {
 
+    private boolean bypassInterceptor = false;
+
     private String sessionCookie;
 
     @Override
@@ -32,8 +34,7 @@ public class SessionCookieInterceptor implements ClientHttpRequestInterceptor {
         @NonNull ClientHttpRequestExecution execution)
         throws IOException {
 
-        // If authentication request, skip interception
-        if (request.getURI().getPath().contains("auth")) {
+        if (bypassInterceptor) {
             return execution.execute(request, body);
         }
 
@@ -52,6 +53,14 @@ public class SessionCookieInterceptor implements ClientHttpRequestInterceptor {
         }
 
         return response;
+    }
+
+    public void enable() {
+        bypassInterceptor = false;
+    }
+
+    public void disable() {
+        bypassInterceptor = true;
     }
 
 }

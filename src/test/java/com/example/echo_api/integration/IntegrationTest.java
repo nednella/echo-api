@@ -43,7 +43,7 @@ public abstract class IntegrationTest {
     protected TestRestTemplate restTemplate;
 
     @Autowired
-    private SessionCookieInterceptor restTemplateInterceptor;
+    protected SessionCookieInterceptor sessionCookieInterceptor;
 
     protected User testUser;
 
@@ -76,7 +76,7 @@ public abstract class IntegrationTest {
         restTemplate
             .getRestTemplate()
             .getInterceptors()
-            .add(restTemplateInterceptor);
+            .add(sessionCookieInterceptor);
 
         // Configure test user
         testUser = new User("test", "password1");

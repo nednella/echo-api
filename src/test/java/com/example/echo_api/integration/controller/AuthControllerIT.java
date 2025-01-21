@@ -3,6 +3,8 @@ package com.example.echo_api.integration.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.*;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -27,6 +29,16 @@ class AuthControllerIT extends IntegrationTest {
 
     @Autowired
     private UserService userService;
+
+    @BeforeAll
+    void setUp() {
+        sessionCookieInterceptor.disable();
+    }
+
+    @AfterAll
+    void tearDown() {
+        sessionCookieInterceptor.enable();
+    }
 
     @Test
     void AuthController_SignIn_Return204() {
