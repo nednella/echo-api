@@ -36,6 +36,7 @@ public class SecurityConfig {
             .logout(lo -> lo
                 .logoutUrl("/api/v1/auth/logout")
                 .logoutSuccessHandler(customLogoutSuccessHandler)
+                .deleteCookies("ECHO_SESSION")
             )
             .sessionManagement(sm -> sm
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
