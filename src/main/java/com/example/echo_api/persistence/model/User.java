@@ -52,7 +52,8 @@ public class User implements Serializable {
 
     /** User role related to permissions */
     @Column
-    private String role = "USER"; // default = "USER"
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER; // default = Role.USER
 
     /** Enabled status */
     @Column
@@ -73,7 +74,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public User(String username, String password, String role) {
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -89,7 +90,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

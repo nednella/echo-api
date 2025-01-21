@@ -13,6 +13,7 @@ import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsExcep
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.model.Role;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 import com.example.echo_api.service.session.SessionService;
@@ -29,11 +30,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void register(String username, String password) throws UsernameException {
-        registerWithRole(username, password, null);
+        registerWithRole(username, password, Role.USER);
     }
 
     @Override
-    public void registerWithRole(String username, String password, String role) throws UsernameException {
+    public void registerWithRole(String username, String password, Role role) throws UsernameException {
         if (existsByUsername(username)) {
             throw new UsernameAlreadyExistsException();
         }
