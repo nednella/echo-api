@@ -19,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.echo_api.config.ApiConfig;
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.auth.SignInRequest;
@@ -97,7 +98,7 @@ class AuthControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value("invalid request"))
+            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.INVALID_REQUEST))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 
@@ -119,7 +120,7 @@ class AuthControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value("username or password is incorrect"))
+            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.USERNAME_OR_PASSWORD_IS_INCORRECT))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 
@@ -141,7 +142,7 @@ class AuthControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value("username or password is incorrect"))
+            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.USERNAME_OR_PASSWORD_IS_INCORRECT))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 
@@ -163,7 +164,7 @@ class AuthControllerTest {
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(401))
-            .andExpect(jsonPath("$.message").value("account status is abnormal"))
+            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.ACCOUNT_STATUS))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 
@@ -185,7 +186,7 @@ class AuthControllerTest {
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(401))
-            .andExpect(jsonPath("$.message").value("account status is abnormal"))
+            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.ACCOUNT_STATUS))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 
@@ -226,7 +227,7 @@ class AuthControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value("invalid request"))
+            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.INVALID_REQUEST))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 
@@ -248,7 +249,7 @@ class AuthControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value("username already exists"))
+            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.USERNAME_ARLEADY_EXISTS))
             .andExpect(jsonPath("$.path").value(endpoint));
     }
 

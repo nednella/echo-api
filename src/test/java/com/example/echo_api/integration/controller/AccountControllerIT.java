@@ -11,6 +11,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.echo_api.config.ApiConfig;
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.integration.IntegrationTest;
 import com.example.echo_api.integration.TestUtils;
@@ -79,7 +80,7 @@ class AccountControllerIT extends IntegrationTest {
         ErrorResponse error = response.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
-        assertEquals("Username already exists.", error.message());
+        assertEquals(ErrorMessageConfig.USERNAME_ARLEADY_EXISTS, error.message());
     }
 
     @Test
@@ -102,7 +103,7 @@ class AccountControllerIT extends IntegrationTest {
         ErrorResponse error = response2.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
-        assertEquals("Incorrect current password.", error.message());
+        assertEquals(ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD, error.message());
     }
 
     @Test
@@ -122,7 +123,7 @@ class AccountControllerIT extends IntegrationTest {
         ErrorResponse error = response.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
-        assertEquals("Incorrect current password.", error.message());
+        assertEquals(ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD, error.message());
     }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.example.echo_api.config.ApiConfig;
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.integration.IntegrationTest;
 import com.example.echo_api.integration.TestUtils;
@@ -98,7 +99,7 @@ class AuthControllerIT extends IntegrationTest {
         ErrorResponse error = response.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
-        assertEquals("username already exists", error.message());
+        assertEquals(ErrorMessageConfig.USERNAME_ARLEADY_EXISTS, error.message());
     }
 
 }
