@@ -1,4 +1,4 @@
-package com.example.echo_api.controller.user;
+package com.example.echo_api.controller.test;
 
 import java.util.List;
 
@@ -15,17 +15,17 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class TestController {
 
     private final AccountService accountService;
 
-    @GetMapping(ApiConfig.User.FIND_ALL)
+    @GetMapping(ApiConfig.Test.FIND_ALL)
     public ResponseEntity<List<User>> findAll() {
         List<User> users = accountService.findAll();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(ApiConfig.User.FIND_BY_USERNAME)
+    @GetMapping(ApiConfig.Test.FIND_BY_USERNAME)
     public ResponseEntity<User> findByUsername(@PathVariable("username") String username) {
         User user = accountService.findByUsername(username);
         return ResponseEntity.ok(user);
