@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
-import com.example.echo_api.persistence.dto.request.auth.SignInRequest;
-import com.example.echo_api.persistence.dto.request.auth.SignUpRequest;
+import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.service.auth.AuthService;
 
 import jakarta.validation.Valid;
@@ -20,13 +20,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(ApiConfig.Auth.LOGIN)
-    public ResponseEntity<Void> signIn(@RequestBody @Valid SignInRequest login) {
+    public ResponseEntity<Void> signIn(@RequestBody @Valid LoginRequest login) {
         authService.signIn(login.username(), login.password());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping(ApiConfig.Auth.SIGNUP)
-    public ResponseEntity<Void> signUp(@RequestBody @Valid SignUpRequest signup) {
+    public ResponseEntity<Void> signUp(@RequestBody @Valid SignupRequest signup) {
         authService.signUp(signup.username(), signup.password());
         return ResponseEntity.noContent().build();
     }

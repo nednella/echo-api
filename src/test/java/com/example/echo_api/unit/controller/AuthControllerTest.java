@@ -22,8 +22,8 @@ import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.dto.request.auth.SignInRequest;
-import com.example.echo_api.persistence.dto.request.auth.SignUpRequest;
+import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,30 +43,29 @@ class AuthControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private SignInRequest validSignInRequest;
-    private SignInRequest invalidSignInRequest;
-
-    private SignUpRequest validSignUpRequest;
-    private SignUpRequest invalidSignUpRequest;
+    private LoginRequest validLogin;
+    private LoginRequest invalidLogin;
+    private SignupRequest validSignup;
+    private SignupRequest invalidSignup;
 
     /**
-     * Sets up valid and invalid {@link SignInRequest} {@link SignUpRequest} objects
+     * Sets up valid and invalid {@link LoginRequest} {@link SignupRequest} objects
      * before each test.
      */
     @BeforeEach
     public void setUp() {
-        validSignInRequest = new SignInRequest("admin", "password");
-        invalidSignInRequest = new SignInRequest("", "");
+        validLogin = new LoginRequest("admin", "password");
+        invalidLogin = new LoginRequest("", "");
 
-        validSignUpRequest = new SignUpRequest("admin", "valid-1-password");
-        invalidSignUpRequest = new SignUpRequest("invalid-username", "invalid-password");
+        validSignup = new SignupRequest("admin", "valid-1-password");
+        invalidSignup = new SignupRequest("invalid-username", "invalid-password");
     }
 
     @Test
     void AuthController_SignIn_Return204() throws Exception {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validSignInRequest);
+        String body = objectMapper.writeValueAsString(validLogin);
 
         doNothing()
             .when(authService)
@@ -84,7 +83,7 @@ class AuthControllerTest {
     void AuthController_SignIn_Return400InvalidRequest() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Invalid Request
         String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(invalidSignInRequest);
+        String body = objectMapper.writeValueAsString(invalidLogin);
 
         doNothing()
             .when(authService)
@@ -106,7 +105,7 @@ class AuthControllerTest {
     void AuthController_SignIn_Return400UsernameNotFound() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Username Not Found
         String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validSignInRequest);
+        String body = objectMapper.writeValueAsString(validLogin);
 
         doThrow(new UsernameNotFoundException(""))
             .when(authService)
@@ -128,7 +127,7 @@ class AuthControllerTest {
     void AuthController_SignIn_Return400BadCredentials() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Bad Credentials
         String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validSignInRequest);
+        String body = objectMapper.writeValueAsString(validLogin);
 
         doThrow(new BadCredentialsException(""))
             .when(authService)
@@ -150,7 +149,7 @@ class AuthControllerTest {
     void AuthController_SignIn_Return401AccountStatusDisabled() throws Exception {
         // api: POST /api/v1/auth/login ==> 401 Account Status - Disabled
         String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validSignInRequest);
+        String body = objectMapper.writeValueAsString(validLogin);
 
         doThrow(new DisabledException(""))
             .when(authService)
@@ -172,7 +171,7 @@ class AuthControllerTest {
     void AuthController_SignIn_Return401AccountStatusLocked() throws Exception {
         // api: POST /api/v1/auth/login ==> 401 Account Status - Locked
         String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validSignInRequest);
+        String body = objectMapper.writeValueAsString(validLogin);
 
         doThrow(new LockedException(""))
             .when(authService)
@@ -194,7 +193,7 @@ class AuthControllerTest {
     void AuthController_SignUp_Return204() throws Exception {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String endpoint = ApiConfig.Auth.SIGNUP;
-        String body = objectMapper.writeValueAsString(validSignUpRequest);
+        String body = objectMapper.writeValueAsString(validSignup);
 
         doNothing()
             .when(authService)
@@ -213,7 +212,7 @@ class AuthControllerTest {
     void AuthController_SignUp_Return400InvalidRequest() throws Exception {
         // api: POST /api/v1/auth/signup ==> 400 Invalid Request
         String endpoint = ApiConfig.Auth.SIGNUP;
-        String body = objectMapper.writeValueAsString(invalidSignUpRequest);
+        String body = objectMapper.writeValueAsString(invalidSignup);
 
         doNothing()
             .when(authService)
@@ -235,7 +234,7 @@ class AuthControllerTest {
     void AuthController_SignUp_Return400UsernameAlreadyExists() throws Exception {
         // api: POST /api/v1/auth/signup ==> 400 Username Already Exists
         String endpoint = ApiConfig.Auth.SIGNUP;
-        String body = objectMapper.writeValueAsString(validSignUpRequest);
+        String body = objectMapper.writeValueAsString(validSignup);
 
         doThrow(new UsernameAlreadyExistsException())
             .when(authService)

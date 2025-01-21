@@ -3,7 +3,7 @@ package com.example.echo_api.persistence.dto.request.auth;
 import jakarta.validation.constraints.NotBlank;
 
 // @formatter:off
-public record SignInRequest(
+public record LoginRequest(
 
     @NotBlank(message = "Username is required")
     String username,
