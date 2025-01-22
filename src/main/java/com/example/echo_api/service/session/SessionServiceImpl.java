@@ -87,7 +87,7 @@ public class SessionServiceImpl implements SessionService {
      */
     @Override
     public void authenticate(String username, String password) throws AuthenticationException {
-        // create authentication token
+        // create an unauthenticated token
         UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
             .unauthenticated(username, password);
 
@@ -97,6 +97,43 @@ public class SessionServiceImpl implements SessionService {
         // set authenticated token in a fresh security context
         SecurityContext context = securityContextHolderStrategy.createEmptyContext();
         context.setAuthentication(result);
+        securityContextHolderStrategy.setContext(context);
+
+        // retrieve current http request/response
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+            .currentRequestAttributes()).getRequest();
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder
+            .currentRequestAttributes()).getResponse();
+
+        // save security context to the http session for persistence
+        securityContextRepository.saveContext(context, request, response);
+    }
+
+    /**
+     * <b>WARNING</b>: This method assumes that the supplied {@code user} is already
+     * authenticated in the application.
+     * 
+     * <p>
+     * Reauthentication method, required when there is a change to the authenticated
+     * {@code user} information.
+     * 
+     * <p>
+     * The method reauthenticates the specified user by creating a new authenticated
+     * token and updating {@link SecurityContext} in both the application and the
+     * HTTP session.
+     */
+    @Override
+    public void reauthenticate(User user) {
+        // instantiate a SecurityUser wrapper
+        SecurityUser auth = new SecurityUser(user);
+
+        // create an authenticated token
+        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
+            .authenticated(auth, null, auth.getAuthorities());
+
+        // set authenticated token in a fresh security context
+        SecurityContext context = securityContextHolderStrategy.createEmptyContext();
+        context.setAuthentication(token);
         securityContextHolderStrategy.setContext(context);
 
         // retrieve current http request/response

@@ -10,4 +10,6 @@ public interface SessionService {
 
     public void authenticate(String username, String password) throws AuthenticationException;
 
+    public void reauthenticate(User user);
+
 }

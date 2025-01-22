@@ -68,7 +68,9 @@ public class AccountServiceImpl implements AccountService {
 
         User user = sessionService.getAuthenticatedUser();
         user.setUsername(username);
+
         userRepository.save(user);
+        sessionService.reauthenticate(user);
     }
 
     @Override
@@ -90,7 +92,9 @@ public class AccountServiceImpl implements AccountService {
         }
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));
+
         userRepository.save(user);
+        sessionService.reauthenticate(user);
     }
 
 }
