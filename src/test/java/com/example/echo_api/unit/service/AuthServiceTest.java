@@ -16,10 +16,13 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
+import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.service.auth.AuthServiceImpl;
-import com.example.echo_api.service.user.UserService;
+import com.example.echo_api.service.session.SessionService;
 
 /**
  * Unit test class for {@link AuthService}.
@@ -28,16 +31,15 @@ import com.example.echo_api.service.user.UserService;
 class AuthServiceTest {
 
     @Mock
-    private UserService userService;
+    private AccountService accountService;
 
     @Mock
-    private AuthenticationManager authenticationManager;
+    private SessionService sessionSerivce;
 
     @InjectMocks
     private AuthServiceImpl authService;
 
     private User testUser;
-    private UsernamePasswordAuthenticationToken token;
 
     /**
      * Sets up a {@link User} and {@link UsernamePasswordAuthenticationToken} object
@@ -46,15 +48,11 @@ class AuthServiceTest {
      */
     @BeforeEach
     public void initVariables() {
-        testUser = new User(
-            "testUsername",
-            "testPassword");
-
-        token = new UsernamePasswordAuthenticationToken(testUser.getUsername(), testUser.getPassword());
+        testUser = new User("testUsername", "testPassword");
     }
 
     /**
-     * This test ensures that the {@link AuthService#signIn(String, String)} method
+     * This test ensures that the {@link AuthService#login(String, String)} method
      * does not throw any exceptions.
      * 
      * <p>
@@ -63,15 +61,19 @@ class AuthServiceTest {
      * 
      */
     @Test
-    void AuthService_SignIn_ReturnVoid() {
-        when(authenticationManager.authenticate(token)).thenReturn(token);
+    void AuthService_Login_ReturnVoid() {
+        LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
 
-        assertDoesNotThrow(() -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
-        verify(authenticationManager, times(1)).authenticate(token);
+        doNothing()
+            .when(sessionSerivce)
+            .authenticate(login.username(), login.password());
+
+        assertDoesNotThrow(() -> authService.login(login));
+        verify(sessionSerivce, times(1)).authenticate(login.username(), login.password());
     }
 
     /**
-     * This test ensures that {@link AuthService#signIn(String, String)} method
+     * This test ensures that {@link AuthService#login(String, String)} method
      * throws {@link DisabledException}.
      * 
      * <p>
@@ -80,16 +82,19 @@ class AuthServiceTest {
      * 
      */
     @Test
-    void AuthService_SignIn_ThrowDisabledException() {
-        when(authenticationManager.authenticate(token)).thenThrow(new DisabledException(""));
+    void AuthService_Login_ThrowDisabledException() {
+        LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
 
-        assertThrows(DisabledException.class,
-            () -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
-        verify(authenticationManager, times(1)).authenticate(token);
+        doThrow(new DisabledException(""))
+            .when(sessionSerivce)
+            .authenticate(login.username(), login.password());
+
+        assertThrows(DisabledException.class, () -> authService.login(login));
+        verify(sessionSerivce, times(1)).authenticate(login.username(), login.password());
     }
 
     /**
-     * This test ensures that {@link AuthService#signIn(String, String)} method
+     * This test ensures that {@link AuthService#login(String, String)} method
      * throws {@link LockedException}.
      * 
      * <p>
@@ -98,16 +103,19 @@ class AuthServiceTest {
      * 
      */
     @Test
-    void AuthService_SignIn_ThrowLockedException() {
-        when(authenticationManager.authenticate(token)).thenThrow(new LockedException(""));
+    void AuthService_Login_ThrowLockedException() {
+        LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
 
-        assertThrows(LockedException.class,
-            () -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
-        verify(authenticationManager, times(1)).authenticate(token);
+        doThrow(new LockedException(""))
+            .when(sessionSerivce)
+            .authenticate(login.username(), login.password());
+
+        assertThrows(LockedException.class, () -> authService.login(login));
+        verify(sessionSerivce, times(1)).authenticate(login.username(), login.password());
     }
 
     /**
-     * This test ensures that {@link AuthService#signIn(String, String)} method
+     * This test ensures that {@link AuthService#login(String, String)} method
      * throws {@link BadCredentialsException}.
      * 
      * <p>
@@ -116,20 +124,23 @@ class AuthServiceTest {
      * 
      */
     @Test
-    void AuthService_SignIn_ThrowBadCredentialsException() {
-        when(authenticationManager.authenticate(token)).thenThrow(new BadCredentialsException(""));
+    void AuthService_Login_ThrowBadCredentialsException() {
+        LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
 
-        assertThrows(BadCredentialsException.class,
-            () -> authService.signIn(testUser.getUsername(), testUser.getPassword()));
-        verify(authenticationManager, times(1)).authenticate(token);
+        doThrow(new BadCredentialsException(""))
+            .when(sessionSerivce)
+            .authenticate(login.username(), login.password());
+
+        assertThrows(BadCredentialsException.class, () -> authService.login(login));
+        verify(sessionSerivce, times(1)).authenticate(login.username(), login.password());
     }
 
     /**
-     * This test ensures that {@link AuthService#signUp(String, String)} method does
+     * This test ensures that {@link AuthService#signup(String, String)} method does
      * not throw any exceptions.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to do
+     * Mocks the {@link AccountService#register(String, String)} method to do
      * nothing.
      * 
      * <p>
@@ -138,48 +149,46 @@ class AuthServiceTest {
      * 
      */
     @Test
-    void AuthService_SignUp_ReturnVoid() {
+    void AuthService_Signup_ReturnVoid() {
+        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
+
+        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
         doNothing()
-            .when(userService)
-            .createUser(testUser.getUsername(), testUser.getPassword());
+            .when(sessionSerivce)
+            .authenticate(signup.username(), signup.password());
 
-        when(authenticationManager.authenticate(token))
-            .thenReturn(token);
-
-        assertDoesNotThrow(() -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
-
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, times(1)).authenticate(token);
+        assertDoesNotThrow(() -> authService.signup(signup));
+        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
     /**
-     * This test ensures that {@link AuthService#signUp(String, String)} method
+     * This test ensures that {@link AuthService#signup(String, String)} method
      * throws {@link UsernameAlreadyExistsException}.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to throw
+     * Mocks the {@link AccountService#register(String, String)} method to throw
      * {@link UsernameAlreadyExistsException}.
      * 
      */
     @Test
-    void AuthService_SignUp_ThrowUsernameAlreadyExists() {
-        doThrow(new UsernameAlreadyExistsException())
-            .when(userService)
-            .createUser(testUser.getUsername(), testUser.getPassword());
+    void AuthService_Signup_ThrowUsernameAlreadyExists() {
+        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
 
-        assertThrows(UsernameAlreadyExistsException.class,
-            () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
+        when(accountService.register(testUser.getUsername(), testUser.getPassword()))
+            .thenThrow(new UsernameAlreadyExistsException());
 
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, never()).authenticate(any());
+        assertThrows(UsernameAlreadyExistsException.class, () -> authService.signup(signup));
+        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(sessionSerivce, never()).authenticate(signup.username(), signup.password());
     }
 
     /**
-     * This test ensures that {@link AuthService#signUp(String, String)} method
+     * This test ensures that {@link AuthService#signup(String, String)} method
      * throws {@link DisabledException}.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to do
+     * Mocks the {@link AccountService#register(String, String)} method to do
      * nothing.
      * 
      * <p>
@@ -188,27 +197,26 @@ class AuthServiceTest {
      * 
      */
     @Test
-    void AuthService_SignUp_ThrowDisabledException() {
-        doNothing()
-            .when(userService)
-            .createUser(testUser.getUsername(), testUser.getPassword());
+    void AuthService_Signup_ThrowDisabledException() {
+        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
 
-        when(authenticationManager.authenticate(token))
-            .thenThrow(new DisabledException(""));
+        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
+        doThrow(new DisabledException(""))
+            .when(sessionSerivce)
+            .authenticate(signup.username(), signup.password());
 
-        assertThrows(DisabledException.class,
-            () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
+        assertThrows(DisabledException.class, () -> authService.signup(signup));
 
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
     /**
-     * This test ensures that {@link AuthService#signUp(String, String)} method
+     * This test ensures that {@link AuthService#signup(String, String)} method
      * throws {@link LockedException}.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to do
+     * Mocks the {@link AccountService#register(String, String)} method to do
      * nothing.
      * 
      * <p>
@@ -217,27 +225,25 @@ class AuthServiceTest {
      * 
      */
     @Test
-    void AuthService_SignUp_ThrowLockedException() {
-        doNothing()
-            .when(userService)
-            .createUser(testUser.getUsername(), testUser.getPassword());
+    void AuthService_Signup_ThrowLockedException() {
+        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
 
-        when(authenticationManager.authenticate(token))
-            .thenThrow(new LockedException(""));
+        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
+        doThrow(new LockedException(""))
+            .when(sessionSerivce)
+            .authenticate(signup.username(), signup.password());
 
-        assertThrows(LockedException.class,
-            () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
-
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, times(1)).authenticate(token);
+        assertThrows(LockedException.class, () -> authService.signup(signup));
+        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
     /**
-     * This test ensures that {@link AuthService#signUp(String, String)} method
+     * This test ensures that {@link AuthService#signup(String, String)} method
      * throws {@link BadCredentialsException}.
      * 
      * <p>
-     * Mocks the {@link UserService#createUser(String, String)} method to do
+     * Mocks the {@link AccountService#register(String, String)} method to do
      * nothing.
      * 
      * <p>
@@ -246,19 +252,17 @@ class AuthServiceTest {
      * 
      */
     @Test
-    void AuthService_SignUp_ThrowBadCredentialsException() {
-        doNothing()
-            .when(userService)
-            .createUser(testUser.getUsername(), testUser.getPassword());
+    void AuthService_Signup_ThrowBadCredentialsException() {
+        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
 
-        when(authenticationManager.authenticate(token))
-            .thenThrow(new BadCredentialsException(""));
+        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
+        doThrow(new BadCredentialsException(""))
+            .when(sessionSerivce)
+            .authenticate(signup.username(), signup.password());
 
-        assertThrows(BadCredentialsException.class,
-            () -> authService.signUp(testUser.getUsername(), testUser.getPassword()));
-
-        verify(userService, times(1)).createUser(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, times(1)).authenticate(token);
+        assertThrows(BadCredentialsException.class, () -> authService.signup(signup));
+        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
 }

@@ -16,9 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * 
  * <p>
  * The class ensures that the logout endpoint always returns a 204 status code
- * instead of a 4xx status code, even though the actual logout request is
- * successfully processed.
- * 
+ * instead of a 4xx status code.
  */
 @Component
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {

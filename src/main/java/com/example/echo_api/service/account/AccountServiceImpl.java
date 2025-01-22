@@ -1,4 +1,4 @@
-package com.example.echo_api.service.user;
+package com.example.echo_api.service.account;
 
 import java.util.List;
 
@@ -13,20 +13,36 @@ import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsExcep
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.model.Role;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
+import com.example.echo_api.service.session.SessionService;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class AccountServiceImpl implements AccountService {
 
+    private final SessionService sessionService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticatedUserService authenticatedUserService;
+
+    @Override
+    public User register(String username, String password) throws UsernameException {
+        return registerWithRole(username, password, Role.USER);
+    }
+
+    @Override
+    public User registerWithRole(String username, String password, Role role) throws UsernameException {
+        if (existsByUsername(username)) {
+            throw new UsernameAlreadyExistsException();
+        }
+
+        User user = new User(username, passwordEncoder.encode(password), role);
+        userRepository.save(user);
+        return user;
+    }
 
     @Override
     public List<User> findAll() {
@@ -45,24 +61,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(String username, String password, String role) throws UsernameException {
-        if (existsByUsername(username)) {
-            throw new UsernameAlreadyExistsException();
-        }
-
-        User user = new User(username, passwordEncoder.encode(password), role);
-        userRepository.save(user);
-    }
-
-    @Override
     public void updateUsername(String username) throws UsernameException {
         if (existsByUsername(username)) {
             throw new UsernameAlreadyExistsException();
         }
 
-        User user = authenticatedUserService.getAuthenticatedUser();
+        User user = sessionService.getAuthenticatedUser();
         user.setUsername(username);
+
         userRepository.save(user);
+        sessionService.reauthenticate(user);
     }
 
     @Override
@@ -78,13 +86,15 @@ public class UserServiceImpl implements UserService {
         }
 
         // validate current password
-        User user = authenticatedUserService.getAuthenticatedUser();
+        User user = sessionService.getAuthenticatedUser();
         if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new IncorrectCurrentPasswordException();
         }
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));
+
         userRepository.save(user);
+        sessionService.reauthenticate(user);
     }
 
 }

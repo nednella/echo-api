@@ -6,7 +6,7 @@ import com.example.echo_api.validation.Username;
 import jakarta.validation.constraints.NotBlank;
 
 // @formatter:off
-public record SignUpRequest(
+public record SignupRequest(
 
     @Username
     @NotBlank(message = "username is required")

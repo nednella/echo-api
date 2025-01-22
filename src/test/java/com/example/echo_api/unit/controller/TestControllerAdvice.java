@@ -18,23 +18,23 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
-import com.example.echo_api.controller.user.UserController;
+import com.example.echo_api.controller.test.TestController;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.model.User;
-import com.example.echo_api.service.user.UserService;
+import com.example.echo_api.service.account.AccountService;
 
 /**
- * Unit test class for {@link UserController}.
+ * Unit test class for {@link TestController}.
  */
-@WebMvcTest(UserController.class)
+@WebMvcTest(TestController.class)
 @AutoConfigureMockMvc(addFilters = false)
-class UserControllerTest {
+class TestControllerAdvice {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private UserService userService;
+    private AccountService accountService;
 
     private User testUser;
 
@@ -51,9 +51,9 @@ class UserControllerTest {
     @Test
     void UserController_FindAll_ReturnListOfUser() throws Exception {
         // api: GET /api/v1/user/list ==> 200 : List<User>
-        String endpoint = ApiConfig.User.FIND_ALL;
+        String endpoint = ApiConfig.Test.FIND_ALL;
 
-        when(userService.findAll())
+        when(accountService.findAll())
             .thenReturn(List.of(testUser));
 
         mockMvc.perform(get(endpoint))
@@ -66,9 +66,9 @@ class UserControllerTest {
     @Test
     void UserController_FindAll_ReturnListOfEmpty() throws Exception {
         // api: GET /api/v1/user/list ==> 200 : No Content
-        String endpoint = ApiConfig.User.FIND_ALL;
+        String endpoint = ApiConfig.Test.FIND_ALL;
 
-        when(userService.findAll())
+        when(accountService.findAll())
             .thenReturn(List.of());
 
         mockMvc.perform(get(endpoint))
@@ -81,9 +81,9 @@ class UserControllerTest {
     @Test
     void UserController_FindByUsername_ReturnUser() throws Exception {
         // api: GET /api/v1/user/list/{username} ==> 200 : User
-        String endpoint = ApiConfig.User.FIND_ALL + "/" + testUser.getUsername();
+        String endpoint = ApiConfig.Test.FIND_ALL + "/" + testUser.getUsername();
 
-        when(userService.findByUsername(testUser.getUsername()))
+        when(accountService.findByUsername(testUser.getUsername()))
             .thenReturn(testUser);
 
         mockMvc.perform(get(endpoint))
@@ -97,9 +97,9 @@ class UserControllerTest {
     @Test
     void UserController_FindByUsername_Return400UsernameNotFound() throws Exception {
         // api: GET /api/v1/user/list/{username} ==> 400 : Username Not Found
-        String endpoint = ApiConfig.User.FIND_ALL + "/" + testUser.getUsername();
+        String endpoint = ApiConfig.Test.FIND_ALL + "/" + testUser.getUsername();
 
-        when(userService.findByUsername(testUser.getUsername()))
+        when(accountService.findByUsername(testUser.getUsername()))
             .thenThrow(new UsernameNotFoundException());
 
         mockMvc.perform(get(endpoint))

@@ -1,25 +1,24 @@
-package com.example.echo_api.service.user;
+package com.example.echo_api.service.account;
 
 import java.util.List;
 
 import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.model.Role;
 import com.example.echo_api.persistence.model.User;
 
-public interface UserService {
+public interface AccountService {
+
+    public User register(String username, String password) throws UsernameException;
+
+    public User registerWithRole(String username, String password, Role role) throws UsernameException;
 
     public List<User> findAll();
 
     public User findByUsername(String username) throws UsernameException;
 
     public boolean existsByUsername(String username);
-
-    default void createUser(String username, String password) throws UsernameException {
-        createUser(username, password, "ROLE_USER");
-    }
-
-    public void createUser(String username, String password, String role) throws UsernameException;
 
     public void updateUsername(String username) throws UsernameException;
 

@@ -28,8 +28,8 @@ public final class ApiConfig {
     }
 
     @NoArgsConstructor(access = PRIVATE)
-    public static final class User {
-        private static final String ROOT = BASE_URL + "/user";
+    public static final class Test {
+        private static final String ROOT = BASE_URL + "/test";
         public static final String FIND_ALL = ROOT + "/list";
         public static final String FIND_BY_USERNAME = ROOT + "/list/{username}";
     }

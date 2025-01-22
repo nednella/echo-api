@@ -16,11 +16,11 @@ import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.integration.IntegrationTest;
 import com.example.echo_api.integration.TestUtils;
-import com.example.echo_api.persistence.dto.request.auth.SignInRequest;
-import com.example.echo_api.persistence.dto.request.auth.SignUpRequest;
+import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.persistence.model.User;
-import com.example.echo_api.service.user.UserService;
+import com.example.echo_api.service.account.AccountService;
 
 /**
  * Integration test class for {@link AuthController}.
@@ -29,7 +29,7 @@ import com.example.echo_api.service.user.UserService;
 class AuthControllerIT extends IntegrationTest {
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @BeforeAll
     void setUp() {
@@ -47,9 +47,9 @@ class AuthControllerIT extends IntegrationTest {
         String endpoint = ApiConfig.Auth.LOGIN;
 
         // POST a login for the pre-existing testUser
-        SignInRequest loginForm = new SignInRequest(existingUser.getUsername(), existingUser.getPassword());
+        LoginRequest login = new LoginRequest(existingUser.getUsername(), existingUser.getPassword());
 
-        HttpEntity<SignInRequest> request = TestUtils.createJsonRequestEntity(loginForm);
+        HttpEntity<LoginRequest> request = TestUtils.createJsonRequestEntity(login);
         ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, request, Void.class);
 
         // assert the response
@@ -64,9 +64,9 @@ class AuthControllerIT extends IntegrationTest {
         String endpoint = ApiConfig.Auth.SIGNUP;
 
         // POST a signup for a new user
-        SignUpRequest signupForm = new SignUpRequest("new_user", "password1");
+        SignupRequest signup = new SignupRequest("new_user", "password1");
 
-        HttpEntity<SignUpRequest> request = TestUtils.createJsonRequestEntity(signupForm);
+        HttpEntity<SignupRequest> request = TestUtils.createJsonRequestEntity(signup);
         ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, request, Void.class);
 
         // assert response
@@ -75,9 +75,9 @@ class AuthControllerIT extends IntegrationTest {
         TestUtils.assertSetCookieStartsWith(response, "ECHO_SESSION");
 
         // assert db
-        User registeredUser = userService.findByUsername(signupForm.username());
+        User registeredUser = accountService.findByUsername(signup.username());
         assertNotNull(registeredUser);
-        assertEquals(signupForm.username(), registeredUser.getUsername());
+        assertEquals(signup.username(), registeredUser.getUsername());
     }
 
     @Test
@@ -86,9 +86,9 @@ class AuthControllerIT extends IntegrationTest {
         String endpoint = ApiConfig.Auth.SIGNUP;
 
         // POST a signup for the pre-existing testUser
-        SignUpRequest signupForm = new SignUpRequest(existingUser.getUsername(), existingUser.getPassword());
+        SignupRequest signup = new SignupRequest(existingUser.getUsername(), existingUser.getPassword());
 
-        HttpEntity<SignUpRequest> request = TestUtils.createJsonRequestEntity(signupForm);
+        HttpEntity<SignupRequest> request = TestUtils.createJsonRequestEntity(signup);
         ResponseEntity<ErrorResponse> response = restTemplate.postForEntity(endpoint, request, ErrorResponse.class);
 
         // assert response

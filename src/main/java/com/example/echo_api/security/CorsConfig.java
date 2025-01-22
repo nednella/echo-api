@@ -21,7 +21,6 @@ import lombok.Setter;
  * <p>
  * The policy allows all header types and HTTP methods, and dynamically assigns
  * allowed origins as specified by application.yml.
- * 
  */
 @Setter
 @Configuration
