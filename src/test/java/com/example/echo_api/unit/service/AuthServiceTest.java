@@ -22,6 +22,7 @@ import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.service.auth.AuthServiceImpl;
+import com.example.echo_api.service.session.SessionService;
 
 /**
  * Unit test class for {@link AuthService}.
@@ -33,13 +34,12 @@ class AuthServiceTest {
     private AccountService accountService;
 
     @Mock
-    private AuthenticationManager authenticationManager;
+    private SessionService sessionSerivce;
 
     @InjectMocks
     private AuthServiceImpl authService;
 
     private User testUser;
-    private UsernamePasswordAuthenticationToken token;
 
     /**
      * Sets up a {@link User} and {@link UsernamePasswordAuthenticationToken} object
@@ -49,7 +49,6 @@ class AuthServiceTest {
     @BeforeEach
     public void initVariables() {
         testUser = new User("testUsername", "testPassword");
-        token = new UsernamePasswordAuthenticationToken(testUser.getUsername(), testUser.getPassword());
     }
 
     /**
@@ -65,10 +64,12 @@ class AuthServiceTest {
     void AuthService_Login_ReturnVoid() {
         LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
 
-        when(authenticationManager.authenticate(token)).thenReturn(token);
+        doNothing()
+            .when(sessionSerivce)
+            .authenticate(login.username(), login.password());
 
         assertDoesNotThrow(() -> authService.login(login));
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(sessionSerivce, times(1)).authenticate(login.username(), login.password());
     }
 
     /**
@@ -84,10 +85,12 @@ class AuthServiceTest {
     void AuthService_Login_ThrowDisabledException() {
         LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
 
-        when(authenticationManager.authenticate(token)).thenThrow(new DisabledException(""));
+        doThrow(new DisabledException(""))
+            .when(sessionSerivce)
+            .authenticate(login.username(), login.password());
 
         assertThrows(DisabledException.class, () -> authService.login(login));
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(sessionSerivce, times(1)).authenticate(login.username(), login.password());
     }
 
     /**
@@ -103,10 +106,12 @@ class AuthServiceTest {
     void AuthService_Login_ThrowLockedException() {
         LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
 
-        when(authenticationManager.authenticate(token)).thenThrow(new LockedException(""));
+        doThrow(new LockedException(""))
+            .when(sessionSerivce)
+            .authenticate(login.username(), login.password());
 
         assertThrows(LockedException.class, () -> authService.login(login));
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(sessionSerivce, times(1)).authenticate(login.username(), login.password());
     }
 
     /**
@@ -122,10 +127,12 @@ class AuthServiceTest {
     void AuthService_Login_ThrowBadCredentialsException() {
         LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
 
-        when(authenticationManager.authenticate(token)).thenThrow(new BadCredentialsException(""));
+        doThrow(new BadCredentialsException(""))
+            .when(sessionSerivce)
+            .authenticate(login.username(), login.password());
 
         assertThrows(BadCredentialsException.class, () -> authService.login(login));
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(sessionSerivce, times(1)).authenticate(login.username(), login.password());
     }
 
     /**
@@ -146,11 +153,13 @@ class AuthServiceTest {
         SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
-        when(authenticationManager.authenticate(token)).thenReturn(token);
+        doNothing()
+            .when(sessionSerivce)
+            .authenticate(signup.username(), signup.password());
 
         assertDoesNotThrow(() -> authService.signup(signup));
         verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
     /**
@@ -171,7 +180,7 @@ class AuthServiceTest {
 
         assertThrows(UsernameAlreadyExistsException.class, () -> authService.signup(signup));
         verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, never()).authenticate(any());
+        verify(sessionSerivce, never()).authenticate(signup.username(), signup.password());
     }
 
     /**
@@ -192,12 +201,14 @@ class AuthServiceTest {
         SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
-        when(authenticationManager.authenticate(token)).thenThrow(new DisabledException(""));
+        doThrow(new DisabledException(""))
+            .when(sessionSerivce)
+            .authenticate(signup.username(), signup.password());
 
         assertThrows(DisabledException.class, () -> authService.signup(signup));
 
         verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
     /**
@@ -218,11 +229,13 @@ class AuthServiceTest {
         SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
-        when(authenticationManager.authenticate(token)).thenThrow(new LockedException(""));
+        doThrow(new LockedException(""))
+            .when(sessionSerivce)
+            .authenticate(signup.username(), signup.password());
 
         assertThrows(LockedException.class, () -> authService.signup(signup));
         verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
     /**
@@ -243,11 +256,13 @@ class AuthServiceTest {
         SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
-        when(authenticationManager.authenticate(token)).thenThrow(new BadCredentialsException(""));
+        doThrow(new BadCredentialsException(""))
+            .when(sessionSerivce)
+            .authenticate(signup.username(), signup.password());
 
         assertThrows(BadCredentialsException.class, () -> authService.signup(signup));
         verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
-        verify(authenticationManager, times(1)).authenticate(token);
+        verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
 }
