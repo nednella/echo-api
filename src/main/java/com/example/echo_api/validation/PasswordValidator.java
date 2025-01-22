@@ -10,8 +10,8 @@ import jakarta.validation.ConstraintValidatorContext;
  * 
  * <p>
  * This class ensures that a {@code CharSequence} value meets the criteria
- * specified by the regular expression defined in the {@code @Password}
- * annotation. Null values are considered valid by default.
+ * specified by the regular expression defined as {@code REGEXP} within this
+ * class. Null values are considered valid by default.
  * 
  * @see Password
  * @see ConstraintValidator
