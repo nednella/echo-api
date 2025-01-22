@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.SecurityContextRepository;
 
 import com.example.echo_api.persistence.model.SecurityUser;
 import com.example.echo_api.persistence.repository.UserRepository;
@@ -28,17 +27,12 @@ import lombok.RequiredArgsConstructor;
  * The class defines beans to handle user authentication, password encoding, and
  * the creation of an {@link AuthenticationManager} to handle the authentication
  * process.
- * 
- * <p>
- * The configuration allows users to authenticate using both email and username.
- * 
  */
 @Configuration
 @RequiredArgsConstructor
 public class AuthenticationConfig {
 
     private final UserRepository userRepository;
-    private final SecurityContextRepository securityContextRepository;
 
     /**
      * Configures a {@link UserDetailsService} that integrates Spring Security
@@ -88,9 +82,7 @@ public class AuthenticationConfig {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(jpaUserDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
-
-        AuthenticationManager baseManager = new ProviderManager(authProvider);
-        return new ContextAwareAuthenticationManager(baseManager, securityContextRepository);
+        return new ProviderManager(authProvider);
     }
 
 }
