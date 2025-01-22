@@ -40,8 +40,7 @@ public class AuthenticationConfig {
      * 
      * <p>
      * The service is responsible for querying the database via JPA to fetch user
-     * details for authentication purposes, supporting both USERNAME:PASSWORD and
-     * EMAIL:PASSWORD login formats.
+     * details for authentication purposes.
      * 
      * @return A {@link UserDetailsService} implementation that retrieves user data
      *         from the database.
