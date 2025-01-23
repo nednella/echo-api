@@ -10,11 +10,11 @@ import jakarta.validation.constraints.NotBlank;
 // @formatter:off
 public record SignupRequest(
 
-    @NotBlank(message = "username is required", groups = BasicCheck.class)
+    @NotBlank(message = "Username is required.", groups = BasicCheck.class)
     @Username(groups = AdvancedCheck.class)
     String username,
     
-    @NotBlank(message = "password is required", groups = BasicCheck.class)
+    @NotBlank(message = "Password is required.", groups = BasicCheck.class)
     @Password(groups = AdvancedCheck.class)
     String password
     
