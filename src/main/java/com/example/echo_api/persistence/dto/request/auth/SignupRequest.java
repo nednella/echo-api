@@ -5,16 +5,16 @@ import com.example.echo_api.validation.Username;
 import com.example.echo_api.validation.sequence.AdvancedCheck;
 import com.example.echo_api.validation.sequence.BasicCheck;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 // @formatter:off
 public record SignupRequest(
 
-    @NotBlank(message = "Username is required.", groups = BasicCheck.class)
+    @NotNull(message = "Username is required.", groups = BasicCheck.class)
     @Username(groups = AdvancedCheck.class)
     String username,
     
-    @NotBlank(message = "Password is required.", groups = BasicCheck.class)
+    @NotNull(message = "Password is required.", groups = BasicCheck.class)
     @Password(groups = AdvancedCheck.class)
     String password
     

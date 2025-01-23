@@ -8,7 +8,7 @@ import com.example.echo_api.validation.NewPasswordUnique;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.GroupSequence;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 // @formatter:off
 @GroupSequence({  })
@@ -16,16 +16,16 @@ import jakarta.validation.constraints.NotBlank;
 @ConfirmationPasswordMatch(groups = AdvancedCheck.class)
 public record UpdatePasswordRequest(
 
-    @NotBlank(message = "Current password is required.", groups = BasicCheck.class)
+    @NotNull(message = "Current password is required.", groups = BasicCheck.class)
     @JsonProperty("current_password")
     String currentPassword,
 
-    @NotBlank(message = "New password is required.", groups = BasicCheck.class)
+    @NotNull(message = "New password is required.", groups = BasicCheck.class)
     @Password(groups = AdvancedCheck.class)
     @JsonProperty("new_password")
     String newPassword,
 
-    @NotBlank(message = "Confirmation password is required.", groups = BasicCheck.class)
+    @NotNull(message = "Confirmation password is required.", groups = BasicCheck.class)
     @JsonProperty("confirmation_password")
     String confirmationPassword
 
