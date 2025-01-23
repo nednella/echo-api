@@ -15,9 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.echo_api.exception.custom.password.ConfirmationPasswordMismatchException;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
-import com.example.echo_api.exception.custom.password.NewPasswordEqualsOldPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
@@ -300,40 +298,6 @@ class AccountServiceTest {
         verify(passwordEncoder, times(1)).matches("current", oldPassword);
         verify(passwordEncoder, times(1)).encode("new");
         verify(userRepository, times(1)).save(testUser);
-    }
-
-    /**
-     * This test ensures that the
-     * {@link AccountServiceImpl#updatePassword(UpdatePasswordRequest)} method
-     * throws {@link ConfirmationPasswordMismatchException} when the supplied new
-     * and confirmation passwords do not match.
-     */
-    @Test
-    void accountService_UpdatePassword_ThrowConfirmationPasswordMismatch() {
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
-            "current",
-            "new",
-            "confirmation");
-
-        assertThrows(ConfirmationPasswordMismatchException.class,
-            () -> accountService.updatePassword(request));
-    }
-
-    /**
-     * This test ensures that the
-     * {@link AccountServiceImpl#updatePassword(UpdatePasswordRequest)} method
-     * throws {@link NewPasswordEqualsOldPasswordException} when the supplied
-     * current and supplied new password match.
-     */
-    @Test
-    void accountService_UpdatePassword_ThrowNewPasswordEqualsOldPassword() {
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
-            "new",
-            "new",
-            "new");
-
-        assertThrows(NewPasswordEqualsOldPasswordException.class,
-            () -> accountService.updatePassword(request));
     }
 
     /**

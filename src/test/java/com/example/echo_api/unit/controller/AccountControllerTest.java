@@ -18,9 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.account.AccountController;
-import com.example.echo_api.exception.custom.password.ConfirmationPasswordMismatchException;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
-import com.example.echo_api.exception.custom.password.NewPasswordEqualsOldPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
@@ -178,8 +176,6 @@ class AccountControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        doThrow(new ConfirmationPasswordMismatchException()).when(accountService).updatePassword(request);
-
         String response = mockMvc
             .perform(put(path)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -208,8 +204,6 @@ class AccountControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        doThrow(new NewPasswordEqualsOldPasswordException()).when(accountService).updatePassword(request);
-
         String response = mockMvc
             .perform(put(path)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -222,7 +216,7 @@ class AccountControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
         assertEquals(400, error.status());
-        assertEquals(ErrorMessageConfig.NEW_PASSWORD_EQUALS_OLD_PASSWORD, error.message());
+        assertEquals(ErrorMessageConfig.NEW_PASSWORD_NOT_UNIQUE, error.message());
         assertEquals(path, error.path());
     }
 
