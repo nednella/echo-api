@@ -12,13 +12,13 @@ public record ErrorResponse(
     String timestamp,
     int status,
     String message,
-    Object details,
+    String details,
     String path) {
 
     public ErrorResponse(
         HttpStatus status,
         String message,
-        Object details,
+        String details,
         String path) {
         this(
             Instant.now().toString(),

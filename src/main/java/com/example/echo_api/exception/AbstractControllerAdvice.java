@@ -52,7 +52,7 @@ public abstract class AbstractControllerAdvice {
         @NonNull HttpServletRequest request,
         @NonNull HttpStatus status,
         @NonNull String message,
-        @Nullable Object details) {
+        @Nullable String details) {
 
         ErrorResponse error = new ErrorResponse(
             status,
