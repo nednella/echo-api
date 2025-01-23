@@ -23,13 +23,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(ApiConfig.Auth.LOGIN)
-    public ResponseEntity<Void> signIn(@RequestBody @Valid LoginRequest request) {
+    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest request) {
         authService.login(request);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping(ApiConfig.Auth.SIGNUP)
-    public ResponseEntity<Void> signUp(@RequestBody @Valid SignupRequest request) {
+    public ResponseEntity<Void> signup(@RequestBody @Valid SignupRequest request) {
         authService.signup(request);
         return ResponseEntity.noContent().build();
     }
