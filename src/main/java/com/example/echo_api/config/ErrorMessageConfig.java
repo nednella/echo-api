@@ -16,9 +16,11 @@ public final class ErrorMessageConfig {
     /* Auth */
     public static final String USERNAME_OR_PASSWORD_IS_INCORRECT = "Username or password is incorrect.";
     /* Username */
+    public static final String INVALID_USERNAME = "Username must be 3-15 characters long and can only include alphanumerics or underscores.";
     public static final String USERNAME_NOT_FOUND = "Username not found.";
     public static final String USERNAME_ARLEADY_EXISTS = "Username already exists.";
     /* Password */
+    public static final String INVALID_PASSWORD = "Password must be at least 6 characters long and contain at least 1 letter and 1 number.";
     public static final String CONFIRMATION_PASSWORD_MISMATCH = "Confirmation password does not match the new password.";
     public static final String NEW_PASSWORD_NOT_UNIQUE = "New password cannot be the same as the current password.";
     public static final String INCORRECT_CURRENT_PASSWORD = "Incorrect current password.";

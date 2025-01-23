@@ -13,7 +13,7 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.example.echo_api.config.RegexConfig;
+import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.validation.Password.List;
 
 import jakarta.validation.Constraint;
@@ -45,7 +45,7 @@ public @interface Password {
     /**
      * @return the error message template
      */
-    String message() default RegexConfig.PASSWORD_MESSAGE;
+    String message() default ErrorMessageConfig.INVALID_PASSWORD;
 
     /**
      * @return the groups the constraint belongs to
