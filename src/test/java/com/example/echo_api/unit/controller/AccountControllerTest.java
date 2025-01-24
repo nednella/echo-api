@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -62,11 +63,16 @@ class AccountControllerTest {
         when(accountService.existsByUsername(testUser.getUsername()))
             .thenReturn(false);
 
-        mockMvc.perform(get(path)
-            .param("username", testUser.getUsername()))
+        String response = mockMvc
+            .perform(get(path)
+                .param("username", testUser.getUsername()))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string("true"));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        assertEquals("true", response);
     }
 
     @Test
@@ -77,16 +83,20 @@ class AccountControllerTest {
         when(accountService.existsByUsername(testUser.getUsername()))
             .thenReturn(true);
 
-        mockMvc
+        String response = mockMvc
             .perform(get(path)
                 .param("username", testUser.getUsername()))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string("false"));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        assertEquals("false", response);
     }
 
     @Test
-    void AccountController_UsernameAvailable_Throw400InvalidRequest() throws Exception {
+    void AccountController_UsernameAvailable_Throw400InvalidRequest_InvalidUsername() throws Exception {
         // api: GET /api/v1/account/username-available?username={...} ==> 400 : Invalid
         // Request
         String path = ApiConfig.Account.USERNAME_AVAILABLE;
@@ -100,15 +110,20 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
-        assertEquals(400, error.status());
-        assertEquals(ErrorMessageConfig.INVALID_REQUEST, error.message());
-        assertEquals(path, error.path());
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            ErrorMessageConfig.INVALID_USERNAME,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void AccountController_UpdateUsername_Return204() throws Exception {
-        // api: PUT /api/v1/account/username ==> 204 : No Content
+        // api: PUT /api/v1/account/username ==> 204 No Content
         String path = ApiConfig.Account.UPDATE_USERNAME;
 
         doNothing().when(accountService).updateUsername(testUser.getUsername());
@@ -121,8 +136,8 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_UpdateUsername_Return400UsernameAlreadyExists() throws Exception {
-        // api: PUT /api/v1/account/username ==> 400 : UsernameAlreadyExists
+    void AccountController_UpdateUsername_Throw400UsernameAlreadyExists() throws Exception {
+        // api: PUT /api/v1/account/username ==> 400 UsernameAlreadyExists
         String path = ApiConfig.Account.UPDATE_USERNAME;
 
         doThrow(new UsernameAlreadyExistsException()).when(accountService).updateUsername(testUser.getUsername());
@@ -136,15 +151,20 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
-        assertEquals(400, error.status());
-        assertEquals(ErrorMessageConfig.USERNAME_ARLEADY_EXISTS, error.message());
-        assertEquals(path, error.path());
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.USERNAME_ARLEADY_EXISTS,
+            null,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void AccountController_UpdatePassword_Return204() throws Exception {
-        // api: PUT /api/v1/account/password ==> 204 : No Content
+        // api: PUT /api/v1/account/password ==> 204 No Content
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
         UpdatePasswordRequest request = new UpdatePasswordRequest(
@@ -165,14 +185,48 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_UpdatePassword_Return400ConfirmationPasswordMismatch() throws Exception {
-        // api: PUT /api/v1/account/password ==> 400 : ConfirmationPasswordMismatch
+    void AccountController_UpdatePassword_Throw400InvalidRequest_InvalidPassword() throws Exception {
+        // api: PUT /api/v1/account/password ==> 400 Invalid Request (new password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
         UpdatePasswordRequest request = new UpdatePasswordRequest(
-            "current_password",
+            "old-password",
+            "new-password",
+            "new-password");
+
+        String body = objectMapper.writeValueAsString(request);
+
+        String response = mockMvc
+            .perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            ErrorMessageConfig.INVALID_PASSWORD,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void AccountController_UpdatePassword_Throw400InvalidRequest_ConfirmationPasswordMismatch() throws Exception {
+        // api: PUT /api/v1/account/password ==> 400 Invalid Request (confirmation
+        // password)
+        String path = ApiConfig.Account.UPDATE_PASSWORD;
+
+        UpdatePasswordRequest request = new UpdatePasswordRequest(
+            "old-password",
             "new-password-1",
-            "this-password-doesnt-match");
+            "this-does-not-match");
 
         String body = objectMapper.writeValueAsString(request);
 
@@ -186,21 +240,26 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
-        assertEquals(400, error.status());
-        assertEquals(ErrorMessageConfig.CONFIRMATION_PASSWORD_MISMATCH, error.message());
-        assertEquals(path, error.path());
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            ErrorMessageConfig.CONFIRMATION_PASSWORD_MISMATCH,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void AccountController_UpdatePassword_Return400NewPasswordEqualsOldPassword() throws Exception {
-        // api: PUT /api/v1/account/password ==> 400 : NewPasswordEqualsOldPassword
+    void AccountController_UpdatePassword_Throw400InvalidRequest_NewPasswordNotUnique() throws Exception {
+        // api: PUT /api/v1/account/password ==> 400 Invalid Request (new password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
         UpdatePasswordRequest request = new UpdatePasswordRequest(
-            "current_password-1",
-            "current-password-1",
-            "current-password-1");
+            "old-password-1",
+            "old-password-1",
+            "old-password-1");
 
         String body = objectMapper.writeValueAsString(request);
 
@@ -214,15 +273,20 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
-        assertEquals(400, error.status());
-        assertEquals(ErrorMessageConfig.NEW_PASSWORD_NOT_UNIQUE, error.message());
-        assertEquals(path, error.path());
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            ErrorMessageConfig.NEW_PASSWORD_NOT_UNIQUE,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void AccountController_UpdatePassword_Return400IncorrectCurrentPassword() throws Exception {
-        // api: PUT /api/v1/account/password ==> 400 : IncorrectCurrentPassword
+    void AccountController_UpdatePassword_Throw400IncorrectCurrentPassword() throws Exception {
+        // api: PUT /api/v1/account/password ==> 400 IncorrectCurrentPassword
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
         UpdatePasswordRequest request = new UpdatePasswordRequest(
@@ -244,10 +308,15 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse error = objectMapper.readValue(response, ErrorResponse.class);
-        assertEquals(400, error.status());
-        assertEquals(ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD, error.message());
-        assertEquals(path, error.path());
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD,
+            null,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
 }
