@@ -38,7 +38,7 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
             request,
             HttpStatus.UNAUTHORIZED,
             ErrorMessageConfig.ACCOUNT_STATUS,
-            ex.getMessage().toLowerCase());
+            ex.getMessage());
     }
 
 }
