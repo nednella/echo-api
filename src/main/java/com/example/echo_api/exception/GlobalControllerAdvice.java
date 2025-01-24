@@ -38,15 +38,16 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /**
-     * Jakarta Validation Exception
+     * Jakarta Validation Exception - ConstraintViolation
      * 
      * <p>
      * With fail-fast enabled, only a singular validation failure will be passed to
      * the exception. Parse the validator message from the exception and return via
      * {@code details}.
      */
-    @ExceptionHandler({ ConstraintViolationException.class, MethodArgumentNotValidException.class })
-    ResponseEntity<ErrorResponse> handleInvalidRequestException(HttpServletRequest request, Exception ex) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    ResponseEntity<ErrorResponse> handleConstraintViolationException(HttpServletRequest request,
+        ConstraintViolationException ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         // parse validation message from exception
@@ -60,6 +61,29 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             details);
+    }
+
+    /**
+     * Jakarta Validation Exception - MethodArgumentNotValid
+     * 
+     * <p>
+     * With fail-fast enabled, only a singular validation failure will be passed to
+     * the exception. Parse the validator message from the exception and return via
+     * {@code details}.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(HttpServletRequest request,
+        MethodArgumentNotValidException ex) {
+        log.debug("Handling exception: {}", ex.getMessage());
+
+        // parse validation message from exception
+        String msg = ex.getBindingResult().getFieldErrors().getFirst().getDefaultMessage();
+
+        return createExceptionHandler(
+            request,
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            msg);
     }
 
     /* Username/Password Exception */
