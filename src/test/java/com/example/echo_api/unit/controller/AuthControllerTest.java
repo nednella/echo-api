@@ -1,20 +1,20 @@
 package com.example.echo_api.unit.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,8 +22,10 @@ import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
+import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
+import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,36 +45,23 @@ class AuthControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private LoginRequest validLogin;
-    private LoginRequest invalidLogin;
-    private SignupRequest validSignup;
-    private SignupRequest invalidSignup;
-
-    /**
-     * Sets up valid and invalid {@link LoginRequest} {@link SignupRequest} objects
-     * before each test.
-     */
-    @BeforeEach
-    public void setUp() {
-        validLogin = new LoginRequest("admin", "password");
-        invalidLogin = new LoginRequest("", "");
-
-        validSignup = new SignupRequest("admin", "valid-1-password");
-        invalidSignup = new SignupRequest("invalid-username", "invalid-password");
-    }
-
     @Test
     void AuthController_Login_Return204() throws Exception {
-        // api: POST /api/v1/auth/login ==> 204 : No Content
-        String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validLogin);
+        // api: POST /api/v1/auth/login ==> 204 No Content
+        String path = ApiConfig.Auth.LOGIN;
+
+        LoginRequest request = new LoginRequest(
+            "admin",
+            "password");
+
+        String body = objectMapper.writeValueAsString(request);
 
         doNothing()
             .when(authService)
-            .login(validLogin);
+            .login(request);
 
         mockMvc.perform(
-            post(endpoint)
+            post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
@@ -80,176 +69,334 @@ class AuthControllerTest {
     }
 
     @Test
-    void AuthController_Login_Return400InvalidRequest() throws Exception {
+    void AuthController_Login_Throw400InvalidRequest_InvalidUsername() throws Exception {
         // api: POST /api/v1/auth/login ==> 400 Invalid Request
-        String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(invalidLogin);
+        String path = ApiConfig.Auth.LOGIN;
 
-        doNothing()
-            .when(authService)
-            .login(invalidLogin);
+        LoginRequest request = new LoginRequest(
+            null,
+            "valid-pw-1");
 
-        mockMvc.perform(
-            post(endpoint)
+        String body = objectMapper.writeValueAsString(request);
+
+        String response = mockMvc
+            .perform(post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.INVALID_REQUEST))
-            .andExpect(jsonPath("$.path").value(endpoint));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            "Username is required.",
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void AuthController_Login_Return400UsernameNotFound() throws Exception {
-        // api: POST /api/v1/auth/login ==> 400 Username Not Found
-        String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validLogin);
+    void AuthController_Login_Throw400InvalidRequest_InvalidPassword() throws Exception {
+        // api: POST /api/v1/auth/login ==> 400 Invalid Request
+        String path = ApiConfig.Auth.LOGIN;
 
-        doThrow(new UsernameNotFoundException(""))
-            .when(authService)
-            .login(validLogin);
+        LoginRequest request = new LoginRequest(
+            "valid_name",
+            null);
 
-        mockMvc.perform(
-            post(endpoint)
+        String body = objectMapper.writeValueAsString(request);
+
+        String response = mockMvc
+            .perform(post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.USERNAME_OR_PASSWORD_IS_INCORRECT))
-            .andExpect(jsonPath("$.path").value(endpoint));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            "Password is required.",
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void AuthController_Login_Return400BadCredentials() throws Exception {
-        // api: POST /api/v1/auth/login ==> 400 Bad Credentials
-        String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validLogin);
+    void AuthController_Login_Throw400UsernameNotFound() throws Exception {
+        // api: POST /api/v1/auth/login ==> 400 UsernameNotFound
+        String path = ApiConfig.Auth.LOGIN;
+
+        LoginRequest request = new LoginRequest(
+            "admin",
+            "password");
+
+        String body = objectMapper.writeValueAsString(request);
+
+        doThrow(new UsernameNotFoundException())
+            .when(authService)
+            .login(request);
+
+        String response = mockMvc.perform(
+            post(path)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.USERNAME_NOT_FOUND,
+            null,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void AuthController_Login_Throw400BadCredentials() throws Exception {
+        // api: POST /api/v1/auth/login ==> 400 BadCredentials
+        String path = ApiConfig.Auth.LOGIN;
+
+        LoginRequest request = new LoginRequest(
+            "admin",
+            "password");
+
+        String body = objectMapper.writeValueAsString(request);
 
         doThrow(new BadCredentialsException(""))
             .when(authService)
-            .login(validLogin);
+            .login(request);
 
-        mockMvc.perform(
-            post(endpoint)
+        String response = mockMvc.perform(
+            post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.USERNAME_OR_PASSWORD_IS_INCORRECT))
-            .andExpect(jsonPath("$.path").value(endpoint));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.USERNAME_OR_PASSWORD_IS_INCORRECT,
+            null,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void AuthController_Login_Return401AccountStatusDisabled() throws Exception {
-        // api: POST /api/v1/auth/login ==> 401 Account Status - Disabled
-        String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validLogin);
+    void AuthController_Login_Throw401AccountStatusDisabled() throws Exception {
+        // api: POST /api/v1/auth/login ==> 401 AccountStatus - Disabled
+        String path = ApiConfig.Auth.LOGIN;
 
-        doThrow(new DisabledException(""))
+        LoginRequest request = new LoginRequest(
+            "admin",
+            "password");
+
+        String body = objectMapper.writeValueAsString(request);
+
+        doThrow(new DisabledException("Account is disabled."))
             .when(authService)
-            .login(validLogin);
+            .login(request);
 
-        mockMvc.perform(
-            post(endpoint)
+        String response = mockMvc.perform(
+            post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
             .andExpect(status().isUnauthorized())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(401))
-            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.ACCOUNT_STATUS))
-            .andExpect(jsonPath("$.path").value(endpoint));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.UNAUTHORIZED,
+            ErrorMessageConfig.ACCOUNT_STATUS,
+            "Account is disabled.",
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void AuthController_Login_Return401AccountStatusLocked() throws Exception {
-        // api: POST /api/v1/auth/login ==> 401 Account Status - Locked
-        String endpoint = ApiConfig.Auth.LOGIN;
-        String body = objectMapper.writeValueAsString(validLogin);
+    void AuthController_Login_Throw401AccountStatusLocked() throws Exception {
+        // api: POST /api/v1/auth/login ==> 401 AccountStatus - Locked
+        String path = ApiConfig.Auth.LOGIN;
 
-        doThrow(new LockedException(""))
+        LoginRequest request = new LoginRequest(
+            "admin",
+            "password");
+
+        String body = objectMapper.writeValueAsString(request);
+
+        doThrow(new LockedException("Account is locked."))
             .when(authService)
-            .login(validLogin);
+            .login(request);
 
-        mockMvc.perform(
-            post(endpoint)
+        String response = mockMvc.perform(
+            post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
             .andExpect(status().isUnauthorized())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(401))
-            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.ACCOUNT_STATUS))
-            .andExpect(jsonPath("$.path").value(endpoint));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.UNAUTHORIZED,
+            ErrorMessageConfig.ACCOUNT_STATUS,
+            "Account is locked.",
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void AuthController_Signup_Return204() throws Exception {
-        // api: POST /api/v1/auth/signup ==> 204 : No Content
-        String endpoint = ApiConfig.Auth.SIGNUP;
-        String body = objectMapper.writeValueAsString(validSignup);
+        // api: POST /api/v1/auth/signup ==> 204 No Content
+        String path = ApiConfig.Auth.SIGNUP;
+
+        SignupRequest request = new SignupRequest(
+            "admin",
+            "password-1");
+
+        String body = objectMapper.writeValueAsString(request);
 
         doNothing()
             .when(authService)
-            .signup(validSignup);
+            .signup(request);
 
         mockMvc.perform(
-            post(endpoint)
+            post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
             .andExpect(status().isNoContent());
-
     }
 
     @Test
-    void AuthController_Signup_Return400InvalidRequest() throws Exception {
+    void AuthController_Signup_Throw400InvalidRequest_InvalidUsername() throws Exception {
         // api: POST /api/v1/auth/signup ==> 400 Invalid Request
-        String endpoint = ApiConfig.Auth.SIGNUP;
-        String body = objectMapper.writeValueAsString(invalidSignup);
+        String path = ApiConfig.Auth.SIGNUP;
 
-        doNothing()
-            .when(authService)
-            .signup(invalidSignup);
+        SignupRequest request = new SignupRequest(
+            "invalid_name!",
+            "valid-pw-1");
 
-        mockMvc.perform(
-            post(endpoint)
+        String body = objectMapper.writeValueAsString(request);
+
+        String response = mockMvc.perform(
+            post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.INVALID_REQUEST))
-            .andExpect(jsonPath("$.path").value(endpoint));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            ErrorMessageConfig.INVALID_USERNAME,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void AuthController_Signup_Return400UsernameAlreadyExists() throws Exception {
-        // api: POST /api/v1/auth/signup ==> 400 Username Already Exists
-        String endpoint = ApiConfig.Auth.SIGNUP;
-        String body = objectMapper.writeValueAsString(validSignup);
+    void AuthController_Signup_Throw400InvalidRequest_InvalidPassword() throws Exception {
+        // api: POST /api/v1/auth/signup ==> 400 Invalid Request
+        String path = ApiConfig.Auth.SIGNUP;
+
+        SignupRequest request = new SignupRequest(
+            "valid_name",
+            "invalid_password");
+
+        String body = objectMapper.writeValueAsString(request);
+
+        String response = mockMvc.perform(
+            post(path)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.INVALID_REQUEST,
+            ErrorMessageConfig.INVALID_PASSWORD,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void AuthController_Signup_Throw400UsernameAlreadyExists() throws Exception {
+        // api: POST /api/v1/auth/signup ==> 400 UsernameAlreadyExists
+        String path = ApiConfig.Auth.SIGNUP;
+
+        SignupRequest request = new SignupRequest(
+            "taken_name",
+            "valid-pw-1");
+
+        String body = objectMapper.writeValueAsString(request);
 
         doThrow(new UsernameAlreadyExistsException())
             .when(authService)
-            .signup(validSignup);
+            .signup(request);
 
-        mockMvc.perform(
-            post(endpoint)
+        String response = mockMvc.perform(
+            post(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value(ErrorMessageConfig.USERNAME_ARLEADY_EXISTS))
-            .andExpect(jsonPath("$.path").value(endpoint));
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ErrorResponse expected = new ErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessageConfig.USERNAME_ARLEADY_EXISTS,
+            null,
+            path);
+
+        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+
+        assertEquals(expected, actual);
     }
 
 }
