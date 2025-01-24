@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import com.example.echo_api.integration.RepositoryTest;
 import com.example.echo_api.persistence.model.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 

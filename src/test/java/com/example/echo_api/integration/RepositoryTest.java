@@ -1,4 +1,4 @@
-package com.example.echo_api.integration.repository;
+package com.example.echo_api.integration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
