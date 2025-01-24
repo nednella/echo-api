@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.example.echo_api.unit.config.RegexConfigTest;
-import com.example.echo_api.validation.Password;
+import com.example.echo_api.validation.annotations.Password;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

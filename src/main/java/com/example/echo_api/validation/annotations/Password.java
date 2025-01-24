@@ -1,4 +1,4 @@
-package com.example.echo_api.validation;
+package com.example.echo_api.validation.annotations;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -14,13 +14,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import com.example.echo_api.config.ErrorMessageConfig;
-import com.example.echo_api.validation.Username.List;
+import com.example.echo_api.validation.annotations.Password.List;
+import com.example.echo_api.validation.validators.PasswordValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 /**
- * Custom Jakarta Validation annotation for application usernames.
+ * Custom Jakarta Validation annotation for application passwords.
  * 
  * <p>
  * The annotated {@code CharSequence} must match the specified regular
@@ -39,13 +40,13 @@ import jakarta.validation.Payload;
 @Retention(RUNTIME)
 @Repeatable(List.class)
 @Documented
-@Constraint(validatedBy = UsernameValidator.class)
-public @interface Username {
+@Constraint(validatedBy = PasswordValidator.class)
+public @interface Password {
 
     /**
      * @return the error message template
      */
-    String message() default ErrorMessageConfig.INVALID_USERNAME;
+    String message() default ErrorMessageConfig.INVALID_PASSWORD;
 
     /**
      * @return the groups the constraint belongs to
@@ -58,16 +59,16 @@ public @interface Username {
     Class<? extends Payload>[] payload() default {};
 
     /**
-     * Defines several {@link Username} annotations on the same element.
+     * Defines several {@link Password} annotations on the same element.
      *
-     * @see Username
+     * @see Password
      */
     @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
     @Retention(RUNTIME)
     @Documented
     @interface List {
 
-        Username[] value();
+        Password[] value();
 
     }
 }

@@ -1,10 +1,10 @@
 package com.example.echo_api.persistence.dto.request.account;
 
-import com.example.echo_api.validation.Password;
+import com.example.echo_api.validation.annotations.ConfirmationPasswordMatch;
+import com.example.echo_api.validation.annotations.NewPasswordUnique;
+import com.example.echo_api.validation.annotations.Password;
 import com.example.echo_api.validation.sequence.AdvancedCheck;
 import com.example.echo_api.validation.sequence.BasicCheck;
-import com.example.echo_api.validation.ConfirmationPasswordMatch;
-import com.example.echo_api.validation.NewPasswordUnique;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.GroupSequence;

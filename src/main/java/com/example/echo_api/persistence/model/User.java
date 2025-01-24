@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.example.echo_api.validation.Username;
+import com.example.echo_api.validation.annotations.Username;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.example.echo_api.persistence.dto.request.auth;
 
-import com.example.echo_api.validation.Password;
-import com.example.echo_api.validation.Username;
+import com.example.echo_api.validation.annotations.Password;
+import com.example.echo_api.validation.annotations.Username;
 import com.example.echo_api.validation.sequence.AdvancedCheck;
 import com.example.echo_api.validation.sequence.BasicCheck;
 
