@@ -25,11 +25,12 @@ public class ValidationConfig {
      * For more information, refer to:
      * {@link https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/?v=8.0#section-fail-fast}
      * 
-     * @return
+     * @return the configured validator
      */
     @Bean
     Validator validator() {
-        return Validation.byProvider(HibernateValidator.class)
+        return Validation
+            .byProvider(HibernateValidator.class)
             .configure()
             .failFast(true)
             .buildValidatorFactory()
