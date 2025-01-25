@@ -1,4 +1,4 @@
-package com.example.echo_api.integration;
+package com.example.echo_api.integration.util;
 
 import java.io.IOException;
 
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
  * the interceptor will bypass modification as to prevent failing tests that
  * expect a fresh session cookie in the server response.
  */
+// @formatter:off
 @Component
 public class SessionCookieInterceptor implements ClientHttpRequestInterceptor {
 
@@ -31,8 +32,8 @@ public class SessionCookieInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(
         @NonNull HttpRequest request,
         @NonNull byte[] body,
-        @NonNull ClientHttpRequestExecution execution)
-        throws IOException {
+        @NonNull ClientHttpRequestExecution execution
+    ) throws IOException {
 
         if (bypassInterceptor) {
             return execution.execute(request, body);
@@ -48,7 +49,9 @@ public class SessionCookieInterceptor implements ClientHttpRequestInterceptor {
 
         // Capture session cookie from the response if present
         String cookie = response.getHeaders().getFirst(HttpHeaders.SET_COOKIE);
-        if (cookie != null && cookie.startsWith("ECHO_SESSION")) {
+        if (cookie != null &&
+            cookie.startsWith("ECHO_SESSION")
+        ) {
             sessionCookie = cookie;
         }
 
@@ -64,3 +67,4 @@ public class SessionCookieInterceptor implements ClientHttpRequestInterceptor {
     }
 
 }
+// @formatter:on

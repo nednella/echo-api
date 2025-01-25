@@ -1,24 +1,25 @@
-package com.example.echo_api.validation;
+package com.example.echo_api.validation.validators;
 
 import com.example.echo_api.config.RegexConfig;
+import com.example.echo_api.validation.annotations.Username;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 /**
- * Validator implementation for the {@link Password} annotation.
+ * Validator implementation for the {@link Username} annotation.
  * 
  * <p>
  * This class ensures that a {@code CharSequence} value meets the criteria
- * specified by the regular expression defined in the {@code @Password}
+ * specified by the regular expression defined in the {@code @Username}
  * annotation. Null values are considered valid by default.
  * 
- * @see Password
+ * @see Username
  * @see ConstraintValidator
  */
-public class PasswordValidator implements ConstraintValidator<Password, String> {
+public class UsernameValidator implements ConstraintValidator<Username, String> {
 
-    private static final String REGEXP = RegexConfig.PASSWORD;
+    private static final String REGEXP = RegexConfig.USERNAME;
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {

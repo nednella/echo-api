@@ -1,20 +1,22 @@
 package com.example.echo_api.persistence.dto.request.auth;
 
-import com.example.echo_api.validation.Password;
-import com.example.echo_api.validation.Username;
+import com.example.echo_api.validation.annotations.Password;
+import com.example.echo_api.validation.annotations.Username;
+import com.example.echo_api.validation.sequence.AdvancedCheck;
+import com.example.echo_api.validation.sequence.BasicCheck;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 // @formatter:off
 public record SignupRequest(
 
-    @Username
-    @NotBlank(message = "username is required")
+    @NotNull(message = "Username is required.", groups = BasicCheck.class)
+    @Username(groups = AdvancedCheck.class)
     String username,
     
-    @Password
-    @NotBlank(message = "password is required")
+    @NotNull(message = "Password is required.", groups = BasicCheck.class)
+    @Password(groups = AdvancedCheck.class)
     String password
-
+    
 ) {}
 // @formatter:on

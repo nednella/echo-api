@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.echo_api.exception.custom.password.ConfirmationPasswordMismatchException;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
-import com.example.echo_api.exception.custom.password.NewPasswordEqualsOldPasswordException;
 import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameException;
@@ -20,6 +18,13 @@ import com.example.echo_api.service.session.SessionService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Service implementation for managing CRUD operations of a {@link User}.
+ * 
+ * @see AuthenticationManager
+ * @see SecurityContextRepository
+ * @see SecurityContextHolderStrategy
+ */
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
@@ -75,18 +80,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void updatePassword(UpdatePasswordRequest request) throws PasswordException {
-        // validate new == confirmation
-        if (!request.newPassword().equals(request.confirmationPassword())) {
-            throw new ConfirmationPasswordMismatchException();
-        }
-
-        // validate new != current
-        if (request.newPassword().equals(request.currentPassword())) {
-            throw new NewPasswordEqualsOldPasswordException();
-        }
-
-        // validate current password
         User user = sessionService.getAuthenticatedUser();
+
         if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new IncorrectCurrentPasswordException();
         }

@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
-import com.example.echo_api.integration.IntegrationTest;
-import com.example.echo_api.integration.TestUtils;
+import com.example.echo_api.integration.util.IntegrationTest;
+import com.example.echo_api.integration.util.TestUtils;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 

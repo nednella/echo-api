@@ -1,9 +1,5 @@
 package com.example.echo_api.exception;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -41,26 +37,24 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
-    /** Jakarta Validation Exception */
-    @ExceptionHandler({ ConstraintViolationException.class })
+    /**
+     * Jakarta Validation Exception - ConstraintViolation
+     * 
+     * <p>
+     * With fail-fast enabled, only a singular validation failure will be passed to
+     * the exception. Parse the validator message from the exception and return via
+     * {@code details}.
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
     ResponseEntity<ErrorResponse> handleConstraintViolationException(HttpServletRequest request,
         ConstraintViolationException ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        // build linked hashmap of ConstrantViolationException violations to maintain
-        // insertion order
-        List<Map<String, String>> details = ex
-            .getConstraintViolations()
-            .stream()
-            .map(violation -> {
-                Map<String, String> tmp = new LinkedHashMap<>();
-                String field = violation.getPropertyPath().toString();
-                field = field.substring(field.lastIndexOf('.') + 1);
-                tmp.put("field", field);
-                tmp.put("message", violation.getMessage());
-                return tmp;
-            })
-            .toList();
+        // parse validation message from exception
+        String msg = ex.getMessage();
+
+        // get substring of msg starting at first index of ":" + 2
+        String details = msg.substring(msg.indexOf(":") + 2);
 
         return createExceptionHandler(
             request,
@@ -69,34 +63,30 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
             details);
     }
 
-    /** Jakarta Validation Exception */
-    @ExceptionHandler({ MethodArgumentNotValidException.class })
+    /**
+     * Jakarta Validation Exception - MethodArgumentNotValid
+     * 
+     * <p>
+     * With fail-fast enabled, only a singular validation failure will be passed to
+     * the exception. Parse the validator message from the exception and return via
+     * {@code details}.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(HttpServletRequest request,
         MethodArgumentNotValidException ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
-        // build linked hashmap of MethodArgumentNotValidException field errors to
-        // maintain insertion order
-        List<Map<String, String>> details = ex
-            .getBindingResult()
-            .getFieldErrors()
-            .stream()
-            .map(error -> {
-                Map<String, String> tmp = new LinkedHashMap<>();
-                tmp.put("field", error.getField());
-                tmp.put("message", error.getDefaultMessage());
-                return tmp;
-            })
-            .toList();
+        // parse validation message from exception
+        String msg = ex.getBindingResult().getFieldErrors().getFirst().getDefaultMessage();
 
         return createExceptionHandler(
             request,
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            details);
+            msg);
     }
 
-    /** Username/Password Exception */
+    /* Username/Password Exception */
     @ExceptionHandler({ UsernameException.class, PasswordException.class })
     ResponseEntity<ErrorResponse> handleUsernamePasswordException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
@@ -108,7 +98,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
             null);
     }
 
-    /** 401 */
+    /* 401 */
     @ExceptionHandler({ InsufficientAuthenticationException.class })
     ResponseEntity<ErrorResponse> handleInsufficientAuthenticationException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
@@ -120,7 +110,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
             null);
     }
 
-    /** 403 */
+    /* 403 */
     @ExceptionHandler({ AccessDeniedException.class })
     ResponseEntity<ErrorResponse> handleAccessDeniedException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
@@ -132,7 +122,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
             null);
     }
 
-    /** 404 */
+    /* 404 */
     @ExceptionHandler({ NoResourceFoundException.class })
     ResponseEntity<ErrorResponse> handleNotFoundException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
@@ -144,7 +134,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
             null);
     }
 
-    /** 500 */
+    /* 500 */
     @ExceptionHandler({ Exception.class })
     ResponseEntity<ErrorResponse> handleGenericException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());

@@ -1,4 +1,4 @@
-package com.example.echo_api.validation;
+package com.example.echo_api.validation.annotations;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -13,14 +13,15 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.example.echo_api.config.RegexConfig;
-import com.example.echo_api.validation.Password.List;
+import com.example.echo_api.config.ErrorMessageConfig;
+import com.example.echo_api.validation.annotations.Username.List;
+import com.example.echo_api.validation.validators.UsernameValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 /**
- * Custom Jakarta Validation annotation for application passwords.
+ * Custom Jakarta Validation annotation for application usernames.
  * 
  * <p>
  * The annotated {@code CharSequence} must match the specified regular
@@ -39,13 +40,13 @@ import jakarta.validation.Payload;
 @Retention(RUNTIME)
 @Repeatable(List.class)
 @Documented
-@Constraint(validatedBy = PasswordValidator.class)
-public @interface Password {
+@Constraint(validatedBy = UsernameValidator.class)
+public @interface Username {
 
     /**
      * @return the error message template
      */
-    String message() default RegexConfig.PASSWORD_MESSAGE;
+    String message() default ErrorMessageConfig.INVALID_USERNAME;
 
     /**
      * @return the groups the constraint belongs to
@@ -58,16 +59,16 @@ public @interface Password {
     Class<? extends Payload>[] payload() default {};
 
     /**
-     * Defines several {@link Password} annotations on the same element.
+     * Defines several {@link Username} annotations on the same element.
      *
-     * @see Password
+     * @see Username
      */
     @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
     @Retention(RUNTIME)
     @Documented
     @interface List {
 
-        Password[] value();
+        Username[] value();
 
     }
 }

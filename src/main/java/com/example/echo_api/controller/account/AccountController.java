@@ -8,6 +8,7 @@ import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.dto.request.account.UpdateUsernameRequest;
 import com.example.echo_api.service.account.AccountService;
+import com.example.echo_api.validation.sequence.ValidationOrder;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Validated
 @RestController
 @RequiredArgsConstructor
+@Validated(ValidationOrder.class)
 public class AccountController {
 
     private final AccountService accountService;
@@ -28,18 +29,18 @@ public class AccountController {
     public ResponseEntity<Boolean> isUsernameAvailable(
         @RequestParam("username")
         @Valid
-        UpdateUsernameRequest username
+        UpdateUsernameRequest request
     ) {
-        return ResponseEntity.ok(!accountService.existsByUsername(username.username()));
+        return ResponseEntity.ok(!accountService.existsByUsername(request.username()));
     }
 
     @PutMapping(ApiConfig.Account.UPDATE_USERNAME)
     public ResponseEntity<Void> updateUsername(
         @RequestParam("username")
         @Valid
-        UpdateUsernameRequest username
+        UpdateUsernameRequest request
     ) {
-        accountService.updateUsername(username.username());
+        accountService.updateUsername(request.username());
         return ResponseEntity.noContent().build();
     }
     // @formatter:on
