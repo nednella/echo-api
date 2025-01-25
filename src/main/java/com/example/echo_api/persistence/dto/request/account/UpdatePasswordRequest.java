@@ -7,11 +7,9 @@ import com.example.echo_api.validation.sequence.AdvancedCheck;
 import com.example.echo_api.validation.sequence.BasicCheck;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.NotNull;
 
 // @formatter:off
-@GroupSequence({  })
 @NewPasswordUnique(groups = AdvancedCheck.class)
 @ConfirmationPasswordMatch(groups = AdvancedCheck.class)
 public record UpdatePasswordRequest(
