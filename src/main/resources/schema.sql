@@ -1,7 +1,7 @@
 CREATE TABLE
     IF NOT EXISTS "user" (
         id                  UUID PRIMARY KEY UNIQUE NOT NULL DEFAULT gen_random_uuid(),
-        username            VARCHAR(255) UNIQUE NOT NULL CHECK (username ~ '^[a-zA-Z0-9_]{3,15}$'),
+        username            VARCHAR(15) UNIQUE NOT NULL CHECK (username ~ '^[a-zA-Z0-9_]{3,15}$'),
         encrypted_password  VARCHAR(255) NOT NULL,
         role                VARCHAR(255) NOT NULL DEFAULT USER,
         enabled             BOOLEAN NOT NULL DEFAULT TRUE,
@@ -16,8 +16,8 @@ CREATE UNIQUE INDEX
 CREATE TABLE
     IF NOT EXISTS "profile" (
         user_id          UUID PRIMARY KEY UNIQUE NOT NULL,
-        username         VARCHAR(255) UNIQUE NOT NULL CHECK (username ~ '^[a-zA-Z0-9_]{3,15}$'),
-        display_name     VARCHAR(255),
+        username         VARCHAR(15) UNIQUE NOT NULL CHECK (username ~ '^[a-zA-Z0-9_]{3,15}$'),
+        display_name     VARCHAR(50),
         bio              TEXT,
         location         VARCHAR(255),
         avatar_url       VARCHAR(255),
