@@ -18,8 +18,8 @@ CREATE TABLE
         user_id          UUID PRIMARY KEY UNIQUE NOT NULL,
         username         VARCHAR(15) UNIQUE NOT NULL CHECK (username ~ '^[a-zA-Z0-9_]{3,15}$'),
         name             VARCHAR(50),
-        bio              TEXT,
-        location         VARCHAR(255),
+        bio              VARCHAR(160)
+        location         VARCHAR(30),
         avatar_url       VARCHAR(255),
         banner_url       VARCHAR(255),
         following_count  INT NOT NULL DEFAULT 0,
