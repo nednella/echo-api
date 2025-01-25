@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileRequest;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.validation.sequence.ValidationOrder;
@@ -12,6 +13,8 @@ import com.example.echo_api.validation.sequence.ValidationOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +27,12 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> getMe() {
         ProfileResponse response = profileService.getMe();
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping(ApiConfig.Profile.UPDATE_ME)
+    public ResponseEntity<Void> putMethodName(@RequestBody UpdateProfileRequest request) {
+        profileService.updateMe(request);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(ApiConfig.Profile.GET_BY_USERNAME)

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileRequest;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.profile.Profile;
@@ -41,6 +42,27 @@ public class ProfileServiceImpl implements ProfileService {
     public ProfileResponse getMe() {
         User me = sessionService.getAuthenticatedUser();
         return getByUsername(me.getUsername());
+    }
+
+    @Override
+    public void updateMe(UpdateProfileRequest request) {
+        User me = sessionService.getAuthenticatedUser();
+        Profile profile = findByUsername(me.getUsername());
+        ProfileMapper.updateProfile(request, profile);
+        profileRepository.save(profile);
+    }
+
+    /**
+     * Internal method for obtaining a {@link Profile} via {@code username} from
+     * {@link ProfileRepository}.
+     * 
+     * @param username the username to search within the repository
+     * @return the found profile
+     * @throws UsernameException if no profile by that username exists
+     */
+    private Profile findByUsername(String username) throws UsernameException {
+        return profileRepository.findByUsername(username)
+            .orElseThrow(UsernameNotFoundException::new);
     }
 
 }
