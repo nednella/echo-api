@@ -10,6 +10,7 @@ import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.validation.sequence.ValidationOrder;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,7 @@ public class ProfileController {
     }
 
     @PutMapping(ApiConfig.Profile.UPDATE_ME)
-    public ResponseEntity<Void> putMethodName(@RequestBody UpdateProfileRequest request) {
+    public ResponseEntity<Void> updateMe(@RequestBody @Valid UpdateProfileRequest request) {
         profileService.updateMe(request);
         return ResponseEntity.noContent().build();
     }
