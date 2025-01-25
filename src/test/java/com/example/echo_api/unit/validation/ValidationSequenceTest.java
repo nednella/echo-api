@@ -7,7 +7,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.example.echo_api.config.ErrorMessageConfig;
+import com.example.echo_api.config.ValidationMessageConfig;
 import com.example.echo_api.validation.account.annotations.Password;
 import com.example.echo_api.validation.account.annotations.Username;
 import com.example.echo_api.validation.sequence.AdvancedCheck;
@@ -73,7 +73,7 @@ class ValidationSequenceTest {
         assertEquals(1, violations.size()); // fails on invalid password
 
         ConstraintViolation<TestUser> violation = violations.iterator().next();
-        assertEquals(ErrorMessageConfig.INVALID_PASSWORD, violation.getMessage());
+        assertEquals(ValidationMessageConfig.INVALID_PASSWORD, violation.getMessage());
     }
 
 }

@@ -7,7 +7,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.example.echo_api.config.ErrorMessageConfig;
+import com.example.echo_api.config.ValidationMessageConfig;
 import com.example.echo_api.validation.account.validators.ConfirmationPasswordMatchValidator;
 
 import jakarta.validation.Constraint;
@@ -32,7 +32,7 @@ public @interface ConfirmationPasswordMatch {
     /**
      * @return the error message template
      */
-    String message() default ErrorMessageConfig.CONFIRMATION_PASSWORD_MISMATCH;
+    String message() default ValidationMessageConfig.CONFIRMATION_PASSWORD_MISMATCH;
 
     /**
      * @return the groups the constraint belongs to

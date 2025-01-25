@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
+import com.example.echo_api.config.ValidationMessageConfig;
 import com.example.echo_api.controller.account.AccountController;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
@@ -113,7 +114,7 @@ class AccountControllerTest {
         ErrorResponse expected = new ErrorResponse(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            ErrorMessageConfig.INVALID_USERNAME,
+            ValidationMessageConfig.INVALID_USERNAME,
             path);
 
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
@@ -209,7 +210,7 @@ class AccountControllerTest {
         ErrorResponse expected = new ErrorResponse(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            ErrorMessageConfig.INVALID_PASSWORD,
+            ValidationMessageConfig.INVALID_PASSWORD,
             path);
 
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
@@ -243,7 +244,7 @@ class AccountControllerTest {
         ErrorResponse expected = new ErrorResponse(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            ErrorMessageConfig.CONFIRMATION_PASSWORD_MISMATCH,
+            ValidationMessageConfig.CONFIRMATION_PASSWORD_MISMATCH,
             path);
 
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
@@ -276,7 +277,7 @@ class AccountControllerTest {
         ErrorResponse expected = new ErrorResponse(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            ErrorMessageConfig.NEW_PASSWORD_NOT_UNIQUE,
+            ValidationMessageConfig.NEW_PASSWORD_NOT_UNIQUE,
             path);
 
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);

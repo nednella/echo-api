@@ -7,7 +7,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.example.echo_api.config.ErrorMessageConfig;
+import com.example.echo_api.config.ValidationMessageConfig;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.validation.account.validators.NewPasswordUniqueValidator;
 
 import jakarta.validation.Constraint;
@@ -32,7 +33,7 @@ public @interface NewPasswordUnique {
     /**
      * @return the error message template
      */
-    String message() default ErrorMessageConfig.NEW_PASSWORD_NOT_UNIQUE;
+    String message() default ValidationMessageConfig.NEW_PASSWORD_NOT_UNIQUE;
 
     /**
      * @return the groups the constraint belongs to
