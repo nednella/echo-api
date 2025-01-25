@@ -14,6 +14,7 @@ import com.example.echo_api.persistence.dto.request.account.UpdatePasswordReques
 import com.example.echo_api.persistence.model.user.Role;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.UserRepository;
+import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.session.SessionService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
+    private final ProfileService profileService;
     private final SessionService sessionService;
+
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -46,6 +50,8 @@ public class AccountServiceImpl implements AccountService {
 
         User user = new User(username, passwordEncoder.encode(password), role);
         userRepository.save(user);
+        profileService.registerForUser(user);
+
         return user;
     }
 
