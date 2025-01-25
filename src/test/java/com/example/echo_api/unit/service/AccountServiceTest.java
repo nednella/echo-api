@@ -19,7 +19,7 @@ import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordEx
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.account.AccountServiceImpl;

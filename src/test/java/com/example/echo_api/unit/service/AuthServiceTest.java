@@ -18,7 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.service.auth.AuthServiceImpl;

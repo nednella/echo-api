@@ -11,7 +11,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 
 @ActiveProfiles(value = "test")
 @Transactional

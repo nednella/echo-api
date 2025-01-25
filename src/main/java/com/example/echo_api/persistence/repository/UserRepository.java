@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 
 import java.util.Optional;
 

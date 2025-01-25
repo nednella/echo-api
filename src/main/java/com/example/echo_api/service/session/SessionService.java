@@ -2,7 +2,7 @@ package com.example.echo_api.service.session;
 
 import org.springframework.security.core.AuthenticationException;
 
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 
 public interface SessionService {
 
