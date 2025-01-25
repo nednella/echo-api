@@ -19,10 +19,10 @@ import lombok.NoArgsConstructor;
 /**
  * Entity class representing a {@link User} profile in the system.
  */
-@Getter
-@NoArgsConstructor
 @Entity
 @Table
+@Getter
+@NoArgsConstructor
 public class Profile {
 
     // ---- primary keys / foreign keys ----
@@ -37,8 +37,7 @@ public class Profile {
 
     // ---- entity-specific attributes ----
 
-    @Column(name = "display_name")
-    private String displayName;
+    private String name;
 
     private String bio;
 
@@ -51,10 +50,16 @@ public class Profile {
     private String bannerUrl;
 
     @Column(name = "following_count")
-    private int followingCount = 0; // default = 0
+    private int followingCount = 0;
 
     @Column(name = "follower_count")
-    private int followerCount = 0; // default = 0
+    private int followerCount = 0;
+
+    @Column(name = "post_count")
+    private int postCount = 0;
+
+    @Column(name = "media_count")
+    private int mediaCount = 0;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -73,8 +78,8 @@ public class Profile {
 
     // ---- setters ----
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setBio(String bio) {
@@ -103,6 +108,14 @@ public class Profile {
         this.followerCount++;
     }
 
+    public void incrementPostCount() {
+        this.postCount++;
+    }
+
+    public void incrementMediaCount() {
+        this.mediaCount++;
+    }
+
     // ---- decrementers ----
 
     public void decrementFollowing() {
@@ -111,6 +124,14 @@ public class Profile {
 
     public void decrementFollowers() {
         this.followerCount--;
+    }
+
+    public void decrementPostCount() {
+        this.postCount--;
+    }
+
+    public void decrementMediaCount() {
+        this.mediaCount--;
     }
 
 }

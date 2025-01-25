@@ -13,13 +13,15 @@ public class ProfileMapper {
     public static ProfileResponse toResponse(Profile profile) {
         return new ProfileResponse(
             profile.getUsername(),
-            profile.getDisplayName(),
+            profile.getName(),
             profile.getBio(),
             profile.getLocation(),
             profile.getAvatarUrl(),
             profile.getBannerUrl(),
             profile.getFollowingCount(),
             profile.getFollowingCount(),
+            profile.getPostCount(),
+            profile.getMediaCount(),
             profile.getCreatedAt());
     }
 
