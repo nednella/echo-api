@@ -2,7 +2,7 @@ package com.example.echo_api.persistence.mapper;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileRequest;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.persistence.model.profile.Profile;
 
@@ -26,7 +26,7 @@ public class ProfileMapper {
             profile.getCreatedAt());
     }
 
-    public static Profile updateProfile(UpdateProfileRequest request, Profile profile) {
+    public static Profile updateProfileInfo(UpdateProfileInfoRequest request, Profile profile) {
         if (request.name() != null) {
             profile.setName(request.name());
         }

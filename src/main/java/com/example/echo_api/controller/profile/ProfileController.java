@@ -5,7 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileRequest;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.validation.sequence.ValidationOrder;
@@ -31,8 +31,8 @@ public class ProfileController {
     }
 
     @PutMapping(ApiConfig.Profile.UPDATE_ME)
-    public ResponseEntity<Void> updateMe(@RequestBody @Valid UpdateProfileRequest request) {
-        profileService.updateMe(request);
+    public ResponseEntity<Void> updateMeProfileInfo(@RequestBody @Valid UpdateProfileInfoRequest request) {
+        profileService.updateMeProfileInfo(request);
         return ResponseEntity.noContent().build();
     }
 
