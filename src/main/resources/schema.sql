@@ -12,3 +12,24 @@ CREATE TABLE
 CREATE UNIQUE INDEX 
     IF NOT EXISTS idx_user_username
         ON "user"(Lower(username));
+    
+CREATE TABLE
+    IF NOT EXISTS "profile" (
+        user_id          UUID PRIMARY KEY UNIQUE NOT NULL,
+        username         VARCHAR(255) UNIQUE NOT NULL CHECK (username ~ '^[a-zA-Z0-9_]{3,15}$'),
+        display_name     VARCHAR(255),
+        bio              TEXT,
+        location         VARCHAR(255),
+        avatar_url       VARCHAR(255),
+        banner_url       VARCHAR(255),
+        following_count  INT NOT NULL DEFAULT 0,
+        follower_count   INT NOT NULL DEFAULT 0,
+        created_at       TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at       TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
+        CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES "user"(username) ON UPDATE CASCADE
+    );
+
+CREATE UNIQUE INDEX 
+    IF NOT EXISTS idx_profile_username
+        ON "profile"(Lower(username));
