@@ -9,6 +9,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Represents a request to update the password of the authenticated user.
+ * 
+ * @param currentPassword      The current password of the user. Required field.
+ *                             Must not match {@code newPassword}.
+ * @param newPassword          The new password for the user. Required field.
+ *                             Must not match {@code currentPassword}.
+ * @param confirmationPassword The confirmation password for the user. Required
+ *                             field. Must match {@code newPassword}.
+ */
 // @formatter:off
 @NewPasswordUnique(groups = AdvancedCheck.class)
 @ConfirmationPasswordMatch(groups = AdvancedCheck.class)

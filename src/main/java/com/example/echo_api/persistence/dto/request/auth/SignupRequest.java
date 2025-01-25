@@ -7,6 +7,14 @@ import com.example.echo_api.validation.sequence.BasicCheck;
 
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Represents a request to register a user.
+ * 
+ * @param username The username of the user to register. Required field. Must
+ *                 match the format specified by {@link Username}.
+ * @param password The password of the user to register. Required field. Must
+ *                 match the format specified by {@link Password}. be null.
+ */
 // @formatter:off
 public record SignupRequest(
 
