@@ -1,4 +1,4 @@
-package com.example.echo_api.validation.annotations;
+package com.example.echo_api.validation.account.annotations;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -14,8 +14,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import com.example.echo_api.config.ErrorMessageConfig;
-import com.example.echo_api.validation.annotations.Username.List;
-import com.example.echo_api.validation.validators.UsernameValidator;
+import com.example.echo_api.validation.account.annotations.Username.List;
+import com.example.echo_api.validation.account.validators.UsernameValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

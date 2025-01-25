@@ -1,6 +1,6 @@
 package com.example.echo_api.persistence.dto.request.account;
 
-import com.example.echo_api.validation.annotations.Username;
+import com.example.echo_api.validation.account.annotations.Username;
 import com.example.echo_api.validation.sequence.AdvancedCheck;
 import com.example.echo_api.validation.sequence.BasicCheck;
 

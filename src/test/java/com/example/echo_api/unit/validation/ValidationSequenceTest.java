@@ -8,8 +8,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.example.echo_api.config.ErrorMessageConfig;
-import com.example.echo_api.validation.annotations.Password;
-import com.example.echo_api.validation.annotations.Username;
+import com.example.echo_api.validation.account.annotations.Password;
+import com.example.echo_api.validation.account.annotations.Username;
 import com.example.echo_api.validation.sequence.AdvancedCheck;
 import com.example.echo_api.validation.sequence.BasicCheck;
 import com.example.echo_api.validation.sequence.ValidationOrder;
