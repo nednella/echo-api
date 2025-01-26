@@ -19,10 +19,12 @@ import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordEx
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.account.AccountServiceImpl;
+import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.session.SessionService;
 
 /**
@@ -30,6 +32,9 @@ import com.example.echo_api.service.session.SessionService;
  */
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
+
+    @Mock
+    private ProfileService profileService;
 
     @Mock
     private SessionService sessionService;
@@ -71,6 +76,7 @@ class AccountServiceTest {
     @Test
     void accountService_Register_ReturnVoid() {
         when(userRepository.save(testUser)).thenReturn(testUser);
+        when(profileService.registerForUser(testUser)).thenReturn(new Profile(testUser));
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
