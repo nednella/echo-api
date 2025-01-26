@@ -31,7 +31,8 @@ public class AccountController {
         @Valid
         UpdateUsernameRequest request
     ) {
-        return ResponseEntity.ok(!accountService.existsByUsername(request.username()));
+        boolean available = accountService.isUsernameAvailable(request.username());
+        return ResponseEntity.ok(available);
     }
     // @formatter:on
 

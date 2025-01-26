@@ -6,7 +6,6 @@ import static org.springframework.http.HttpStatus.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
@@ -19,17 +18,12 @@ import com.example.echo_api.integration.util.TestUtils;
 import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
-import com.example.echo_api.persistence.model.user.User;
-import com.example.echo_api.service.account.AccountService;
 
 /**
  * Integration test class for {@link AuthController}.
  */
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class AuthControllerIT extends IntegrationTest {
-
-    @Autowired
-    private AccountService accountService;
 
     @BeforeAll
     void setUp() {
@@ -59,7 +53,7 @@ class AuthControllerIT extends IntegrationTest {
     }
 
     @Test
-    void AuthController_SignUp_Return204() throws Exception {
+    void AuthController_SignUp_Return204() {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String endpoint = ApiConfig.Auth.SIGNUP;
 
@@ -73,11 +67,6 @@ class AuthControllerIT extends IntegrationTest {
         assertEquals(NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
         TestUtils.assertSetCookieStartsWith(response, "ECHO_SESSION");
-
-        // assert db
-        User registeredUser = accountService.findByUsername(signup.username());
-        assertNotNull(registeredUser);
-        assertEquals(signup.username(), registeredUser.getUsername());
     }
 
     @Test

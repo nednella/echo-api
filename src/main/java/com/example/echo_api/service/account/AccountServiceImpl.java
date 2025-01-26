@@ -1,7 +1,5 @@
 package com.example.echo_api.service.account;
 
-import java.util.List;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +7,6 @@ import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordEx
 import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameException;
-import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.model.user.Role;
 import com.example.echo_api.persistence.model.user.User;
@@ -49,27 +46,16 @@ public class AccountServiceImpl implements AccountService {
             throw new UsernameAlreadyExistsException();
         }
 
-        User user = new User(username, passwordEncoder.encode(password), role);
-        userRepository.save(user);
-        profileService.registerForUser(user);
+        User newUser = new User(username, passwordEncoder.encode(password), role);
+        userRepository.save(newUser);
+        profileService.registerForUser(newUser);
 
-        return user;
+        return newUser;
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User findByUsername(String username) throws UsernameException {
-        return userRepository.findByUsername(username)
-            .orElseThrow(UsernameNotFoundException::new);
-    }
-
-    @Override
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+    public boolean isUsernameAvailable(String username) {
+        return !existsByUsername(username);
     }
 
     @Override
@@ -78,25 +64,46 @@ public class AccountServiceImpl implements AccountService {
             throw new UsernameAlreadyExistsException();
         }
 
-        User user = sessionService.getAuthenticatedUser();
-        user.setUsername(username);
+        User me = getMe();
+        me.setUsername(username);
 
-        userRepository.save(user);
-        sessionService.reauthenticate(user);
+        userRepository.save(me);
+        sessionService.reauthenticate(me);
     }
 
     @Override
     public void updatePassword(UpdatePasswordRequest request) throws PasswordException {
-        User user = sessionService.getAuthenticatedUser();
+        User me = getMe();
 
-        if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.currentPassword(), me.getPassword())) {
             throw new IncorrectCurrentPasswordException();
         }
 
-        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        me.setPassword(passwordEncoder.encode(request.newPassword()));
 
-        userRepository.save(user);
-        sessionService.reauthenticate(user);
+        userRepository.save(me);
+        sessionService.reauthenticate(me);
+    }
+
+    /**
+     * Internal method for checking whether a {@link User} exists with the supplied
+     * {@code username}.
+     * 
+     * @param username The username to check against.
+     * @return A boolean indicating a user's existence.
+     */
+    private boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    /**
+     * Internal method for obtaining a {@link User} associated to the authenticated
+     * user.
+     * 
+     * @return The found {@link User}.
+     */
+    private User getMe() {
+        return sessionService.getAuthenticatedUser();
     }
 
 }

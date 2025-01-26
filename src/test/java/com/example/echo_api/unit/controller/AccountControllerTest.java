@@ -57,12 +57,12 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_UsernameAvailable_Return200True() throws Exception {
+    void AccountController_IsUsernameAvailable_Return200True() throws Exception {
         // api: GET /api/v1/account/username-available?username={...} ==> 200 : True
         String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
-        when(accountService.existsByUsername(testUser.getUsername()))
-            .thenReturn(false);
+        when(accountService.isUsernameAvailable(testUser.getUsername()))
+            .thenReturn(true);
 
         String response = mockMvc
             .perform(get(path)
@@ -77,12 +77,12 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_UsernameAvailable_Return200False() throws Exception {
+    void AccountController_IsUsernameAvailable_Return200False() throws Exception {
         // api: GET /api/v1/account/username-available?username={...} ==> 200 : False
         String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
-        when(accountService.existsByUsername(testUser.getUsername()))
-            .thenReturn(true);
+        when(accountService.isUsernameAvailable(testUser.getUsername()))
+            .thenReturn(false);
 
         String response = mockMvc
             .perform(get(path)
@@ -97,7 +97,7 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_UsernameAvailable_Throw400InvalidRequest_InvalidUsername() throws Exception {
+    void AccountController_IsUsernameAvailable_Throw400InvalidRequest_InvalidUsername() throws Exception {
         // api: GET /api/v1/account/username-available?username={...} ==> 400 : Invalid
         // Request
         String path = ApiConfig.Account.USERNAME_AVAILABLE;

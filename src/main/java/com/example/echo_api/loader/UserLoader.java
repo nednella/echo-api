@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.repository.UserRepository;
 import com.example.echo_api.service.account.AccountService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,8 @@ public class UserLoader extends AbstractJsonLoader<User> {
 
     private static final String PATH = "data/dev-users.json";
 
+    private final UserRepository userRepository;
+
     private final AccountService accountService;
 
     @Override
@@ -27,7 +30,7 @@ public class UserLoader extends AbstractJsonLoader<User> {
 
     @Override
     protected void loadData() throws IOException {
-        if (accountService.findAll().isEmpty()) {
+        if (userRepository.findAll().isEmpty()) {
             log.info("USER table is empty. Populating table from path: {}", getFilePath());
             List<User> entities = loadJsonFromResourceFile(getFilePath(), User.class);
             saveToRepository(entities);

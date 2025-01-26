@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.model.user.User;
@@ -105,93 +101,21 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the {@link AccountServiceImpl#findAll()} method
-     * correctly returns a list of users from the repository.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#findAll()} method to return a list of users.
-     */
-    @Test
-    void accountService_FindAll_ReturnListOfUser() {
-        when(userRepository.findAll()).thenReturn(List.of(testUser));
-
-        List<User> users = accountService.findAll();
-
-        assertEquals(1, users.size());
-        assertIterableEquals(List.of(testUser), users);
-        verify(userRepository, times(1)).findAll();
-    }
-
-    /**
-     * This test ensures that the {@link AccountServiceImpl#findAll()} method
-     * correctly returns an empty list when no users exist.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#findAll()} method to return an empty list.
-     */
-    @Test
-    void accountService_FindAll_ReturnListOfEmpty() {
-        when(userRepository.findAll()).thenReturn(List.of());
-
-        List<User> users = accountService.findAll();
-
-        assertEquals(0, users.size());
-        assertIterableEquals(List.of(), users);
-        verify(userRepository, times(1)).findAll();
-    }
-
-    /**
-     * This test ensures that the {@link AccountServiceImpl#findByUsername(String)}
-     * method correctly returns the user when the username exists.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#findByUsername(String)} method to return a
-     * user.
-     */
-    @Test
-    void accountService_FindByUsername_ReturnUser() {
-        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
-
-        User foundUser = accountService.findByUsername(testUser.getUsername());
-
-        assertEquals(testUser, foundUser);
-        verify(userRepository, times(1)).findByUsername(testUser.getUsername());
-    }
-
-    /**
-     * This test ensures that the {@link AccountServiceImpl#findByUsername(String)}
-     * method throws a {@link UsernameNotFoundException} when the username does not
-     * exist.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#findByUsername(String)} method to throw a
-     * {@link UsernameNotFoundException}.
-     */
-    @Test
-    void accountService_FindByUsername_ThrowUsernameNotFound() {
-        when(userRepository.findByUsername(testUser.getUsername())).thenThrow(new UsernameNotFoundException());
-
-        assertThrows(UsernameNotFoundException.class,
-            () -> accountService.findByUsername(testUser.getUsername()));
-        verify(userRepository, times(1)).findByUsername(testUser.getUsername());
-    }
-
-    /**
      * This test ensures that the
-     * {@link AccountServiceImpl#existsByUsername(String)} method returns true when
-     * the username exists in the repository.
+     * {@link AccountServiceImpl#isUsernameAvailable(String)} method returns true
+     * when the username exists in the repository.
      * 
      * <p>
      * Mocks the {@link UserRepository#existsByUsername(String)} method to return
      * true.
      */
     @Test
-    void accountService_ExistsByUsername_ReturnTrue() {
+    void accountService_IsUsernameAvailable_ReturnTrue() {
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
-        boolean exists = accountService.existsByUsername(testUser.getUsername());
+        boolean taken = accountService.isUsernameAvailable(testUser.getUsername());
 
-        assertTrue(exists);
+        assertFalse(taken);
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
 
@@ -205,12 +129,12 @@ class AccountServiceTest {
      * false.
      */
     @Test
-    void accountService_ExistsByUsername_ReturnFalse() {
+    void accountService_IsUsernameAvailable_ReturnFalse() {
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
 
-        boolean exists = accountService.existsByUsername(testUser.getUsername());
+        boolean taken = accountService.isUsernameAvailable(testUser.getUsername());
 
-        assertFalse(exists);
+        assertTrue(taken);
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
 

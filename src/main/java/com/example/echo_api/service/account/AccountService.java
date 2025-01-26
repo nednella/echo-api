@@ -1,7 +1,5 @@
 package com.example.echo_api.service.account;
 
-import java.util.List;
-
 import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
@@ -14,11 +12,7 @@ public interface AccountService {
 
     public User registerWithRole(String username, String password, Role role) throws UsernameException;
 
-    public List<User> findAll();
-
-    public User findByUsername(String username) throws UsernameException;
-
-    public boolean existsByUsername(String username);
+    public boolean isUsernameAvailable(String username);
 
     public void updateUsername(String username) throws UsernameException;
 
