@@ -25,7 +25,7 @@ class UserRepositoryIT extends RepositoryTest {
     private UserRepository userRepository;
 
     /**
-     * Save a {@link User} object to the {@link UserRepository} before commencing.
+     * Save a {@link User} object to the {@link UserRepository}..
      */
     @BeforeAll
     void setUp() {
