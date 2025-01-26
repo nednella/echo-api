@@ -48,7 +48,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Login_Return204() throws Exception {
-        // api: POST /api/v1/auth/login ==> 204 No Content
+        // api: POST /api/v1/auth/login ==> 204 : No Content
         String path = ApiConfig.Auth.LOGIN;
 
         LoginRequest request = new LoginRequest(
@@ -71,7 +71,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Login_Throw400InvalidRequest_InvalidUsername() throws Exception {
-        // api: POST /api/v1/auth/login ==> 400 Invalid Request
+        // api: POST /api/v1/auth/login ==> 400 : Invalid Request
         String path = ApiConfig.Auth.LOGIN;
 
         LoginRequest request = new LoginRequest(
@@ -103,7 +103,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Login_Throw400InvalidRequest_InvalidPassword() throws Exception {
-        // api: POST /api/v1/auth/login ==> 400 Invalid Request
+        // api: POST /api/v1/auth/login ==> 400 : Invalid Request
         String path = ApiConfig.Auth.LOGIN;
 
         LoginRequest request = new LoginRequest(
@@ -135,7 +135,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Login_Throw400UsernameNotFound() throws Exception {
-        // api: POST /api/v1/auth/login ==> 400 UsernameNotFound
+        // api: POST /api/v1/auth/login ==> 400 : UsernameNotFound
         String path = ApiConfig.Auth.LOGIN;
 
         LoginRequest request = new LoginRequest(
@@ -171,7 +171,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Login_Throw400BadCredentials() throws Exception {
-        // api: POST /api/v1/auth/login ==> 400 BadCredentials
+        // api: POST /api/v1/auth/login ==> 400 : BadCredentials
         String path = ApiConfig.Auth.LOGIN;
 
         LoginRequest request = new LoginRequest(
@@ -207,7 +207,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Login_Throw401AccountStatusDisabled() throws Exception {
-        // api: POST /api/v1/auth/login ==> 401 AccountStatus - Disabled
+        // api: POST /api/v1/auth/login ==> 401 : AccountStatus - Disabled
         String path = ApiConfig.Auth.LOGIN;
 
         LoginRequest request = new LoginRequest(
@@ -243,7 +243,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Login_Throw401AccountStatusLocked() throws Exception {
-        // api: POST /api/v1/auth/login ==> 401 AccountStatus - Locked
+        // api: POST /api/v1/auth/login ==> 401 : AccountStatus - Locked
         String path = ApiConfig.Auth.LOGIN;
 
         LoginRequest request = new LoginRequest(
@@ -279,7 +279,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Signup_Return204() throws Exception {
-        // api: POST /api/v1/auth/signup ==> 204 No Content
+        // api: POST /api/v1/auth/signup ==> 204 : No Content
         String path = ApiConfig.Auth.SIGNUP;
 
         SignupRequest request = new SignupRequest(
@@ -302,7 +302,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Signup_Throw400InvalidRequest_InvalidUsername() throws Exception {
-        // api: POST /api/v1/auth/signup ==> 400 Invalid Request
+        // api: POST /api/v1/auth/signup ==> 400 : Invalid Request
         String path = ApiConfig.Auth.SIGNUP;
 
         SignupRequest request = new SignupRequest(
@@ -334,7 +334,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Signup_Throw400InvalidRequest_InvalidPassword() throws Exception {
-        // api: POST /api/v1/auth/signup ==> 400 Invalid Request
+        // api: POST /api/v1/auth/signup ==> 400 : Invalid Request
         String path = ApiConfig.Auth.SIGNUP;
 
         SignupRequest request = new SignupRequest(
@@ -366,7 +366,7 @@ class AuthControllerTest {
 
     @Test
     void AuthController_Signup_Throw400UsernameAlreadyExists() throws Exception {
-        // api: POST /api/v1/auth/signup ==> 400 UsernameAlreadyExists
+        // api: POST /api/v1/auth/signup ==> 400 : UsernameAlreadyExists
         String path = ApiConfig.Auth.SIGNUP;
 
         SignupRequest request = new SignupRequest(
