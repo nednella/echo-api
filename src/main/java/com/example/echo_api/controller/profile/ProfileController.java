@@ -37,7 +37,7 @@ public class ProfileController {
     }
 
     @GetMapping(ApiConfig.Profile.GET_BY_USERNAME)
-    public ResponseEntity<ProfileResponse> getByUsername(@PathVariable String username) {
+    public ResponseEntity<ProfileResponse> getByUsername(@PathVariable("username") String username) {
         ProfileResponse response = profileService.getByUsername(username);
         return ResponseEntity.ok(response);
     }
