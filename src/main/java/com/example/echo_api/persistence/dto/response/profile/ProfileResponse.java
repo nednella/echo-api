@@ -59,7 +59,7 @@ public record ProfileResponse(
             followerCount,
             postCount,
             mediaCount,
-            createdAt.toString()
+            createdAt != null ? createdAt.toString() : null
         );
     }
 
