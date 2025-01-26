@@ -18,12 +18,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
+import com.example.echo_api.config.ValidationMessageConfig;
 import com.example.echo_api.controller.account.AccountController;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -113,7 +114,7 @@ class AccountControllerTest {
         ErrorResponse expected = new ErrorResponse(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            ErrorMessageConfig.INVALID_USERNAME,
+            ValidationMessageConfig.INVALID_USERNAME,
             path);
 
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
@@ -123,7 +124,7 @@ class AccountControllerTest {
 
     @Test
     void AccountController_UpdateUsername_Return204() throws Exception {
-        // api: PUT /api/v1/account/username ==> 204 No Content
+        // api: PUT /api/v1/account/username ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_USERNAME;
 
         doNothing().when(accountService).updateUsername(testUser.getUsername());
@@ -137,7 +138,7 @@ class AccountControllerTest {
 
     @Test
     void AccountController_UpdateUsername_Throw400UsernameAlreadyExists() throws Exception {
-        // api: PUT /api/v1/account/username ==> 400 UsernameAlreadyExists
+        // api: PUT /api/v1/account/username ==> 400 : UsernameAlreadyExists
         String path = ApiConfig.Account.UPDATE_USERNAME;
 
         doThrow(new UsernameAlreadyExistsException()).when(accountService).updateUsername(testUser.getUsername());
@@ -164,7 +165,7 @@ class AccountControllerTest {
 
     @Test
     void AccountController_UpdatePassword_Return204() throws Exception {
-        // api: PUT /api/v1/account/password ==> 204 No Content
+        // api: PUT /api/v1/account/password ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
         UpdatePasswordRequest request = new UpdatePasswordRequest(
@@ -186,7 +187,7 @@ class AccountControllerTest {
 
     @Test
     void AccountController_UpdatePassword_Throw400InvalidRequest_InvalidPassword() throws Exception {
-        // api: PUT /api/v1/account/password ==> 400 Invalid Request (new password)
+        // api: PUT /api/v1/account/password ==> 400 : Invalid Request (new password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
         UpdatePasswordRequest request = new UpdatePasswordRequest(
@@ -209,7 +210,7 @@ class AccountControllerTest {
         ErrorResponse expected = new ErrorResponse(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            ErrorMessageConfig.INVALID_PASSWORD,
+            ValidationMessageConfig.INVALID_PASSWORD,
             path);
 
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
@@ -219,7 +220,7 @@ class AccountControllerTest {
 
     @Test
     void AccountController_UpdatePassword_Throw400InvalidRequest_ConfirmationPasswordMismatch() throws Exception {
-        // api: PUT /api/v1/account/password ==> 400 Invalid Request (confirmation
+        // api: PUT /api/v1/account/password ==> 400 : Invalid Request (confirmation
         // password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
@@ -243,7 +244,7 @@ class AccountControllerTest {
         ErrorResponse expected = new ErrorResponse(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            ErrorMessageConfig.CONFIRMATION_PASSWORD_MISMATCH,
+            ValidationMessageConfig.CONFIRMATION_PASSWORD_MISMATCH,
             path);
 
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
@@ -253,7 +254,7 @@ class AccountControllerTest {
 
     @Test
     void AccountController_UpdatePassword_Throw400InvalidRequest_NewPasswordNotUnique() throws Exception {
-        // api: PUT /api/v1/account/password ==> 400 Invalid Request (new password)
+        // api: PUT /api/v1/account/password ==> 400 : Invalid Request (new password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
         UpdatePasswordRequest request = new UpdatePasswordRequest(
@@ -276,7 +277,7 @@ class AccountControllerTest {
         ErrorResponse expected = new ErrorResponse(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
-            ErrorMessageConfig.NEW_PASSWORD_NOT_UNIQUE,
+            ValidationMessageConfig.NEW_PASSWORD_NOT_UNIQUE,
             path);
 
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
@@ -286,7 +287,7 @@ class AccountControllerTest {
 
     @Test
     void AccountController_UpdatePassword_Throw400IncorrectCurrentPassword() throws Exception {
-        // api: PUT /api/v1/account/password ==> 400 IncorrectCurrentPassword
+        // api: PUT /api/v1/account/password ==> 400 : IncorrectCurrentPassword
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
         UpdatePasswordRequest request = new UpdatePasswordRequest(

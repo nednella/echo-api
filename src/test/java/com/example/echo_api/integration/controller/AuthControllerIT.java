@@ -19,7 +19,7 @@ import com.example.echo_api.integration.util.TestUtils;
 import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
 
 /**

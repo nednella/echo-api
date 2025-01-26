@@ -1,17 +1,25 @@
 package com.example.echo_api.persistence.dto.request.account;
 
-import com.example.echo_api.validation.annotations.ConfirmationPasswordMatch;
-import com.example.echo_api.validation.annotations.NewPasswordUnique;
-import com.example.echo_api.validation.annotations.Password;
+import com.example.echo_api.validation.account.annotations.ConfirmationPasswordMatch;
+import com.example.echo_api.validation.account.annotations.NewPasswordUnique;
+import com.example.echo_api.validation.account.annotations.Password;
 import com.example.echo_api.validation.sequence.AdvancedCheck;
 import com.example.echo_api.validation.sequence.BasicCheck;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Represents a request to update the password of the authenticated user.
+ * 
+ * @param currentPassword      The current password of the user. Required field.
+ *                             Must not match {@code newPassword}.
+ * @param newPassword          The new password for the user. Required field.
+ *                             Must not match {@code currentPassword}.
+ * @param confirmationPassword The confirmation password for the user. Required
+ *                             field. Must match {@code newPassword}.
+ */
 // @formatter:off
-@GroupSequence({  })
 @NewPasswordUnique(groups = AdvancedCheck.class)
 @ConfirmationPasswordMatch(groups = AdvancedCheck.class)
 public record UpdatePasswordRequest(

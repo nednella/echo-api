@@ -1,4 +1,4 @@
-package com.example.echo_api.persistence.model;
+package com.example.echo_api.persistence.model.user;
 
 import java.util.Collection;
 import java.util.List;

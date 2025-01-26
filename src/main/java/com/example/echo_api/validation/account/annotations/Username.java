@@ -1,4 +1,4 @@
-package com.example.echo_api.validation.annotations;
+package com.example.echo_api.validation.account.annotations;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -13,9 +13,9 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.example.echo_api.config.ErrorMessageConfig;
-import com.example.echo_api.validation.annotations.Username.List;
-import com.example.echo_api.validation.validators.UsernameValidator;
+import com.example.echo_api.config.ValidationMessageConfig;
+import com.example.echo_api.validation.account.annotations.Username.List;
+import com.example.echo_api.validation.account.validators.UsernameValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -46,7 +46,7 @@ public @interface Username {
     /**
      * @return the error message template
      */
-    String message() default ErrorMessageConfig.INVALID_USERNAME;
+    String message() default ValidationMessageConfig.INVALID_USERNAME;
 
     /**
      * @return the groups the constraint belongs to

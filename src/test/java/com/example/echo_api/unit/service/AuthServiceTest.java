@@ -3,7 +3,7 @@ package com.example.echo_api.unit.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.service.auth.AuthServiceImpl;
@@ -39,15 +39,14 @@ class AuthServiceTest {
     @InjectMocks
     private AuthServiceImpl authService;
 
-    private User testUser;
+    private static User testUser;
 
     /**
-     * Sets up a {@link User} and {@link UsernamePasswordAuthenticationToken} object
-     * before each test.
+     * Set up a {@link User} object before each test.
      * 
      */
-    @BeforeEach
-    public void initVariables() {
+    @BeforeAll
+    static void initVariables() {
         testUser = new User("testUsername", "testPassword");
     }
 

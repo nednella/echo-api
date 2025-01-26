@@ -9,9 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.example.echo_api.integration.util.RepositoryTest;
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 
 /**
@@ -19,13 +20,14 @@ import com.example.echo_api.persistence.repository.UserRepository;
  */
 @DataJpaTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UserRepositoryIT extends RepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
 
     /**
-     * Save a {@link User} object to the {@link UserRepository} before commencing.
+     * Save a {@link User} object to the {@link UserRepository}..
      */
     @BeforeAll
     void setUp() {

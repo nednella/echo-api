@@ -1,7 +1,7 @@
-package com.example.echo_api.validation.validators;
+package com.example.echo_api.validation.account.validators;
 
 import com.example.echo_api.config.RegexConfig;
-import com.example.echo_api.validation.annotations.Password;
+import com.example.echo_api.validation.account.annotations.Password;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

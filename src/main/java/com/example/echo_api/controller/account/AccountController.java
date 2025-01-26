@@ -33,7 +33,9 @@ public class AccountController {
     ) {
         return ResponseEntity.ok(!accountService.existsByUsername(request.username()));
     }
+    // @formatter:on
 
+    // @formatter:off
     @PutMapping(ApiConfig.Account.UPDATE_USERNAME)
     public ResponseEntity<Void> updateUsername(
         @RequestParam("username")

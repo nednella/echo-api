@@ -1,7 +1,7 @@
-package com.example.echo_api.validation.validators;
+package com.example.echo_api.validation.account.validators;
 
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
-import com.example.echo_api.validation.annotations.NewPasswordUnique;
+import com.example.echo_api.validation.account.annotations.NewPasswordUnique;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

@@ -1,4 +1,4 @@
-package com.example.echo_api.persistence.model;
+package com.example.echo_api.persistence.model.user;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -8,14 +8,14 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.example.echo_api.validation.annotations.Username;
+import com.example.echo_api.validation.account.annotations.Username;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Entity class representing a User in the system.
+ * Entity class representing an account in the system.
  * 
  * <p>
  * This class is mapped to the {@code user} table in the database and stores
@@ -35,28 +35,23 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** Unique identifier */
+    // ---- primary keys / foreign keys ----
+
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    /** Unique username */
+    // ---- entity-specific attributes ----
+
     @Username
-    @Column
     private String username;
 
-    /** Hashed password */
-    @Column
+    @Column(name = "encrypted_password")
     private String password;
 
-    /** User role related to permissions */
-    @Column
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER; // default = Role.USER
 
-    /** Enabled status */
-    @Column
     private boolean enabled = true; // default = true
 
     @CreationTimestamp
@@ -121,7 +116,7 @@ public class User implements Serializable {
             return false;
 
         User that = (User) o;
-        return this.username.equals(that.username);
+        return Objects.equals(this.username, that.username);
     }
 
     /**

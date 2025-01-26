@@ -5,8 +5,8 @@ import java.util.List;
 import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
-import com.example.echo_api.persistence.model.Role;
-import com.example.echo_api.persistence.model.User;
+import com.example.echo_api.persistence.model.user.Role;
+import com.example.echo_api.persistence.model.user.User;
 
 public interface AccountService {
 

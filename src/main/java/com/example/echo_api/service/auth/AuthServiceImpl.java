@@ -12,6 +12,12 @@ import com.example.echo_api.service.session.SessionService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Service implementation for managing {@link User} creation and authentication.
+ * 
+ * @see AccountService
+ * @see SessionService
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
