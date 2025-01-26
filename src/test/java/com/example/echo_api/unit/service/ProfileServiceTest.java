@@ -110,7 +110,7 @@ class ProfileServiceTest {
         User user = new User("test", "test");
 
         when(sessionService.getAuthenticatedUser()).thenReturn(user);
-        when(profileRepository.findByUsername(user.getUsername())).thenThrow(UsernameNotFoundException.class);
+        when(profileRepository.findByUsername(user.getUsername())).thenThrow(new UsernameNotFoundException());
 
         // act & assert
         assertThrows(UsernameNotFoundException.class, () -> profileService.getMe());
@@ -153,7 +153,7 @@ class ProfileServiceTest {
             "location");
 
         when(sessionService.getAuthenticatedUser()).thenReturn(user);
-        when(profileRepository.findByUsername(user.getUsername())).thenThrow(UsernameNotFoundException.class);
+        when(profileRepository.findByUsername(user.getUsername())).thenThrow(new UsernameNotFoundException());
 
         // act & assert
         assertThrows(UsernameNotFoundException.class, () -> profileService.updateMeProfileInfo(request));
