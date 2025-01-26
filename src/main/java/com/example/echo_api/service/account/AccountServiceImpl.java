@@ -22,9 +22,10 @@ import lombok.RequiredArgsConstructor;
 /**
  * Service implementation for managing CRUD operations of a {@link User}.
  * 
- * @see AuthenticationManager
- * @see SecurityContextRepository
- * @see SecurityContextHolderStrategy
+ * @see ProfileService
+ * @see SessionService
+ * @see UserRepository
+ * @see PasswordEncoder
  */
 @Service
 @RequiredArgsConstructor

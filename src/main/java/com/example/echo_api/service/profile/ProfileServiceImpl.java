@@ -14,6 +14,12 @@ import com.example.echo_api.service.session.SessionService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Service implementation for managing CRUD operations of a {@link Profile}.
+ * 
+ * @see SessionService
+ * @see ProfileRepository
+ */
 @Service
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
