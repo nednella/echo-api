@@ -10,7 +10,7 @@ public interface ProfileService {
 
     /**
      * Creates a profile for a newly registered {@link User} with a 1-to-1
-     * relationship. The method is consumed by the {@code AccountService}.
+     * relationship. The method is consumed by {@link AccountService}.
      * 
      * @param user the user for whom the profile is to be created.
      * @return The created {@link Profile}.

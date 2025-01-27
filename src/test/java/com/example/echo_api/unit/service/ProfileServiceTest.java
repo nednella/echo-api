@@ -38,6 +38,10 @@ class ProfileServiceTest {
     @InjectMocks
     private ProfileServiceImpl profileService;
 
+    /**
+     * Test ensures that the {@link ProfileServiceImpl#registerForUser(User)} method
+     * correctly creates a new profile for the supplied user.
+     */
     @Test
     void ProfileService_RegisterForUser_ReturnProfile() {
         // arrange
@@ -55,6 +59,10 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).save(any(Profile.class));
     }
 
+    /**
+     * Test ensures that the {@link ProfileServiceImpl#getByUsername(String)} method
+     * correctly returns the profile when the username exists.
+     */
     @Test
     void ProfileService_GetByUsername_ReturnProfileResponse() {
         // arrange
@@ -73,6 +81,11 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).findByUsername(profile.getUsername());
     }
 
+    /**
+     * Test ensures that the {@link ProfileServiceImpl#getByUsername(String)} method
+     * correctly throws a {@link UsernameNotFoundException} when no such profile
+     * with the supplied username exists.
+     */
     @Test
     void ProfileService_GetByUsername_ThrowUsernameNotFound() {
         // arrange
@@ -84,6 +97,10 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).findByUsername(username);
     }
 
+    /**
+     * Test ensures that the {@link ProfileServiceImpl#getMe()} method correctly
+     * returns the authenticated user's profile.
+     */
     @Test
     void ProfileService_GetMe_ReturnProfileResponse() {
         // arrange
@@ -104,6 +121,11 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).findByUsername(user.getUsername());
     }
 
+    /**
+     * Test ensures that the {@link ProfileServiceImpl#getMe()} method correctly
+     * throws a {@link UsernameNotFoundException} when no such profile with the
+     * authenticated user's username exists.
+     */
     @Test
     void ProfileService_GetMe_ThrowUsernameNotFound() {
         // arrange
@@ -118,6 +140,11 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).findByUsername(user.getUsername());
     }
 
+    /**
+     * Test ensures that the
+     * {@link ProfileServiceImpl#updateMeProfileInfo(UpdateProfileInfoRequest)}
+     * method correctly updates the authenticated user's profile information.
+     */
     @Test
     void ProfileService_UpdateMeProfileInfo_ReturnVoid() {
         // arrange
@@ -142,6 +169,12 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).findByUsername(user.getUsername());
     }
 
+    /**
+     * Test ensures that the
+     * {@link ProfileServiceImpl#updateMeProfileInfo(UpdateProfileInfoRequest)}
+     * method correctly throws a {@link UsernameNotFoundException} when no such
+     * profile with the authenticated user's username exists.
+     */
     @Test
     void ProfileService_UpdateMeProfileInfo_ThrowUsernameNotFound() {
         // arrange

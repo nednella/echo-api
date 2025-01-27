@@ -37,13 +37,6 @@ public class SessionServiceImpl implements SessionService {
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
         .getContextHolderStrategy();
 
-    /**
-     * Retrieves the authenticated {@link User} entity from
-     * {@link SecurityContextHolder}.
-     *
-     * @return the authenticated {@link User}, or {@code null} if no user is
-     *         authenticated
-     */
     @Override
     public User getAuthenticatedUser() {
         Authentication authentication = securityContextHolderStrategy.getContext().getAuthentication();
@@ -54,21 +47,30 @@ public class SessionServiceImpl implements SessionService {
         return ((SecurityUser) authentication.getPrincipal()).getUser();
     }
 
+    @Override
+    public void authenticate(String username, String password) throws AuthenticationException {
+        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
+            .unauthenticated(username, password);
+
+        Authentication authenticatedToken = authenticationManager.authenticate(token);
+
+        saveAuthenticationToSession(authenticatedToken);
+    }
+
+    @Override
+    public void reauthenticate(User user) {
+        SecurityUser auth = new SecurityUser(user);
+
+        UsernamePasswordAuthenticationToken authenticatedToken = UsernamePasswordAuthenticationToken
+            .authenticated(auth, null, auth.getAuthorities());
+
+        saveAuthenticationToSession(authenticatedToken);
+    }
+
     /**
-     * Custom authentication method, required when manually authenticating users
-     * through a custom {@code /login} API endpoint.
-     * 
-     * <p>
-     * By default, Spring Security automatically handles {@link SecurityContext}
-     * persistence during form-based authentication via
-     * {@link UsernamePasswordAuthenticationFilter}. When implementing a custom
-     * login endpoint, that persistence is bypassed, which this method aims to
-     * reintroduce.
-     * 
-     * <p>
-     * The method attempts to authenticate the supplied credentials against the
-     * database using {@link AuthenticationManager}, and stores the authenticated
-     * {@link SecurityContext} in the HTTP session if successful.
+     * Internal method for saving an authenticated token to the HTTP session using
+     * {@link SecurityContextRepository}. This is the default Spring
+     * {@link UsernamePasswordAuthenticationFilter} behaviour.
      * 
      * <p>
      * For more information, refer to:
@@ -81,56 +83,9 @@ public class SessionServiceImpl implements SessionService {
      * {@link https://docs.spring.io/spring-security/reference/servlet/authentication/session-management.html#use-securitycontextholderstrategy}
      * </ul>
      * 
-     * @param username the username of the user to authenticate
-     * @param password the password of the user to authenticate
-     * @throws AuthenticationException if authentication fails
+     * @param token The authenticated token to store in the session.
      */
-    @Override
-    public void authenticate(String username, String password) throws AuthenticationException {
-        // create an unauthenticated token
-        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
-            .unauthenticated(username, password);
-
-        // authenticate provided token (compares supplied credentials to db)
-        Authentication result = authenticationManager.authenticate(token);
-
-        // set authenticated token in a fresh security context
-        SecurityContext context = securityContextHolderStrategy.createEmptyContext();
-        context.setAuthentication(result);
-        securityContextHolderStrategy.setContext(context);
-
-        // retrieve current http request/response
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-            .currentRequestAttributes()).getRequest();
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder
-            .currentRequestAttributes()).getResponse();
-
-        // save security context to the http session for persistence
-        securityContextRepository.saveContext(context, request, response);
-    }
-
-    /**
-     * <b>WARNING</b>: This method assumes that the supplied {@code user} is already
-     * authenticated in the application.
-     * 
-     * <p>
-     * Reauthentication method, required when there is a change to the authenticated
-     * {@code user} information.
-     * 
-     * <p>
-     * The method reauthenticates the specified user by creating a new authenticated
-     * token and updating {@link SecurityContext} in both the application and the
-     * HTTP session.
-     */
-    @Override
-    public void reauthenticate(User user) {
-        // instantiate a SecurityUser wrapper
-        SecurityUser auth = new SecurityUser(user);
-
-        // create an authenticated token
-        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
-            .authenticated(auth, null, auth.getAuthorities());
-
+    private void saveAuthenticationToSession(Authentication token) {
         // set authenticated token in a fresh security context
         SecurityContext context = securityContextHolderStrategy.createEmptyContext();
         context.setAuthentication(token);
@@ -142,7 +97,7 @@ public class SessionServiceImpl implements SessionService {
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder
             .currentRequestAttributes()).getResponse();
 
-        // save security context to the http session for persistence
+        // persist the security context within the HTTP session
         securityContextRepository.saveContext(context, request, response);
     }
 

@@ -1,27 +1,61 @@
 package com.example.echo_api.service.account;
 
-import java.util.List;
-
-import com.example.echo_api.exception.custom.password.PasswordException;
-import com.example.echo_api.exception.custom.username.UsernameException;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
+import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.model.user.Role;
 import com.example.echo_api.persistence.model.user.User;
 
 public interface AccountService {
 
-    public User register(String username, String password) throws UsernameException;
+    /**
+     * Creates a new {@link User} within the application, using the standard
+     * {@link Role}, {@code Role.USER}.
+     * 
+     * @param username The username of the user to register.
+     * @param password The password of the user to register.
+     * @return The newly registered {@link User}.
+     * @throws UsernameAlreadyExistsException If the username is already taken.
+     */
+    public User register(String username, String password) throws UsernameAlreadyExistsException;
 
-    public User registerWithRole(String username, String password, Role role) throws UsernameException;
+    /**
+     * Creates a new {@link User} within the application, using the supplied
+     * {@link Role}.
+     * 
+     * @param username The username of the user to register.
+     * @param password The password of the user to register.
+     * @return The newly registered {@link User}.
+     * @throws UsernameAlreadyExistsException If the username is already taken.
+     */
+    public User registerWithRole(String username, String password, Role role) throws UsernameAlreadyExistsException;
 
-    public List<User> findAll();
+    /**
+     * Returns a boolean indicating whether the supplied {@code username} is
+     * available.
+     * 
+     * @param username The username to check for availability.
+     * @return A boolean indicating the availability.
+     */
+    public boolean isUsernameAvailable(String username);
 
-    public User findByUsername(String username) throws UsernameException;
+    /**
+     * Updates the authenticated user's username.
+     * 
+     * @param username The new username for the authenticated user.
+     * @throws UsernameAlreadyExistsException If the username is already taken.
+     */
+    public void updateUsername(String username) throws UsernameAlreadyExistsException;
 
-    public boolean existsByUsername(String username);
-
-    public void updateUsername(String username) throws UsernameException;
-
-    public void updatePassword(UpdatePasswordRequest request) throws PasswordException;
+    /**
+     * Update the authenticated user's password.
+     * 
+     * @param currentPassword The current password of the authenticated user.
+     * @param newPassword     The new password for the authenticated user.
+     * @throws IncorrectCurrentPasswordException If the supplied
+     *                                           {@code currentPassword} does not
+     *                                           match the authenticated user's
+     *                                           existing password.
+     */
+    public void updatePassword(String currentPassword, String newPassword) throws IncorrectCurrentPasswordException;
 
 }
