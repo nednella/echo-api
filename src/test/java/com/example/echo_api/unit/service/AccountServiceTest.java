@@ -55,9 +55,8 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the
-     * {@link AccountServiceImpl#register(String, String)} method correctly creates
-     * a new user when the username does not already exist.
+     * Test ensures that the {@link AccountServiceImpl#register(String, String)}
+     * method correctly creates a new user when the username does not already exist.
      */
     @Test
     void accountService_Register_ReturnVoid() {
@@ -68,7 +67,6 @@ class AccountServiceTest {
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
         // act
-
         accountService.register(testUser.getUsername(), testUser.getPassword());
 
         // assert
@@ -77,9 +75,9 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the
-     * {@link AccountServiceImpl#register(String, String)} method throws a
-     * {@link UsernameAlreadyExistsException} when the username already exists.
+     * Test ensures that the {@link AccountServiceImpl#register(String, String)}
+     * method throws a {@link UsernameAlreadyExistsException} when the username
+     * already exists.
      */
     @Test
     void accountService_Register_ThrowUsernameAlreadyExists() {
@@ -93,9 +91,8 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the
-     * {@link AccountServiceImpl#isUsernameAvailable(String)} method returns true
-     * when the username exists in the repository.
+     * Test ensures that the {@link AccountServiceImpl#isUsernameAvailable(String)}
+     * method returns true when the username exists in the repository.
      */
     @Test
     void accountService_IsUsernameAvailable_ReturnTrue() {
@@ -111,9 +108,8 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the
-     * {@link AccountServiceImpl#existsByUsername(String)} method returns false when
-     * the username does not exist in the repository.
+     * Test ensures that the {@link AccountServiceImpl#existsByUsername(String)}
+     * method returns false when the username does not exist in the repository.
      */
     @Test
     void accountService_IsUsernameAvailable_ReturnFalse() {
@@ -129,7 +125,7 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the {@link AccountServiceImpl#updateUsername(String)}
+     * Test ensures that the {@link AccountServiceImpl#updateUsername(String)}
      * method succeeds when the username does not already exist.
      */
     @Test
@@ -150,7 +146,7 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the {@link AccountServiceImpl#updateUsername(String)}
+     * Test ensures that the {@link AccountServiceImpl#updateUsername(String)}
      * methodthrows a {@link UsernameAlreadyExistsException} when the username
      * already exists.
      */
@@ -166,7 +162,7 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the
+     * Test ensures that the
      * {@link AccountServiceImpl#updatePassword(String, String)} method succeeds
      * when the request is valid.
      */
@@ -197,7 +193,7 @@ class AccountServiceTest {
     }
 
     /**
-     * This test ensures that the
+     * Test ensures that the
      * {@link AccountServiceImpl#updatePassword(String, String)} method throws
      * {@link IncorrectCurrentPasswordException} when the supplied current and the
      * stored existing passwords do not match.
