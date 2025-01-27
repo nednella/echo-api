@@ -4,10 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
-import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.exception.custom.username.UsernameException;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
 import com.example.echo_api.persistence.model.user.Role;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.UserRepository;
@@ -36,12 +33,12 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User register(String username, String password) throws UsernameException {
+    public User register(String username, String password) throws UsernameAlreadyExistsException {
         return registerWithRole(username, password, Role.USER);
     }
 
     @Override
-    public User registerWithRole(String username, String password, Role role) throws UsernameException {
+    public User registerWithRole(String username, String password, Role role) throws UsernameAlreadyExistsException {
         if (existsByUsername(username)) {
             throw new UsernameAlreadyExistsException();
         }
@@ -59,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updateUsername(String username) throws UsernameException {
+    public void updateUsername(String username) throws UsernameAlreadyExistsException {
         if (existsByUsername(username)) {
             throw new UsernameAlreadyExistsException();
         }
@@ -72,14 +69,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updatePassword(UpdatePasswordRequest request) throws PasswordException {
+    public void updatePassword(String currentPassword, String newPassword) throws IncorrectCurrentPasswordException {
         User me = getMe();
 
-        if (!passwordEncoder.matches(request.currentPassword(), me.getPassword())) {
+        if (!passwordEncoder.matches(currentPassword, me.getPassword())) {
             throw new IncorrectCurrentPasswordException();
         }
 
-        me.setPassword(passwordEncoder.encode(request.newPassword()));
+        me.setPassword(passwordEncoder.encode(newPassword));
 
         userRepository.save(me);
         sessionService.reauthenticate(me);

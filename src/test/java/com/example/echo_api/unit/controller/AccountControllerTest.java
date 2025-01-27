@@ -175,7 +175,7 @@ class AccountControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(accountService).updatePassword(request);
+        doNothing().when(accountService).updatePassword(request.currentPassword(), request.newPassword());
 
         mockMvc
             .perform(put(path)
@@ -297,7 +297,9 @@ class AccountControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        doThrow(new IncorrectCurrentPasswordException()).when(accountService).updatePassword(request);
+        doThrow(new IncorrectCurrentPasswordException())
+            .when(accountService)
+            .updatePassword(request.currentPassword(), request.newPassword());
 
         String response = mockMvc
             .perform(put(path)

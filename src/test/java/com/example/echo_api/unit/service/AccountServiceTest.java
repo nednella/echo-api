@@ -58,26 +58,20 @@ class AccountServiceTest {
      * This test ensures that the
      * {@link AccountServiceImpl#register(String, String)} method correctly creates
      * a new user when the username does not already exist.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#save(User)} method to return the saved user.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#existsByUsername(String)} to return false.
-     * 
-     * <p>
-     * Mocks the {@link PasswordEncoder#encode(CharSequence)} to return the string
-     * "encodedPassword".
      */
     @Test
     void accountService_Register_ReturnVoid() {
+        // arrange
         when(userRepository.save(testUser)).thenReturn(testUser);
         when(profileService.registerForUser(testUser)).thenReturn(new Profile(testUser));
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
+        // act
+
         accountService.register(testUser.getUsername(), testUser.getPassword());
 
+        // assert
         verify(userRepository, times(1)).save(testUser);
         verify(passwordEncoder, times(1)).encode(testUser.getPassword());
     }
@@ -86,15 +80,13 @@ class AccountServiceTest {
      * This test ensures that the
      * {@link AccountServiceImpl#register(String, String)} method throws a
      * {@link UsernameAlreadyExistsException} when the username already exists.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#existsByUsername(String)} method to return
-     * true.
      */
     @Test
     void accountService_Register_ThrowUsernameAlreadyExists() {
+        // arrange
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
+        // act & assert
         assertThrows(UsernameAlreadyExistsException.class,
             () -> accountService.register(testUser.getUsername(), testUser.getPassword()));
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
@@ -104,17 +96,16 @@ class AccountServiceTest {
      * This test ensures that the
      * {@link AccountServiceImpl#isUsernameAvailable(String)} method returns true
      * when the username exists in the repository.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#existsByUsername(String)} method to return
-     * true.
      */
     @Test
     void accountService_IsUsernameAvailable_ReturnTrue() {
+        // arrange
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
 
+        // act
         boolean taken = accountService.isUsernameAvailable(testUser.getUsername());
 
+        // assert
         assertFalse(taken);
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
@@ -123,17 +114,16 @@ class AccountServiceTest {
      * This test ensures that the
      * {@link AccountServiceImpl#existsByUsername(String)} method returns false when
      * the username does not exist in the repository.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#existsByUsername(String)} method to return
-     * false.
      */
     @Test
     void accountService_IsUsernameAvailable_ReturnFalse() {
+        // arrange
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
 
+        // act
         boolean taken = accountService.isUsernameAvailable(testUser.getUsername());
 
+        // assert
         assertTrue(taken);
         verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
     }
@@ -141,27 +131,18 @@ class AccountServiceTest {
     /**
      * This test ensures that the {@link AccountServiceImpl#updateUsername(String)}
      * method succeeds when the username does not already exist.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#existsByUsername(String)} method to return
-     * false.
-     * 
-     * <p>
-     * Mocks the {@link sessionService#getAuthenticatedUser()} method to return
-     * {@code testUser}.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#save(User)} method to return
-     * {@code testUser}.
      */
     @Test
     void accountService_UpdateUsername_Success() {
+        // arrange
         when(userRepository.existsByUsername("new_username")).thenReturn(false);
         when(sessionService.getAuthenticatedUser()).thenReturn(testUser);
         when(userRepository.save(testUser)).thenReturn(testUser);
 
+        // act
         accountService.updateUsername("new_username");
 
+        // assert
         assertEquals("new_username", testUser.getUsername());
         verify(userRepository, times(1)).existsByUsername("new_username");
         verify(sessionService, times(1)).getAuthenticatedUser();
@@ -172,15 +153,13 @@ class AccountServiceTest {
      * This test ensures that the {@link AccountServiceImpl#updateUsername(String)}
      * methodthrows a {@link UsernameAlreadyExistsException} when the username
      * already exists.
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#existsByUsername(String)} method to return
-     * true.
      */
     @Test
     void accountService_UpdateUsername_ThrowUsernameAlreadyExists() {
+        // arrange
         when(userRepository.existsByUsername("new_username")).thenReturn(true);
 
+        // act & assert
         assertThrows(UsernameAlreadyExistsException.class,
             () -> accountService.updateUsername("new_username"));
         verify(userRepository, times(1)).existsByUsername("new_username");
@@ -188,27 +167,12 @@ class AccountServiceTest {
 
     /**
      * This test ensures that the
-     * {@link AccountServiceImpl#updatePassword(UpdatePasswordRequest)} method
-     * succeeds when the request is valid.
-     * 
-     * <p>
-     * Mocks the {@link AuthenticatedaccountService#getAuthenticatedUser()} method
-     * to return {@code testUser}.
-     * 
-     * <p>
-     * Mocks the {@link PasswordEncoder#matches(String, string)} method to return
-     * true.
-     * 
-     * <p>
-     * Mocks the {@link PasswordEncoder#encode(String)} method to return
-     * "encodedPassword".
-     * 
-     * <p>
-     * Mocks the {@link UserRepository#save(User)} method to return
-     * {@code testUser}.
+     * {@link AccountServiceImpl#updatePassword(String, String)} method succeeds
+     * when the request is valid.
      */
     @Test
     void accountService_UpdatePassword_Success() {
+        // arrange
         UpdatePasswordRequest request = new UpdatePasswordRequest(
             "current",
             "new",
@@ -221,8 +185,10 @@ class AccountServiceTest {
         when(passwordEncoder.encode("new")).thenReturn("encodedPassword");
         when(userRepository.save(testUser)).thenReturn(testUser);
 
-        accountService.updatePassword(request);
+        // act
+        accountService.updatePassword(request.currentPassword(), request.newPassword());
 
+        // assert
         assertEquals("encodedPassword", testUser.getPassword());
         verify(sessionService, times(1)).getAuthenticatedUser();
         verify(passwordEncoder, times(1)).matches("current", oldPassword);
@@ -232,20 +198,13 @@ class AccountServiceTest {
 
     /**
      * This test ensures that the
-     * {@link AccountServiceImpl#updatePassword(UpdatePasswordRequest)} method
-     * throws {@link IncorrectCurrentPasswordException} when the supplied current
-     * and the stored current passwords do not match.
-     * 
-     * <p>
-     * Mocks the {@link AuthenticatedaccountService#getAuthenticatedUser(User)}
-     * method to return {@code testUser}.
-     * 
-     * <p>
-     * Mocks the {@link PasswordEncoder#matches(String, String)} method to return
-     * false.
+     * {@link AccountServiceImpl#updatePassword(String, String)} method throws
+     * {@link IncorrectCurrentPasswordException} when the supplied current and the
+     * stored existing passwords do not match.
      */
     @Test
     void accountService_UpdatePassword_ThrowIncorrectCurrentPassword() {
+        // arrange
         UpdatePasswordRequest request = new UpdatePasswordRequest(
             "wrong_password",
             "new",
@@ -254,8 +213,9 @@ class AccountServiceTest {
         when(sessionService.getAuthenticatedUser()).thenReturn(testUser);
         when(passwordEncoder.matches("wrong_password", testUser.getPassword())).thenReturn(false);
 
+        // act & assert
         assertThrows(IncorrectCurrentPasswordException.class,
-            () -> accountService.updatePassword(request));
+            () -> accountService.updatePassword(request.currentPassword(), request.newPassword()));
         verify(sessionService, times(1)).getAuthenticatedUser();
         verify(passwordEncoder, times(1)).matches("wrong_password", testUser.getPassword());
     }

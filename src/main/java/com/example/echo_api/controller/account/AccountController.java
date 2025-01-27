@@ -50,7 +50,7 @@ public class AccountController {
 
     @PutMapping(ApiConfig.Account.UPDATE_PASSWORD)
     public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdatePasswordRequest request) {
-        accountService.updatePassword(request);
+        accountService.updatePassword(request.currentPassword(), request.newPassword());
         return ResponseEntity.noContent().build();
     }
 
