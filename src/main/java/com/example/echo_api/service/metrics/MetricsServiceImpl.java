@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MetricsServiceImpl implements MetricsService {
 
-    private MetricsRepository metricsRepository;
+    private final MetricsRepository metricsRepository;
 
     @Override
     public Metrics getMetrics(UUID profileId) throws IdNotFoundException {
