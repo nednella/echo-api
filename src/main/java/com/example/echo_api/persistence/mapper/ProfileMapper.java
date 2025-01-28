@@ -19,10 +19,6 @@ public class ProfileMapper {
             profile.getLocation(),
             profile.getAvatarUrl(),
             profile.getBannerUrl(),
-            profile.getFollowingCount(),
-            profile.getFollowingCount(),
-            profile.getPostCount(),
-            profile.getMediaCount(),
             profile.getCreatedAt());
     }
 
