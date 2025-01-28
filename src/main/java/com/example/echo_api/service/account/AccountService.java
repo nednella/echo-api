@@ -13,6 +13,11 @@ public interface AccountService {
      * Registers a new {@link Account} with the specified {@code username} and
      * {@code password}.
      * 
+     * <p>
+     * If the username is available, it creates an {@link Account} object, and
+     * associated {@link Profile} object, and an associated profile {@link Metrics}
+     * object.
+     * 
      * @param username The username of the account to register.
      * @param password The password of the account to register.
      * @return The newly registered {@link Account}.
@@ -28,7 +33,6 @@ public interface AccountService {
      * If the username is available, it creates an {@link Account} object, and
      * associated {@link Profile} object, and an associated profile {@link Metrics}
      * object.
-     * 
      * 
      * @param username The username of the account to register.
      * @param password The password of the account to register.

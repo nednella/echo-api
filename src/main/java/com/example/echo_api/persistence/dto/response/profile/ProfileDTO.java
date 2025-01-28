@@ -7,18 +7,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Represents a standardised response format for an {@link Account} profile.
  *
- * @param username       The username of the account associated to the profile.
- * @param name           The profile name.
- * @param bio            The profile bio.
- * @param location       The profile location.
- * @param avatarUrl      The URL of the profile avatar image.
- * @param bannerUrl      The URL of the profile banner image.
- * @param followingCount The number of profiles this profile is following.
- * @param followerCount  The number of followers this profile has.
- * @param postCount      The number of posts this profile has made.
- * @param mediaCount     The number of media items this profile has uploaded.
- * @param createdAt      The timestamp when the profile was created (ISO-8601
- *                       format).
+ * @param username  The username of the account associated to the profile.
+ * @param name      The profile name.
+ * @param bio       The profile bio.
+ * @param location  The profile location.
+ * @param avatarUrl The URL of the profile avatar image.
+ * @param bannerUrl The URL of the profile banner image.
+ * @param createdAt The timestamp when the profile was created (ISO-8601
+ *                  format).
+ * @param metrics   The profile metrics.
  */
 // @formatter:off
 public record ProfileDTO(
