@@ -51,7 +51,7 @@ class ProfileControllerTest {
 
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        ProfileDTO expected = ProfileMapper.toResponse(profile);
+        ProfileDTO expected = ProfileMapper.toDTO(profile);
 
         when(profileService.getMe()).thenReturn(expected);
 
@@ -234,7 +234,7 @@ class ProfileControllerTest {
 
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        ProfileDTO expected = ProfileMapper.toResponse(profile);
+        ProfileDTO expected = ProfileMapper.toDTO(profile);
 
         when(profileService.getByUsername(expected.username())).thenReturn(expected);
 

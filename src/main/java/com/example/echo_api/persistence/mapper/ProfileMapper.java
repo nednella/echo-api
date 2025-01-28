@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PRIVATE)
 public class ProfileMapper {
 
-    public static ProfileDTO toResponse(Profile profile) {
+    public static ProfileDTO toDTO(Profile profile) {
         return new ProfileDTO(
             profile.getUsername(),
             profile.getName(),

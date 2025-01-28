@@ -31,13 +31,13 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileDTO getByUsername(String username) throws UsernameException {
         Profile profile = findByUsername(username);
-        return ProfileMapper.toResponse(profile);
+        return ProfileMapper.toDTO(profile);
     }
 
     @Override
     public ProfileDTO getMe() {
         Profile me = findMe();
-        return ProfileMapper.toResponse(me);
+        return ProfileMapper.toDTO(me);
     }
 
     @Override

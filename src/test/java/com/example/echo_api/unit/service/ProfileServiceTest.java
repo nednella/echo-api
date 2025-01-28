@@ -46,7 +46,7 @@ class ProfileServiceTest {
         // arrange
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        ProfileDTO expected = ProfileMapper.toResponse(profile);
+        ProfileDTO expected = ProfileMapper.toDTO(profile);
 
         when(profileRepository.findByUsername(profile.getUsername())).thenReturn(Optional.of(profile));
 
@@ -84,7 +84,7 @@ class ProfileServiceTest {
         // arrange
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        ProfileDTO expected = ProfileMapper.toResponse(profile);
+        ProfileDTO expected = ProfileMapper.toDTO(profile);
 
         when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
