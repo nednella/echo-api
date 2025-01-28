@@ -38,7 +38,7 @@ class ProfileRepositoryIT extends RepositoryTest {
      * 
      * <p>
      * Requires a {@link Account} object saved to {@link AccountRepository} to set
-     * the {@code user_id} field.
+     * the {@code account_id} field.
      */
     @BeforeAll
     void setup() {

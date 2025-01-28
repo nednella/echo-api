@@ -28,8 +28,8 @@ public class Profile {
     // ---- primary keys / foreign keys ----
 
     @Id
-    @Column(name = "user_id", unique = true, nullable = false)
-    private UUID userId; // PK, FK
+    @Column(name = "account_id", unique = true, nullable = false)
+    private UUID accountId; // PK, FK
 
     @Username
     @Column(unique = true, nullable = false)
@@ -72,7 +72,7 @@ public class Profile {
     // ---- constructors ----
 
     public Profile(Account account) {
-        this.userId = account.getId();
+        this.accountId = account.getId();
         this.username = account.getUsername();
     }
 

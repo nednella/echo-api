@@ -15,7 +15,7 @@ CREATE UNIQUE INDEX
     
 CREATE TABLE
     IF NOT EXISTS "profile" (
-        user_id          UUID PRIMARY KEY UNIQUE NOT NULL,
+        account_id       UUID PRIMARY KEY UNIQUE NOT NULL,
         username         VARCHAR(15) UNIQUE NOT NULL CHECK (username ~ '^[a-zA-Z0-9_]{3,15}$'),
         name             VARCHAR(50),
         bio              VARCHAR(160),
@@ -28,8 +28,8 @@ CREATE TABLE
         media_count      INT NOT NULL DEFAULT 0,
         created_at       TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at       TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
-        CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES "user"(username) ON UPDATE CASCADE
+        CONSTRAINT fk_account_id FOREIGN KEY (account_id) REFERENCES "account"(id) ON DELETE CASCADE,
+        CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES "account"(username) ON UPDATE CASCADE
     );
 
 CREATE UNIQUE INDEX 
