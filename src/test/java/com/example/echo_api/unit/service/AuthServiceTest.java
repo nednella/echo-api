@@ -16,7 +16,7 @@ import org.springframework.security.authentication.LockedException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
 import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
-import com.example.echo_api.persistence.model.account.User;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.service.auth.AuthServiceImpl;
@@ -37,15 +37,15 @@ class AuthServiceTest {
     @InjectMocks
     private AuthServiceImpl authService;
 
-    private static User testUser;
+    private static Account account;
 
     /**
-     * Set up a {@link User} object before each test.
+     * Set up a {@link Account} object before each test.
      * 
      */
     @BeforeAll
     static void initVariables() {
-        testUser = new User("testUsername", "testPassword");
+        account = new Account("testUsername", "testPassword");
     }
 
     /**
@@ -55,7 +55,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Login_ReturnVoid() {
         // arrange
-        LoginDTO login = new LoginDTO(testUser.getUsername(), testUser.getPassword());
+        LoginDTO login = new LoginDTO(account.getUsername(), account.getPassword());
 
         doNothing()
             .when(sessionSerivce)
@@ -73,7 +73,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Login_ThrowDisabledException() {
         // arrange
-        LoginDTO login = new LoginDTO(testUser.getUsername(), testUser.getPassword());
+        LoginDTO login = new LoginDTO(account.getUsername(), account.getPassword());
 
         doThrow(new DisabledException(""))
             .when(sessionSerivce)
@@ -91,7 +91,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Login_ThrowLockedException() {
         // arrange
-        LoginDTO login = new LoginDTO(testUser.getUsername(), testUser.getPassword());
+        LoginDTO login = new LoginDTO(account.getUsername(), account.getPassword());
 
         doThrow(new LockedException(""))
             .when(sessionSerivce)
@@ -109,7 +109,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Login_ThrowBadCredentialsException() {
         // arrange
-        LoginDTO login = new LoginDTO(testUser.getUsername(), testUser.getPassword());
+        LoginDTO login = new LoginDTO(account.getUsername(), account.getPassword());
 
         doThrow(new BadCredentialsException(""))
             .when(sessionSerivce)
@@ -127,16 +127,16 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ReturnVoid() {
         // arrange
-        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(account.getUsername(), account.getPassword());
 
-        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
+        when(accountService.register(account.getUsername(), account.getPassword())).thenReturn(account);
         doNothing()
             .when(sessionSerivce)
             .authenticate(signup.username(), signup.password());
 
         // act & assert
         assertDoesNotThrow(() -> authService.signup(signup));
-        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).register(account.getUsername(), account.getPassword());
         verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
@@ -147,14 +147,14 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ThrowUsernameAlreadyExists() {
         // arrange
-        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(account.getUsername(), account.getPassword());
 
-        when(accountService.register(testUser.getUsername(), testUser.getPassword()))
+        when(accountService.register(account.getUsername(), account.getPassword()))
             .thenThrow(new UsernameAlreadyExistsException());
 
         // act & assert
         assertThrows(UsernameAlreadyExistsException.class, () -> authService.signup(signup));
-        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).register(account.getUsername(), account.getPassword());
         verify(sessionSerivce, never()).authenticate(signup.username(), signup.password());
     }
 
@@ -165,16 +165,16 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ThrowDisabledException() {
         // arrange
-        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(account.getUsername(), account.getPassword());
 
-        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
+        when(accountService.register(account.getUsername(), account.getPassword())).thenReturn(account);
         doThrow(new DisabledException(""))
             .when(sessionSerivce)
             .authenticate(signup.username(), signup.password());
 
         // act & assert
         assertThrows(DisabledException.class, () -> authService.signup(signup));
-        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).register(account.getUsername(), account.getPassword());
         verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
@@ -185,16 +185,16 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ThrowLockedException() {
         // arrange
-        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(account.getUsername(), account.getPassword());
 
-        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
+        when(accountService.register(account.getUsername(), account.getPassword())).thenReturn(account);
         doThrow(new LockedException(""))
             .when(sessionSerivce)
             .authenticate(signup.username(), signup.password());
 
         // act & assert
         assertThrows(LockedException.class, () -> authService.signup(signup));
-        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).register(account.getUsername(), account.getPassword());
         verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 
@@ -205,16 +205,16 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ThrowBadCredentialsException() {
         // arrange
-        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(account.getUsername(), account.getPassword());
 
-        when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
+        when(accountService.register(account.getUsername(), account.getPassword())).thenReturn(account);
         doThrow(new BadCredentialsException(""))
             .when(sessionSerivce)
             .authenticate(signup.username(), signup.password());
 
         // act & assert
         assertThrows(BadCredentialsException.class, () -> authService.signup(signup));
-        verify(accountService, times(1)).register(testUser.getUsername(), testUser.getPassword());
+        verify(accountService, times(1)).register(account.getUsername(), account.getPassword());
         verify(sessionSerivce, times(1)).authenticate(signup.username(), signup.password());
     }
 

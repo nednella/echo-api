@@ -23,7 +23,7 @@ import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
-import com.example.echo_api.persistence.model.account.User;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.service.profile.ProfileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,8 +49,8 @@ class ProfileControllerTest {
         // api: GET /api/v1/profile/me ==> 200 : ProfileResponse
         String path = ApiConfig.Profile.GET_ME;
 
-        User user = new User("test", "test");
-        Profile profile = new Profile(user);
+        Account account = new Account("test", "test");
+        Profile profile = new Profile(account);
         ProfileDTO expected = ProfileMapper.toResponse(profile);
 
         when(profileService.getMe()).thenReturn(expected);
@@ -232,8 +232,8 @@ class ProfileControllerTest {
         // api: GET /api/v1/profile/{username} ==> 200 : ProfileResponse
         String path = ApiConfig.Profile.GET_BY_USERNAME;
 
-        User user = new User("test", "test");
-        Profile profile = new Profile(user);
+        Account account = new Account("test", "test");
+        Profile profile = new Profile(account);
         ProfileDTO expected = ProfileMapper.toResponse(profile);
 
         when(profileService.getByUsername(expected.username())).thenReturn(expected);
