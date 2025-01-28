@@ -24,7 +24,7 @@ import com.example.echo_api.config.ValidationMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
-import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.service.auth.AuthService;
@@ -51,7 +51,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -74,7 +74,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 400 : Invalid Request
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             null,
             "valid-pw-1");
 
@@ -106,7 +106,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 400 : Invalid Request
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "valid_name",
             null);
 
@@ -138,7 +138,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 400 : UsernameNotFound
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -174,7 +174,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 400 : BadCredentials
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -210,7 +210,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 401 : AccountStatus - Disabled
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -246,7 +246,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 401 : AccountStatus - Locked
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 

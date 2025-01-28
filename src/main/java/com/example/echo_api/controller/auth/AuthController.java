@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
-import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.validation.sequence.ValidationOrder;
@@ -23,7 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(ApiConfig.Auth.LOGIN)
-    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest request) {
+    public ResponseEntity<Void> login(@RequestBody @Valid LoginDTO request) {
         authService.login(request);
         return ResponseEntity.noContent().build();
     }

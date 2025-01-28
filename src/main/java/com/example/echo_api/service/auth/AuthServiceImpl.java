@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.echo_api.exception.custom.username.UsernameException;
-import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.session.SessionService;
@@ -27,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final SessionService sessionService;
 
     @Override
-    public void login(LoginRequest login) throws AuthenticationException {
+    public void login(LoginDTO login) throws AuthenticationException {
         sessionService.authenticate(login.username(), login.password());
     }
 

@@ -14,7 +14,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
@@ -55,7 +55,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Login_ReturnVoid() {
         // arrange
-        LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
+        LoginDTO login = new LoginDTO(testUser.getUsername(), testUser.getPassword());
 
         doNothing()
             .when(sessionSerivce)
@@ -73,7 +73,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Login_ThrowDisabledException() {
         // arrange
-        LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
+        LoginDTO login = new LoginDTO(testUser.getUsername(), testUser.getPassword());
 
         doThrow(new DisabledException(""))
             .when(sessionSerivce)
@@ -91,7 +91,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Login_ThrowLockedException() {
         // arrange
-        LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
+        LoginDTO login = new LoginDTO(testUser.getUsername(), testUser.getPassword());
 
         doThrow(new LockedException(""))
             .when(sessionSerivce)
@@ -109,7 +109,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Login_ThrowBadCredentialsException() {
         // arrange
-        LoginRequest login = new LoginRequest(testUser.getUsername(), testUser.getPassword());
+        LoginDTO login = new LoginDTO(testUser.getUsername(), testUser.getPassword());
 
         doThrow(new BadCredentialsException(""))
             .when(sessionSerivce)

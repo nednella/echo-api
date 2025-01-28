@@ -15,7 +15,7 @@ import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.integration.util.IntegrationTest;
 import com.example.echo_api.integration.util.TestUtils;
-import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
+import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
 import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 
@@ -41,9 +41,9 @@ class AuthControllerIT extends IntegrationTest {
         String endpoint = ApiConfig.Auth.LOGIN;
 
         // POST a login for the pre-existing testUser
-        LoginRequest login = new LoginRequest(existingUser.getUsername(), existingUser.getPassword());
+        LoginDTO login = new LoginDTO(existingUser.getUsername(), existingUser.getPassword());
 
-        HttpEntity<LoginRequest> request = TestUtils.createJsonRequestEntity(login);
+        HttpEntity<LoginDTO> request = TestUtils.createJsonRequestEntity(login);
         ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, request, Void.class);
 
         // assert the response
