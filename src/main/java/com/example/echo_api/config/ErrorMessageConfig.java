@@ -15,6 +15,8 @@ public final class ErrorMessageConfig {
     public static final String INVALID_REQUEST = "Invalid request.";
     /* Auth */
     public static final String USERNAME_OR_PASSWORD_IS_INCORRECT = "Username or password is incorrect.";
+    /* Account */
+    public static final String ID_NOT_FOUND = "ID not found.";
     /* Username */
     public static final String USERNAME_NOT_FOUND = "Username not found.";
     public static final String USERNAME_ARLEADY_EXISTS = "Username already exists.";
