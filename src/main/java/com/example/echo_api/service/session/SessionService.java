@@ -5,7 +5,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.User;
 import com.example.echo_api.service.account.AccountService;
 
 public interface SessionService {

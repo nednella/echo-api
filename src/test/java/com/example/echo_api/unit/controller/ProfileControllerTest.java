@@ -23,8 +23,8 @@ import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
+import com.example.echo_api.persistence.model.account.User;
 import com.example.echo_api.persistence.model.profile.Profile;
-import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.profile.ProfileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

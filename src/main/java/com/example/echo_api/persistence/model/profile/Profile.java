@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.User;
 import com.example.echo_api.validation.account.annotations.Username;
 
 import jakarta.persistence.Column;

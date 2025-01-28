@@ -19,7 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.User;
 import com.redis.testcontainers.RedisContainer;
 
 @ActiveProfiles(value = "test")

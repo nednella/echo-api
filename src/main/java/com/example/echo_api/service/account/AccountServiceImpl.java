@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.model.user.Role;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.Role;
+import com.example.echo_api.persistence.model.account.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.session.SessionService;

@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.example.echo_api.persistence.model.user.SecurityUser;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.SecurityUser;
+import com.example.echo_api.persistence.model.account.User;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

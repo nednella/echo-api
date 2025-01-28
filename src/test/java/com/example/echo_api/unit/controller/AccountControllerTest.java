@@ -24,7 +24,7 @@ import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordEx
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.User;
 import com.example.echo_api.service.account.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

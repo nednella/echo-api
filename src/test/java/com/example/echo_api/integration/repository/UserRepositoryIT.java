@@ -12,7 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.example.echo_api.integration.util.RepositoryTest;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.User;
 import com.example.echo_api.persistence.repository.UserRepository;
 
 /**

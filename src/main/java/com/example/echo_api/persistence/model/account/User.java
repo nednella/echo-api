@@ -1,4 +1,4 @@
-package com.example.echo_api.persistence.model.user;
+package com.example.echo_api.persistence.model.account;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

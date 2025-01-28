@@ -2,8 +2,8 @@ package com.example.echo_api.service.account;
 
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.model.user.Role;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.Role;
+import com.example.echo_api.persistence.model.account.User;
 
 public interface AccountService {
 
