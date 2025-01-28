@@ -28,7 +28,8 @@ public record ProfileDTO(
     String location,
     @JsonProperty("avatar_url") String avatarUrl,
     @JsonProperty("banner_url") String bannerUrl,
-    @JsonProperty("created_at") String createdAt
+    @JsonProperty("created_at") String createdAt,
+    @JsonProperty("profile_metrics") MetricsDTO metrics
 ) {
 
     public ProfileDTO(
@@ -38,7 +39,8 @@ public record ProfileDTO(
         String location,
         String avatarUrl,
         String bannerUrl,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        MetricsDTO metrics
     ) {
         this(
             username,
@@ -47,7 +49,8 @@ public record ProfileDTO(
             location,
             avatarUrl,
             bannerUrl,
-            createdAt != null ? createdAt.toString() : null
+            createdAt != null ? createdAt.toString() : null,
+            metrics
         );
     }
 
