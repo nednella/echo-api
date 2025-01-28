@@ -17,6 +17,8 @@ import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsExcep
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.repository.AccountRepository;
+import com.example.echo_api.persistence.repository.MetricsRepository;
+import com.example.echo_api.persistence.repository.ProfileRepository;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.account.AccountServiceImpl;
 import com.example.echo_api.service.session.SessionService;
@@ -32,6 +34,12 @@ class AccountServiceTest {
 
     @Mock
     private AccountRepository accountRepository;
+
+    @Mock
+    private ProfileRepository profileRepository;
+
+    @Mock
+    private MetricsRepository metricsRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -55,16 +63,17 @@ class AccountServiceTest {
      * exist.
      */
     @Test
-    void accountService_Register_ReturnVoid() {
+    void accountService_Register_ReturnAccount() {
         // arrange
         when(accountRepository.save(account)).thenReturn(account);
         when(accountRepository.existsByUsername(account.getUsername())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
         // act
-        accountService.register(account.getUsername(), account.getPassword());
+        Account registered = accountService.register(account.getUsername(), account.getPassword());
 
         // assert
+        assertEquals(account, registered);
         verify(accountRepository, times(1)).save(account);
         verify(passwordEncoder, times(1)).encode(account.getPassword());
     }

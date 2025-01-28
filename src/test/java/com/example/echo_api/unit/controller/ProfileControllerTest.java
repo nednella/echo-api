@@ -24,6 +24,7 @@ import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
+import com.example.echo_api.persistence.model.profile.Metrics;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.service.profile.ProfileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,13 +46,14 @@ class ProfileControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void ProfileController_GetMe_ReturnProfileResponse() throws Exception {
+    void ProfileController_GetMe_ReturnProfileDTO() throws Exception {
         // api: GET /api/v1/profile/me ==> 200 : ProfileResponse
         String path = ApiConfig.Profile.GET_ME;
 
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        ProfileDTO expected = ProfileMapper.toDTO(profile);
+        Metrics metrics = new Metrics(profile);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics);
 
         when(profileService.getMe()).thenReturn(expected);
 
@@ -228,13 +230,14 @@ class ProfileControllerTest {
     }
 
     @Test
-    void ProfileController_GetByUsername_ReturnProfileResponse() throws Exception {
-        // api: GET /api/v1/profile/{username} ==> 200 : ProfileResponse
+    void ProfileController_GetByUsername_ReturnProfileDTO() throws Exception {
+        // api: GET /api/v1/profile/{username} ==> 200 : ProfileDTO
         String path = ApiConfig.Profile.GET_BY_USERNAME;
 
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        ProfileDTO expected = ProfileMapper.toDTO(profile);
+        Metrics metrics = new Metrics(profile);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics);
 
         when(profileService.getByUsername(expected.username())).thenReturn(expected);
 
