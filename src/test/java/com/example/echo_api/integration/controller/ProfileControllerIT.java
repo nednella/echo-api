@@ -14,7 +14,7 @@ import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.integration.util.IntegrationTest;
 import com.example.echo_api.integration.util.TestUtils;
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 
@@ -46,12 +46,12 @@ class ProfileControllerIT extends IntegrationTest {
         // api: PUT /api/v1/profile/me ==> 204 : No Content
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest body = new UpdateProfileInfoRequest(
+        UpdateProfileDTO body = new UpdateProfileDTO(
             "name",
             "bio",
             "location");
 
-        HttpEntity<UpdateProfileInfoRequest> request = TestUtils.createJsonRequestEntity(body);
+        HttpEntity<UpdateProfileDTO> request = TestUtils.createJsonRequestEntity(body);
         ResponseEntity<Void> response = restTemplate.exchange(path, PUT, request, Void.class);
 
         // assert response

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.profile.Profile;
@@ -47,9 +47,9 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void updateMeProfileInfo(UpdateProfileInfoRequest request) {
+    public void updateMeProfile(UpdateProfileDTO request) {
         Profile me = findMe();
-        ProfileMapper.updateProfileInfo(request, me);
+        ProfileMapper.updateProfile(request, me);
         profileRepository.save(me);
     }
 

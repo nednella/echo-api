@@ -19,7 +19,7 @@ import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.profile.ProfileController;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
@@ -100,14 +100,14 @@ class ProfileControllerTest {
         // api: PUT /api/v1/profile/me ==> 204 : No Content
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "name",
             "bio",
             "location");
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(profileService).updateMeProfileInfo(request);
+        doNothing().when(profileService).updateMeProfile(request);
 
         mockMvc
             .perform(put(path)
@@ -116,7 +116,7 @@ class ProfileControllerTest {
             .andDo(print())
             .andExpect(status().isNoContent());
 
-        verify(profileService, times(1)).updateMeProfileInfo(request);
+        verify(profileService, times(1)).updateMeProfile(request);
     }
 
     @Test
@@ -124,14 +124,14 @@ class ProfileControllerTest {
         // api: PUT /api/v1/profile/me ==> 400 : Invalid Request
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "ThisNameIsTooLongBy......................1Character",
             "bio",
             "location");
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(profileService).updateMeProfileInfo(request);
+        doNothing().when(profileService).updateMeProfile(request);
 
         String response = mockMvc
             .perform(put(path)
@@ -152,7 +152,7 @@ class ProfileControllerTest {
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
 
         assertEquals(expected, actual);
-        verify(profileService, never()).updateMeProfileInfo(request);
+        verify(profileService, never()).updateMeProfile(request);
     }
 
     @Test
@@ -160,14 +160,14 @@ class ProfileControllerTest {
         // api: PUT /api/v1/profile/me ==> 400 : Invalid Request
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "name",
             "ThisBioIsTooLongBy.....................................................................................................................................1Character",
             "location");
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(profileService).updateMeProfileInfo(request);
+        doNothing().when(profileService).updateMeProfile(request);
 
         String response = mockMvc
             .perform(put(path)
@@ -188,7 +188,7 @@ class ProfileControllerTest {
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
 
         assertEquals(expected, actual);
-        verify(profileService, never()).updateMeProfileInfo(request);
+        verify(profileService, never()).updateMeProfile(request);
     }
 
     @Test
@@ -196,14 +196,14 @@ class ProfileControllerTest {
         // api: PUT /api/v1/profile/me ==> 400 : Invalid Request
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "name",
             "bio",
             "ThisLocationIsTooLongBy4Characters");
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(profileService).updateMeProfileInfo(request);
+        doNothing().when(profileService).updateMeProfile(request);
 
         String response = mockMvc
             .perform(put(path)
@@ -224,7 +224,7 @@ class ProfileControllerTest {
         ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
 
         assertEquals(expected, actual);
-        verify(profileService, never()).updateMeProfileInfo(request);
+        verify(profileService, never()).updateMeProfile(request);
     }
 
     @Test

@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.profile.Profile;
@@ -142,15 +142,15 @@ class ProfileServiceTest {
 
     /**
      * Test ensures that the
-     * {@link ProfileServiceImpl#updateMeProfileInfo(UpdateProfileInfoRequest)}
-     * method correctly updates the authenticated user's profile information.
+     * {@link ProfileServiceImpl#updateMeProfileInfo(UpdateProfileDTO)} method
+     * correctly updates the authenticated user's profile information.
      */
     @Test
     void ProfileService_UpdateMeProfileInfo_ReturnVoid() {
         // arrange
         User user = new User("test", "test");
         Profile profile = new Profile(user);
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "John Doe",
             "Bio",
             "Location");
@@ -159,7 +159,7 @@ class ProfileServiceTest {
         when(profileRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(profile));
 
         // act
-        profileService.updateMeProfileInfo(request);
+        profileService.updateMeProfile(request);
 
         // assert
         assertEquals(request.name(), profile.getName());
@@ -171,16 +171,16 @@ class ProfileServiceTest {
 
     /**
      * Test ensures that the
-     * {@link ProfileServiceImpl#updateMeProfileInfo(UpdateProfileInfoRequest)}
-     * method correctly throws a {@link UsernameNotFoundException} when no such
-     * profile with the authenticated user's username exists.
+     * {@link ProfileServiceImpl#updateMeProfileInfo(UpdateProfileDTO)} method
+     * correctly throws a {@link UsernameNotFoundException} when no such profile
+     * with the authenticated user's username exists.
      */
     @Test
     void ProfileService_UpdateMeProfileInfo_ThrowUsernameNotFound() {
         // arrange
         User user = new User("test", "test");
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "name",
             "bio",
             "location");
@@ -189,7 +189,7 @@ class ProfileServiceTest {
         when(profileRepository.findByUsername(user.getUsername())).thenThrow(new UsernameNotFoundException());
 
         // act & assert
-        assertThrows(UsernameNotFoundException.class, () -> profileService.updateMeProfileInfo(request));
+        assertThrows(UsernameNotFoundException.class, () -> profileService.updateMeProfile(request));
         verify(sessionService, times(1)).getAuthenticatedUser();
         verify(profileRepository, times(1)).findByUsername(user.getUsername());
     }

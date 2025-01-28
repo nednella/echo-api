@@ -1,7 +1,7 @@
 package com.example.echo_api.service.profile;
 
 import com.example.echo_api.exception.custom.username.UsernameException;
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.model.user.User;
@@ -37,8 +37,12 @@ public interface ProfileService {
     /**
      * Updates the profile information of the authenticated user.
      * 
-     * @param request The request containing the updated profile information.
+     * <p>
+     * Valid fields are {@code name}, {@code bio}, {@code location}.
+     * 
+     * @param request The {@link UpdateProfileDTO} request containing the updated
+     *                profile information.
      */
-    public void updateMeProfileInfo(UpdateProfileInfoRequest request);
+    public void updateMeProfile(UpdateProfileDTO request);
 
 }
