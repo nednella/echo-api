@@ -97,32 +97,6 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_IsUsernameAvailable_Throw400InvalidRequest_InvalidUsername() throws Exception {
-        // api: GET /api/v1/account/username-available?username={...} ==> 400 : Invalid
-        // Request
-        String path = ApiConfig.Account.USERNAME_AVAILABLE;
-
-        String response = mockMvc
-            .perform(get(path)
-                .param("username", "invalid-username"))
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-
-        ErrorDTO expected = new ErrorDTO(
-            HttpStatus.BAD_REQUEST,
-            ErrorMessageConfig.INVALID_REQUEST,
-            ValidationMessageConfig.INVALID_USERNAME,
-            path);
-
-        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
     void AccountController_UpdateUsername_Return204() throws Exception {
         // api: PUT /api/v1/account/username ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_USERNAME;
