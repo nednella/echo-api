@@ -24,9 +24,9 @@ import com.example.echo_api.config.ValidationMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
-import com.example.echo_api.persistence.dto.request.auth.LoginRequest;
-import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
+import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -51,7 +51,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -74,7 +74,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 400 : Invalid Request
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             null,
             "valid-pw-1");
 
@@ -90,13 +90,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             "Username is required.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -106,7 +106,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 400 : Invalid Request
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "valid_name",
             null);
 
@@ -122,13 +122,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             "Password is required.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -138,7 +138,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 400 : UsernameNotFound
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -158,13 +158,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_NOT_FOUND,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -174,7 +174,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 400 : BadCredentials
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -194,13 +194,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_OR_PASSWORD_IS_INCORRECT,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -210,7 +210,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 401 : AccountStatus - Disabled
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -230,13 +230,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.UNAUTHORIZED,
             ErrorMessageConfig.ACCOUNT_STATUS,
             "Account is disabled.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -246,7 +246,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/login ==> 401 : AccountStatus - Locked
         String path = ApiConfig.Auth.LOGIN;
 
-        LoginRequest request = new LoginRequest(
+        LoginDTO request = new LoginDTO(
             "admin",
             "password");
 
@@ -266,13 +266,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.UNAUTHORIZED,
             ErrorMessageConfig.ACCOUNT_STATUS,
             "Account is locked.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -282,7 +282,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String path = ApiConfig.Auth.SIGNUP;
 
-        SignupRequest request = new SignupRequest(
+        SignupDTO request = new SignupDTO(
             "admin",
             "password-1");
 
@@ -305,7 +305,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/signup ==> 400 : Invalid Request
         String path = ApiConfig.Auth.SIGNUP;
 
-        SignupRequest request = new SignupRequest(
+        SignupDTO request = new SignupDTO(
             "invalid_name!",
             "valid-pw-1");
 
@@ -321,13 +321,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.INVALID_USERNAME,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -337,7 +337,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/signup ==> 400 : Invalid Request
         String path = ApiConfig.Auth.SIGNUP;
 
-        SignupRequest request = new SignupRequest(
+        SignupDTO request = new SignupDTO(
             "valid_name",
             "invalid_password");
 
@@ -353,13 +353,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.INVALID_PASSWORD,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -369,7 +369,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/signup ==> 400 : UsernameAlreadyExists
         String path = ApiConfig.Auth.SIGNUP;
 
-        SignupRequest request = new SignupRequest(
+        SignupDTO request = new SignupDTO(
             "taken_name",
             "valid-pw-1");
 
@@ -389,13 +389,13 @@ class AuthControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_ARLEADY_EXISTS,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }

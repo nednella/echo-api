@@ -19,9 +19,9 @@ import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.profile.ProfileController;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
-import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
+import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.model.user.User;
@@ -51,7 +51,7 @@ class ProfileControllerTest {
 
         User user = new User("test", "test");
         Profile profile = new Profile(user);
-        ProfileResponse expected = ProfileMapper.toResponse(profile);
+        ProfileDTO expected = ProfileMapper.toResponse(profile);
 
         when(profileService.getMe()).thenReturn(expected);
 
@@ -63,7 +63,7 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ProfileResponse actual = objectMapper.readValue(response, ProfileResponse.class);
+        ProfileDTO actual = objectMapper.readValue(response, ProfileDTO.class);
         assertEquals(expected, actual);
         verify(profileService, times(1)).getMe();
     }
@@ -83,13 +83,13 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_NOT_FOUND,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
         verify(profileService, times(1)).getMe();
@@ -100,14 +100,14 @@ class ProfileControllerTest {
         // api: PUT /api/v1/profile/me ==> 204 : No Content
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "name",
             "bio",
             "location");
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(profileService).updateMeProfileInfo(request);
+        doNothing().when(profileService).updateMeProfile(request);
 
         mockMvc
             .perform(put(path)
@@ -116,7 +116,7 @@ class ProfileControllerTest {
             .andDo(print())
             .andExpect(status().isNoContent());
 
-        verify(profileService, times(1)).updateMeProfileInfo(request);
+        verify(profileService, times(1)).updateMeProfile(request);
     }
 
     @Test
@@ -124,14 +124,14 @@ class ProfileControllerTest {
         // api: PUT /api/v1/profile/me ==> 400 : Invalid Request
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "ThisNameIsTooLongBy......................1Character",
             "bio",
             "location");
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(profileService).updateMeProfileInfo(request);
+        doNothing().when(profileService).updateMeProfile(request);
 
         String response = mockMvc
             .perform(put(path)
@@ -143,16 +143,16 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             "Name must not exceed 50 characters.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
-        verify(profileService, never()).updateMeProfileInfo(request);
+        verify(profileService, never()).updateMeProfile(request);
     }
 
     @Test
@@ -160,14 +160,14 @@ class ProfileControllerTest {
         // api: PUT /api/v1/profile/me ==> 400 : Invalid Request
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "name",
             "ThisBioIsTooLongBy.....................................................................................................................................1Character",
             "location");
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(profileService).updateMeProfileInfo(request);
+        doNothing().when(profileService).updateMeProfile(request);
 
         String response = mockMvc
             .perform(put(path)
@@ -179,16 +179,16 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             "Bio must not exceed 160 characters.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
-        verify(profileService, never()).updateMeProfileInfo(request);
+        verify(profileService, never()).updateMeProfile(request);
     }
 
     @Test
@@ -196,14 +196,14 @@ class ProfileControllerTest {
         // api: PUT /api/v1/profile/me ==> 400 : Invalid Request
         String path = ApiConfig.Profile.UPDATE_ME;
 
-        UpdateProfileInfoRequest request = new UpdateProfileInfoRequest(
+        UpdateProfileDTO request = new UpdateProfileDTO(
             "name",
             "bio",
             "ThisLocationIsTooLongBy4Characters");
 
         String body = objectMapper.writeValueAsString(request);
 
-        doNothing().when(profileService).updateMeProfileInfo(request);
+        doNothing().when(profileService).updateMeProfile(request);
 
         String response = mockMvc
             .perform(put(path)
@@ -215,16 +215,16 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             "Location must not exceed 30 characters.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
-        verify(profileService, never()).updateMeProfileInfo(request);
+        verify(profileService, never()).updateMeProfile(request);
     }
 
     @Test
@@ -234,7 +234,7 @@ class ProfileControllerTest {
 
         User user = new User("test", "test");
         Profile profile = new Profile(user);
-        ProfileResponse expected = ProfileMapper.toResponse(profile);
+        ProfileDTO expected = ProfileMapper.toResponse(profile);
 
         when(profileService.getByUsername(expected.username())).thenReturn(expected);
 
@@ -246,7 +246,7 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ProfileResponse actual = objectMapper.readValue(response, ProfileResponse.class);
+        ProfileDTO actual = objectMapper.readValue(response, ProfileDTO.class);
         assertEquals(expected, actual);
         verify(profileService, times(1)).getByUsername(expected.username());
     }
@@ -266,13 +266,13 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_NOT_FOUND,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
         verify(profileService, times(1)).getByUsername("non-existent-user");

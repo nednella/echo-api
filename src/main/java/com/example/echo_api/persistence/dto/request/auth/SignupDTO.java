@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
  *                 match the format specified by {@link Password}. be null.
  */
 // @formatter:off
-public record SignupRequest(
+public record SignupDTO(
 
     @NotNull(message = "Username is required.", groups = BasicCheck.class)
     @Username(groups = AdvancedCheck.class)

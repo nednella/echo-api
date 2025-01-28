@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *                       (ISO-8601 format).
  */
 // @formatter:off
-public record ProfileResponse(
+public record ProfileDTO(
     String username,
     String name,
     String bio,
@@ -35,7 +35,7 @@ public record ProfileResponse(
     @JsonProperty("created_at") String createdAt
 ) {
 
-    public ProfileResponse(
+    public ProfileDTO(
         String username,
         String name,
         String bio,

@@ -14,14 +14,14 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 /**
- * Custom Jakarta Validation annotation for {@link UpdatePasswordRequest} forms.
+ * Custom Jakarta Validation annotation for {@link UpdatePasswordDTO} forms.
  * 
  * <p>
- * The annotated {@link UpdatePasswordRequest} record fields
+ * The annotated {@link UpdatePasswordDTO} record fields
  * {@code confirmationPassword} and {@code newPassword} must match.
  * 
  * <p>
- * Accepts type annotations for {@link UpdatePasswordRequest}.
+ * Accepts type annotations for {@link UpdatePasswordDTO}.
  */
 @Target({ TYPE })
 @Retention(RUNTIME)

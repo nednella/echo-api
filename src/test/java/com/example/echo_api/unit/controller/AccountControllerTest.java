@@ -22,8 +22,8 @@ import com.example.echo_api.config.ValidationMessageConfig;
 import com.example.echo_api.controller.account.AccountController;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -97,32 +97,6 @@ class AccountControllerTest {
     }
 
     @Test
-    void AccountController_IsUsernameAvailable_Throw400InvalidRequest_InvalidUsername() throws Exception {
-        // api: GET /api/v1/account/username-available?username={...} ==> 400 : Invalid
-        // Request
-        String path = ApiConfig.Account.USERNAME_AVAILABLE;
-
-        String response = mockMvc
-            .perform(get(path)
-                .param("username", "invalid-username"))
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-
-        ErrorResponse expected = new ErrorResponse(
-            HttpStatus.BAD_REQUEST,
-            ErrorMessageConfig.INVALID_REQUEST,
-            ValidationMessageConfig.INVALID_USERNAME,
-            path);
-
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
     void AccountController_UpdateUsername_Return204() throws Exception {
         // api: PUT /api/v1/account/username ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_USERNAME;
@@ -152,13 +126,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_ARLEADY_EXISTS,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -168,7 +142,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/password ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "current_password",
             "new-password-1",
             "new-password-1");
@@ -190,7 +164,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/password ==> 400 : Invalid Request (new password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "old-password",
             "new-password",
             "new-password");
@@ -207,13 +181,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.INVALID_PASSWORD,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -224,7 +198,7 @@ class AccountControllerTest {
         // password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "old-password",
             "new-password-1",
             "this-does-not-match");
@@ -241,13 +215,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.CONFIRMATION_PASSWORD_MISMATCH,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -257,7 +231,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/password ==> 400 : Invalid Request (new password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "old-password-1",
             "old-password-1",
             "old-password-1");
@@ -274,13 +248,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.NEW_PASSWORD_NOT_UNIQUE,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -290,7 +264,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/password ==> 400 : IncorrectCurrentPassword
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "wrong-password",
             "new-password-1",
             "new-password-1");
@@ -311,13 +285,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }

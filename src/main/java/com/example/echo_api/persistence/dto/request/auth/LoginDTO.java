@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
  * @param password The password of the user to authenticate. Required field.
  */
 // @formatter:off
-public record LoginRequest(
+public record LoginDTO(
 
     @NotNull(message = "Username is required.")
     String username,

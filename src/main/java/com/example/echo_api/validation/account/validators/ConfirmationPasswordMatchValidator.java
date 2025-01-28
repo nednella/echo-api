@@ -1,6 +1,6 @@
 package com.example.echo_api.validation.account.validators;
 
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.validation.account.annotations.ConfirmationPasswordMatch;
 
 import jakarta.validation.ConstraintValidator;
@@ -12,17 +12,16 @@ import jakarta.validation.ConstraintValidatorContext;
  * 
  * <p>
  * This class ensures that fields {@code confirmationPassword} and
- * {@code newPassword} match exactly within a {@link UpdatePasswordRequest}
- * form.
+ * {@code newPassword} match exactly within a {@link UpdatePasswordDTO} form.
  * 
  * @see ConfirmationPasswordMatch
  * @see ConstraintValidator
  */
 public class ConfirmationPasswordMatchValidator
-    implements ConstraintValidator<ConfirmationPasswordMatch, UpdatePasswordRequest> {
+    implements ConstraintValidator<ConfirmationPasswordMatch, UpdatePasswordDTO> {
 
     @Override
-    public boolean isValid(UpdatePasswordRequest form, ConstraintValidatorContext context) {
+    public boolean isValid(UpdatePasswordDTO form, ConstraintValidatorContext context) {
         return form.confirmationPassword().equals(form.newPassword());
     }
 

@@ -2,8 +2,8 @@ package com.example.echo_api.persistence.mapper;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import com.example.echo_api.persistence.dto.request.profile.UpdateProfileInfoRequest;
-import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
+import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
+import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.model.profile.Profile;
 
 import lombok.NoArgsConstructor;
@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PRIVATE)
 public class ProfileMapper {
 
-    public static ProfileResponse toResponse(Profile profile) {
-        return new ProfileResponse(
+    public static ProfileDTO toResponse(Profile profile) {
+        return new ProfileDTO(
             profile.getUsername(),
             profile.getName(),
             profile.getBio(),
@@ -26,7 +26,7 @@ public class ProfileMapper {
             profile.getCreatedAt());
     }
 
-    public static Profile updateProfileInfo(UpdateProfileInfoRequest request, Profile profile) {
+    public static Profile updateProfile(UpdateProfileDTO request, Profile profile) {
         if (request.name() != null) {
             profile.setName(request.name());
         }

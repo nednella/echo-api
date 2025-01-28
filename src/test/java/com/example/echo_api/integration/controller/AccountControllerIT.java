@@ -15,8 +15,8 @@ import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.integration.util.IntegrationTest;
 import com.example.echo_api.integration.util.TestUtils;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 
 /**
  * Integration test class for {@link AuthController}.
@@ -70,14 +70,14 @@ class AccountControllerIT extends IntegrationTest {
         // api: PUT /api/v1/account/username ==> 400 : UsernameAlreadyExists
         String path = ApiConfig.Account.UPDATE_USERNAME + "?username=" + existingUser.getUsername();
 
-        ResponseEntity<ErrorResponse> response = restTemplate.exchange(path, PUT, null, ErrorResponse.class);
+        ResponseEntity<ErrorDTO> response = restTemplate.exchange(path, PUT, null, ErrorDTO.class);
 
         // assert response
         assertEquals(BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
 
         // assert error
-        ErrorResponse error = response.getBody();
+        ErrorDTO error = response.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
         assertEquals(ErrorMessageConfig.USERNAME_ARLEADY_EXISTS, error.message());
@@ -88,19 +88,19 @@ class AccountControllerIT extends IntegrationTest {
     void AccountController_UpdatePassword_Return204() {
         // api: PUT /api/v1/account/password ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_PASSWORD;
-        UpdatePasswordRequest update = new UpdatePasswordRequest(existingUser.getPassword(), "new-pw1", "new-pw1");
+        UpdatePasswordDTO update = new UpdatePasswordDTO(existingUser.getPassword(), "new-pw1", "new-pw1");
 
         // PUT 1
-        HttpEntity<UpdatePasswordRequest> request = TestUtils.createJsonRequestEntity(update);
+        HttpEntity<UpdatePasswordDTO> request = TestUtils.createJsonRequestEntity(update);
         ResponseEntity<Void> response1 = restTemplate.exchange(path, PUT, request, Void.class);
         assertEquals(NO_CONTENT, response1.getStatusCode());
 
         // PUT 2 (assert db)
-        ResponseEntity<ErrorResponse> response2 = restTemplate.exchange(path, PUT, request, ErrorResponse.class);
+        ResponseEntity<ErrorDTO> response2 = restTemplate.exchange(path, PUT, request, ErrorDTO.class);
         assertEquals(BAD_REQUEST, response2.getStatusCode());
         assertNotNull(response2.getBody());
 
-        ErrorResponse error = response2.getBody();
+        ErrorDTO error = response2.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
         assertEquals(ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD, error.message());
@@ -110,17 +110,17 @@ class AccountControllerIT extends IntegrationTest {
     void AccountController_UpdatePassword_Return400IncorrectCurrentPassword() {
         // api: PUT /api/v1/account/password ==> 400 : IncorrectCurrentPassword
         String path = ApiConfig.Account.UPDATE_PASSWORD;
-        UpdatePasswordRequest update = new UpdatePasswordRequest("wrong-password", "new-pw1", "new-pw1");
+        UpdatePasswordDTO update = new UpdatePasswordDTO("wrong-password", "new-pw1", "new-pw1");
 
-        HttpEntity<UpdatePasswordRequest> request = TestUtils.createJsonRequestEntity(update);
-        ResponseEntity<ErrorResponse> response = restTemplate.exchange(path, PUT, request, ErrorResponse.class);
+        HttpEntity<UpdatePasswordDTO> request = TestUtils.createJsonRequestEntity(update);
+        ResponseEntity<ErrorDTO> response = restTemplate.exchange(path, PUT, request, ErrorDTO.class);
 
         // assert response
         assertEquals(BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
 
         // assert error
-        ErrorResponse error = response.getBody();
+        ErrorDTO error = response.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
         assertEquals(ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD, error.message());

@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Size;
  *                 characters.
  */
 // @formatter:off
-public record UpdateProfileInfoRequest(
+public record UpdateProfileDTO(
 
     @Size(max = 50, message = "Name must not exceed 50 characters.")
     String name,

@@ -1,10 +1,10 @@
 package com.example.echo_api.exception.custom.password;
 
 import com.example.echo_api.config.ErrorMessageConfig;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 
 /**
- * Thrown if an {@link UpdatePasswordRequest} is rejected because the supplied
+ * Thrown if an {@link UpdatePasswordDTO} is rejected because the supplied
  * current password does not match the hashed password from db.
  */
 public class IncorrectCurrentPasswordException extends PasswordException {
