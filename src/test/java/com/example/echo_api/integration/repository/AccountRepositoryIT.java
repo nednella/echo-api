@@ -41,11 +41,11 @@ class AccountRepositoryIT extends RepositoryTest {
      */
     @Test
     void accountRepository_FindByUsername_ReturnUser() {
-        Optional<Account> foundUser = accountRepository.findByUsername(testAccount.getUsername());
+        Optional<Account> account = accountRepository.findByUsername(testAccount.getUsername());
 
-        assertNotNull(foundUser);
-        assertTrue(foundUser.isPresent());
-        assertEquals(testAccount, foundUser.get());
+        assertNotNull(account);
+        assertTrue(account.isPresent());
+        assertEquals(testAccount, account.get());
     }
 
     /**
@@ -54,10 +54,10 @@ class AccountRepositoryIT extends RepositoryTest {
      */
     @Test
     void accountRepository_FindByUsername_ReturnEmpty() {
-        Optional<Account> foundUser = accountRepository.findByUsername("nonExistentUser");
+        Optional<Account> account = accountRepository.findByUsername("nonExistentUser");
 
-        assertNotNull(foundUser);
-        assertTrue(foundUser.isEmpty());
+        assertNotNull(account);
+        assertTrue(account.isEmpty());
     }
 
     /**

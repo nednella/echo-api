@@ -39,7 +39,7 @@ public interface AccountService {
     public boolean isUsernameAvailable(String username);
 
     /**
-     * Updates the authenticated user's username.
+     * Updates the authenticated account username.
      * 
      * @param username The new username for the authenticated user.
      * @throws UsernameAlreadyExistsException If the username is already taken.
@@ -47,13 +47,13 @@ public interface AccountService {
     public void updateUsername(String username) throws UsernameAlreadyExistsException;
 
     /**
-     * Update the authenticated user's password.
+     * Update the authenticated account password.
      * 
-     * @param currentPassword The current password of the authenticated user.
-     * @param newPassword     The new password for the authenticated user.
+     * @param currentPassword The current password of the authenticated accopunt.
+     * @param newPassword     The new password for the authenticated account.
      * @throws IncorrectCurrentPasswordException If the supplied
      *                                           {@code currentPassword} does not
-     *                                           match the authenticated user's
+     *                                           match the authenticated account's
      *                                           existing password.
      */
     public void updatePassword(String currentPassword, String newPassword) throws IncorrectCurrentPasswordException;

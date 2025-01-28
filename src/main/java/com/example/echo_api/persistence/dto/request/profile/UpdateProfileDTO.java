@@ -3,13 +3,13 @@ package com.example.echo_api.persistence.dto.request.profile;
 import jakarta.validation.constraints.Size;
 
 /**
- * Represents a request to update the authenticated user's profile information.
+ * Represents a request to update the authenticated account profile information.
  * 
- * @param name     The name for the user's profile. Must not exceed 50
+ * @param name     The name for the account profile. Must not exceed 50
  *                 characters.
- * @param bio      The bio for the user's profile. Must not exceed 160
+ * @param bio      The bio for the account profile. Must not exceed 160
  *                 characters.
- * @param location The location for the user's profile. Must not exceed 30
+ * @param location The location for the account profile. Must not exceed 30
  *                 characters.
  */
 // @formatter:off
