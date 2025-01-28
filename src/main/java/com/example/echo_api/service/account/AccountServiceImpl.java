@@ -6,8 +6,12 @@ import org.springframework.stereotype.Service;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.model.account.Role;
+import com.example.echo_api.persistence.model.profile.Metrics;
+import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.repository.AccountRepository;
+import com.example.echo_api.persistence.repository.MetricsRepository;
+import com.example.echo_api.persistence.repository.ProfileRepository;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.session.SessionService;
 
@@ -25,10 +29,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private final ProfileService profileService;
     private final SessionService sessionService;
 
     private final AccountRepository accountRepository;
+    private final ProfileRepository profileRepository;
+    private final MetricsRepository metricsRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -45,7 +50,12 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = new Account(username, passwordEncoder.encode(password), role);
         accountRepository.save(account);
-        profileService.registerForAccount(account);
+
+        Profile profile = new Profile(account);
+        profileRepository.save(profile);
+
+        Metrics metrics = new Metrics(profile);
+        metricsRepository.save(metrics);
 
         return account;
     }

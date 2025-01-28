@@ -1,7 +1,6 @@
 package com.example.echo_api.unit.service;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -37,27 +36,6 @@ class ProfileServiceTest {
 
     @InjectMocks
     private ProfileServiceImpl profileService;
-
-    /**
-     * Test ensures that the {@link ProfileServiceImpl#registerForUser(Account)}
-     * method correctly creates a new profile for the supplied account.
-     */
-    @Test
-    void ProfileService_RegisterForUser_ReturnProfile() {
-        // arrange
-        Account account = new Account("test", "test");
-        Profile expected = new Profile(account);
-
-        when(profileRepository.save(any(Profile.class))).thenReturn(expected);
-
-        // act
-        Profile actual = profileService.registerForAccount(account);
-
-        // assert
-        assertNotNull(actual);
-        assertEquals(expected, actual);
-        verify(profileRepository, times(1)).save(any(Profile.class));
-    }
 
     /**
      * Test ensures that the {@link ProfileServiceImpl#getByUsername(String)} method

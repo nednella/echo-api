@@ -29,12 +29,6 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
 
     @Override
-    public Profile registerForAccount(Account account) {
-        Profile profile = new Profile(account);
-        return profileRepository.save(profile);
-    }
-
-    @Override
     public ProfileDTO getByUsername(String username) throws UsernameException {
         Profile profile = findByUsername(username);
         return ProfileMapper.toResponse(profile);
