@@ -15,7 +15,7 @@ import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.integration.util.IntegrationTest;
 import com.example.echo_api.integration.util.TestUtils;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 
 /**
@@ -82,15 +82,15 @@ class ProfileControllerIT extends IntegrationTest {
         // api: GET /api/v1/profile/{username} ==> 400 : UsernameNotFound
         String path = ApiConfig.Profile.GET_BY_USERNAME;
 
-        ResponseEntity<ErrorResponse> response = restTemplate.getForEntity(
-            path, ErrorResponse.class, "non-existent-user");
+        ResponseEntity<ErrorDTO> response = restTemplate.getForEntity(
+            path, ErrorDTO.class, "non-existent-user");
 
         // assert response
         assertEquals(BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
 
         // assert error
-        ErrorResponse error = response.getBody();
+        ErrorDTO error = response.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
         assertEquals(ErrorMessageConfig.USERNAME_NOT_FOUND, error.message());

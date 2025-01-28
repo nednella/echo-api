@@ -23,7 +23,7 @@ import com.example.echo_api.controller.account.AccountController;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -111,13 +111,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.INVALID_USERNAME,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -152,13 +152,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_ARLEADY_EXISTS,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -207,13 +207,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.INVALID_PASSWORD,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -241,13 +241,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.CONFIRMATION_PASSWORD_MISMATCH,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -274,13 +274,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             ValidationMessageConfig.NEW_PASSWORD_NOT_UNIQUE,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }
@@ -311,13 +311,13 @@ class AccountControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INCORRECT_CURRENT_PASSWORD,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
     }

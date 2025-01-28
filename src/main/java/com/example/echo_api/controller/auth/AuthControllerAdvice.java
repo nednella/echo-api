@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.exception.AbstractControllerAdvice;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthControllerAdvice extends AbstractControllerAdvice {
 
     @ExceptionHandler({ UsernameNotFoundException.class, BadCredentialsException.class })
-    ResponseEntity<ErrorResponse> handleAuthenticationException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorDTO> handleAuthenticationException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -31,7 +31,7 @@ public class AuthControllerAdvice extends AbstractControllerAdvice {
     }
 
     @ExceptionHandler({ AccountStatusException.class })
-    ResponseEntity<ErrorResponse> handleAccountStatusException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorDTO> handleAccountStatusException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(

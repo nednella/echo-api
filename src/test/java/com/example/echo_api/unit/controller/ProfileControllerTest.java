@@ -20,7 +20,7 @@ import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.profile.ProfileController;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.profile.Profile;
@@ -83,13 +83,13 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_NOT_FOUND,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
         verify(profileService, times(1)).getMe();
@@ -143,13 +143,13 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             "Name must not exceed 50 characters.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
         verify(profileService, never()).updateMeProfile(request);
@@ -179,13 +179,13 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             "Bio must not exceed 160 characters.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
         verify(profileService, never()).updateMeProfile(request);
@@ -215,13 +215,13 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.INVALID_REQUEST,
             "Location must not exceed 30 characters.",
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
         verify(profileService, never()).updateMeProfile(request);
@@ -266,13 +266,13 @@ class ProfileControllerTest {
             .getResponse()
             .getContentAsString();
 
-        ErrorResponse expected = new ErrorResponse(
+        ErrorDTO expected = new ErrorDTO(
             HttpStatus.BAD_REQUEST,
             ErrorMessageConfig.USERNAME_NOT_FOUND,
             null,
             path);
 
-        ErrorResponse actual = objectMapper.readValue(response, ErrorResponse.class);
+        ErrorDTO actual = objectMapper.readValue(response, ErrorDTO.class);
 
         assertEquals(expected, actual);
         verify(profileService, times(1)).getByUsername("non-existent-user");

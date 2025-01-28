@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 // @formatter:off
 @JsonInclude(Include.NON_NULL)
-public record ErrorResponse(
+public record ErrorDTO(
     String timestamp,
     int status,
     String message,
@@ -27,7 +27,7 @@ public record ErrorResponse(
     String path
 ) {
 
-    public ErrorResponse(
+    public ErrorDTO(
         HttpStatus status,
         String message,
         String details,
@@ -43,7 +43,7 @@ public record ErrorResponse(
     }
 
     /**
-     * Compares two {@link ErrorResponse} objects by status code, message and
+     * Compares two {@link ErrorDTO} objects by status code, message and
      * details. The timestamp field is ignored.
      */
     @Override
@@ -55,7 +55,7 @@ public record ErrorResponse(
         if (this.getClass() != o.getClass())
             return false;
 
-        ErrorResponse that = (ErrorResponse) o;
+        ErrorDTO that = (ErrorDTO) o;
 
         return (this.status == that.status &&
             Objects.equals(this.message, that.message) &&

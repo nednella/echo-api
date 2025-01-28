@@ -12,7 +12,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameException;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -46,7 +46,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
      * {@code details}.
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    ResponseEntity<ErrorResponse> handleConstraintViolationException(HttpServletRequest request,
+    ResponseEntity<ErrorDTO> handleConstraintViolationException(HttpServletRequest request,
         ConstraintViolationException ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
@@ -72,7 +72,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
      * {@code details}.
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(HttpServletRequest request,
+    ResponseEntity<ErrorDTO> handleMethodArgumentNotValidException(HttpServletRequest request,
         MethodArgumentNotValidException ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
@@ -88,7 +88,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /* Username/Password Exception */
     @ExceptionHandler({ UsernameException.class, PasswordException.class })
-    ResponseEntity<ErrorResponse> handleUsernamePasswordException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorDTO> handleUsernamePasswordException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -100,7 +100,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /* 401 */
     @ExceptionHandler({ InsufficientAuthenticationException.class })
-    ResponseEntity<ErrorResponse> handleInsufficientAuthenticationException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorDTO> handleInsufficientAuthenticationException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -112,7 +112,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /* 403 */
     @ExceptionHandler({ AccessDeniedException.class })
-    ResponseEntity<ErrorResponse> handleAccessDeniedException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorDTO> handleAccessDeniedException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -124,7 +124,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /* 404 */
     @ExceptionHandler({ NoResourceFoundException.class })
-    ResponseEntity<ErrorResponse> handleNotFoundException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorDTO> handleNotFoundException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(
@@ -136,7 +136,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
 
     /* 500 */
     @ExceptionHandler({ Exception.class })
-    ResponseEntity<ErrorResponse> handleGenericException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<ErrorDTO> handleGenericException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(request,

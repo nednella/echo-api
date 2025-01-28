@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public abstract class AbstractControllerAdvice {
 
     /**
-     * Creates and returns a custom {@link ErrorResponse}, providing uniform JSON
+     * Creates and returns a custom {@link ErrorDTO}, providing uniform JSON
      * responses across the application.
      * 
      * <p>
@@ -46,15 +46,15 @@ public abstract class AbstractControllerAdvice {
      * @return A {@link ResponseEntity} containing an {@link ErrorWrapper} with the
      *         generated error details.
      * 
-     * @see ErrorResponse
+     * @see ErrorDTO
      */
-    protected ResponseEntity<ErrorResponse> createExceptionHandler(
+    protected ResponseEntity<ErrorDTO> createExceptionHandler(
         @NonNull HttpServletRequest request,
         @NonNull HttpStatus status,
         @NonNull String message,
         @Nullable String details) {
 
-        ErrorResponse error = new ErrorResponse(
+        ErrorDTO error = new ErrorDTO(
             status,
             message,
             details,

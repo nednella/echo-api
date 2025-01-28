@@ -17,7 +17,7 @@ import com.example.echo_api.integration.util.IntegrationTest;
 import com.example.echo_api.integration.util.TestUtils;
 import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
 import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
-import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
+import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 
 /**
  * Integration test class for {@link AuthController}.
@@ -78,14 +78,14 @@ class AuthControllerIT extends IntegrationTest {
         SignupDTO signup = new SignupDTO(existingUser.getUsername(), existingUser.getPassword());
 
         HttpEntity<SignupDTO> request = TestUtils.createJsonRequestEntity(signup);
-        ResponseEntity<ErrorResponse> response = restTemplate.postForEntity(endpoint, request, ErrorResponse.class);
+        ResponseEntity<ErrorDTO> response = restTemplate.postForEntity(endpoint, request, ErrorDTO.class);
 
         // assert response
         assertEquals(BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
 
         // assert error
-        ErrorResponse error = response.getBody();
+        ErrorDTO error = response.getBody();
         assertNotNull(error);
         assertEquals(BAD_REQUEST.value(), error.status());
         assertEquals(ErrorMessageConfig.USERNAME_ARLEADY_EXISTS, error.message());
