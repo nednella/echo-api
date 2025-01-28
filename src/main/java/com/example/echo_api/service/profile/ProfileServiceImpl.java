@@ -7,8 +7,8 @@ import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Profile;
-import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.ProfileRepository;
 import com.example.echo_api.service.session.SessionService;
 
@@ -29,8 +29,8 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
 
     @Override
-    public Profile registerForUser(User user) {
-        Profile profile = new Profile(user);
+    public Profile registerForAccount(Account account) {
+        Profile profile = new Profile(account);
         return profileRepository.save(profile);
     }
 
@@ -73,7 +73,7 @@ public class ProfileServiceImpl implements ProfileService {
      * @return The found {@link Profile}.
      */
     private Profile findMe() {
-        User me = sessionService.getAuthenticatedUser();
+        Account me = sessionService.getAuthenticatedUser();
         return findByUsername(me.getUsername());
     }
 

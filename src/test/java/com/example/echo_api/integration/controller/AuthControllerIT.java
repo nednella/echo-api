@@ -40,8 +40,8 @@ class AuthControllerIT extends IntegrationTest {
         // api: POST /api/v1/auth/login ==> 204 : No Content
         String endpoint = ApiConfig.Auth.LOGIN;
 
-        // POST a login for the pre-existing testUser
-        LoginDTO login = new LoginDTO(existingUser.getUsername(), existingUser.getPassword());
+        // POST a login for the pre-existing test account
+        LoginDTO login = new LoginDTO(existingAccount.getUsername(), existingAccount.getPassword());
 
         HttpEntity<LoginDTO> request = TestUtils.createJsonRequestEntity(login);
         ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, request, Void.class);
@@ -57,8 +57,8 @@ class AuthControllerIT extends IntegrationTest {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String endpoint = ApiConfig.Auth.SIGNUP;
 
-        // POST a signup for a new user
-        SignupDTO signup = new SignupDTO("new_user", "password1");
+        // POST a signup for a new account
+        SignupDTO signup = new SignupDTO("new_account", "password1");
 
         HttpEntity<SignupDTO> request = TestUtils.createJsonRequestEntity(signup);
         ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, request, Void.class);
@@ -74,8 +74,8 @@ class AuthControllerIT extends IntegrationTest {
         // api: POST /api/v1/auth/signup ==> 400 : Username Already Exists
         String endpoint = ApiConfig.Auth.SIGNUP;
 
-        // POST a signup for the pre-existing testUser
-        SignupDTO signup = new SignupDTO(existingUser.getUsername(), existingUser.getPassword());
+        // POST a signup for the pre-existing test account
+        SignupDTO signup = new SignupDTO(existingAccount.getUsername(), existingAccount.getPassword());
 
         HttpEntity<SignupDTO> request = TestUtils.createJsonRequestEntity(signup);
         ResponseEntity<ErrorDTO> response = restTemplate.postForEntity(endpoint, request, ErrorDTO.class);

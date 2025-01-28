@@ -19,7 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.Account;
 import com.redis.testcontainers.RedisContainer;
 
 @ActiveProfiles(value = "test")
@@ -42,15 +42,15 @@ public abstract class IntegrationTest {
     @Autowired
     protected SessionCookieInterceptor sessionCookieInterceptor;
 
-    protected User existingUser;
+    protected Account existingAccount;
 
     /**
      * Initialise the integration test environment:
      * <ul>
      * <li>Configure {@link TestRestTemplate} with
      * {@link SessionCookieInterceptor}.</li>
-     * <li>Configure a {@code testUser} for integration testing.</li>
-     * <li>Obtaining an authenticated session for {@code testUser}.</li>
+     * <li>Configure a test {@link Account} for integration testing.</li>
+     * <li>Obtaining an authenticated session for the test {@link Account}.</li>
      * </ul>
      */
     @BeforeAll
@@ -61,11 +61,11 @@ public abstract class IntegrationTest {
             .getInterceptors()
             .add(sessionCookieInterceptor);
 
-        // Configure test user
-        existingUser = new User("test", "password1");
+        // Configure test account
+        existingAccount = new Account("test", "password1");
 
-        // Register and authenticate test user
-        obtainAuthenticatedSession(existingUser);
+        // Register and authenticate test account
+        obtainAuthenticatedSession(existingAccount);
     }
 
     /**
@@ -89,17 +89,17 @@ public abstract class IntegrationTest {
     }
 
     /**
-     * Registers and authenticates the supplied {@link User} by sending a POST
-     * request to the signup endpoint. The user is inserted into the database and an
-     * authenticated session is retrieved from the server, and stored in
+     * Registers and authenticates the supplied {@link Account} by sending a POST
+     * request to the signup endpoint. The account is inserted into the database and
+     * an authenticated session is retrieved from the server, and stored in
      * {@link SessionCookieInterceptor}.
      * 
-     * @param user the user to be authenticated
+     * @param account The account to be authenticated.
      */
-    private void obtainAuthenticatedSession(User user) {
+    private void obtainAuthenticatedSession(Account account) {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String path = ApiConfig.Auth.SIGNUP;
-        SignupDTO signup = new SignupDTO(user.getUsername(), user.getPassword());
+        SignupDTO signup = new SignupDTO(account.getUsername(), account.getPassword());
 
         HttpEntity<SignupDTO> request = TestUtils.createJsonRequestEntity(signup);
         ResponseEntity<Void> response = restTemplate.postForEntity(path, request, Void.class);

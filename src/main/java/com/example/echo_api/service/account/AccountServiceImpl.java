@@ -5,20 +5,20 @@ import org.springframework.stereotype.Service;
 
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.model.user.Role;
-import com.example.echo_api.persistence.model.user.User;
-import com.example.echo_api.persistence.repository.UserRepository;
+import com.example.echo_api.persistence.model.account.Role;
+import com.example.echo_api.persistence.model.account.Account;
+import com.example.echo_api.persistence.repository.AccountRepository;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.session.SessionService;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * Service implementation for managing CRUD operations of a {@link User}.
+ * Service implementation for managing CRUD operations of a {@link Account}.
  * 
  * @see ProfileService
  * @see SessionService
- * @see UserRepository
+ * @see AccountRepository
  * @see PasswordEncoder
  */
 @Service
@@ -28,26 +28,26 @@ public class AccountServiceImpl implements AccountService {
     private final ProfileService profileService;
     private final SessionService sessionService;
 
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User register(String username, String password) throws UsernameAlreadyExistsException {
+    public Account register(String username, String password) throws UsernameAlreadyExistsException {
         return registerWithRole(username, password, Role.USER);
     }
 
     @Override
-    public User registerWithRole(String username, String password, Role role) throws UsernameAlreadyExistsException {
+    public Account registerWithRole(String username, String password, Role role) throws UsernameAlreadyExistsException {
         if (existsByUsername(username)) {
             throw new UsernameAlreadyExistsException();
         }
 
-        User newUser = new User(username, passwordEncoder.encode(password), role);
-        userRepository.save(newUser);
-        profileService.registerForUser(newUser);
+        Account account = new Account(username, passwordEncoder.encode(password), role);
+        accountRepository.save(account);
+        profileService.registerForAccount(account);
 
-        return newUser;
+        return account;
     }
 
     @Override
@@ -61,16 +61,16 @@ public class AccountServiceImpl implements AccountService {
             throw new UsernameAlreadyExistsException();
         }
 
-        User me = getMe();
+        Account me = getMe();
         me.setUsername(username);
 
-        userRepository.save(me);
+        accountRepository.save(me);
         sessionService.reauthenticate(me);
     }
 
     @Override
     public void updatePassword(String currentPassword, String newPassword) throws IncorrectCurrentPasswordException {
-        User me = getMe();
+        Account me = getMe();
 
         if (!passwordEncoder.matches(currentPassword, me.getPassword())) {
             throw new IncorrectCurrentPasswordException();
@@ -78,28 +78,28 @@ public class AccountServiceImpl implements AccountService {
 
         me.setPassword(passwordEncoder.encode(newPassword));
 
-        userRepository.save(me);
+        accountRepository.save(me);
         sessionService.reauthenticate(me);
     }
 
     /**
-     * Internal method for checking whether a {@link User} exists with the supplied
-     * {@code username}.
+     * Internal method for checking whether a {@link Account} exists with the
+     * supplied {@code username}.
      * 
      * @param username The username to check against.
      * @return A boolean indicating a user's existence.
      */
     private boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+        return accountRepository.existsByUsername(username);
     }
 
     /**
-     * Internal method for obtaining a {@link User} associated to the authenticated
-     * user.
+     * Internal method for obtaining a {@link Account} associated to the
+     * authenticated user.
      * 
-     * @return The found {@link User}.
+     * @return The found {@link Account}.
      */
-    private User getMe() {
+    private Account getMe() {
         return sessionService.getAuthenticatedUser();
     }
 

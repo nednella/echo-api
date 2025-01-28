@@ -12,10 +12,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.example.echo_api.integration.util.RepositoryTest;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Profile;
-import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.ProfileRepository;
-import com.example.echo_api.persistence.repository.UserRepository;
+import com.example.echo_api.persistence.repository.AccountRepository;
 
 /**
  * Integration test class for {@link ProfileRepository}.
@@ -26,7 +26,7 @@ import com.example.echo_api.persistence.repository.UserRepository;
 class ProfileRepositoryIT extends RepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
     private ProfileRepository profileRepository;
@@ -37,15 +37,15 @@ class ProfileRepositoryIT extends RepositoryTest {
      * Save a {@link Profile} object to {@link ProfileRepository}.
      * 
      * <p>
-     * Requires a {@link User} object saved to {@link UserRepository} to set the
-     * {@code user_id} field.
+     * Requires a {@link Account} object saved to {@link AccountRepository} to set
+     * the {@code account_id} field.
      */
     @BeforeAll
     void setup() {
-        User user = new User("test", "test");
-        userRepository.save(user);
+        testAccount = new Account("test", "test");
+        accountRepository.save(testAccount);
 
-        profile = new Profile(user);
+        profile = new Profile(testAccount);
         profileRepository.save(profile);
     }
 

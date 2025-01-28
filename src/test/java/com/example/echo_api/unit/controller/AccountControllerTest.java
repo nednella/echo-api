@@ -24,7 +24,7 @@ import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordEx
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.service.account.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -44,14 +44,14 @@ class AccountControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private User testUser;
+    private Account testAccount;
 
     /**
-     * Sets up a {@link User} object before each test.
+     * Sets up a {@link Account} object before each test.
      */
     @BeforeEach
     public void setUp() {
-        testUser = new User(
+        testAccount = new Account(
             "testUsername",
             "testPassword");
     }
@@ -61,12 +61,12 @@ class AccountControllerTest {
         // api: GET /api/v1/account/username-available?username={...} ==> 200 : True
         String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
-        when(accountService.isUsernameAvailable(testUser.getUsername()))
+        when(accountService.isUsernameAvailable(testAccount.getUsername()))
             .thenReturn(true);
 
         String response = mockMvc
             .perform(get(path)
-                .param("username", testUser.getUsername()))
+                .param("username", testAccount.getUsername()))
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
@@ -81,12 +81,12 @@ class AccountControllerTest {
         // api: GET /api/v1/account/username-available?username={...} ==> 200 : False
         String path = ApiConfig.Account.USERNAME_AVAILABLE;
 
-        when(accountService.isUsernameAvailable(testUser.getUsername()))
+        when(accountService.isUsernameAvailable(testAccount.getUsername()))
             .thenReturn(false);
 
         String response = mockMvc
             .perform(get(path)
-                .param("username", testUser.getUsername()))
+                .param("username", testAccount.getUsername()))
             .andDo(print())
             .andExpect(status().isOk())
             .andReturn()
@@ -101,11 +101,11 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/username ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_USERNAME;
 
-        doNothing().when(accountService).updateUsername(testUser.getUsername());
+        doNothing().when(accountService).updateUsername(testAccount.getUsername());
 
         mockMvc
             .perform(put(path)
-                .param("username", testUser.getUsername()))
+                .param("username", testAccount.getUsername()))
             .andDo(print())
             .andExpect(status().isNoContent());
     }
@@ -115,11 +115,11 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/username ==> 400 : UsernameAlreadyExists
         String path = ApiConfig.Account.UPDATE_USERNAME;
 
-        doThrow(new UsernameAlreadyExistsException()).when(accountService).updateUsername(testUser.getUsername());
+        doThrow(new UsernameAlreadyExistsException()).when(accountService).updateUsername(testAccount.getUsername());
 
         String response = mockMvc
             .perform(put(path)
-                .param("username", testUser.getUsername()))
+                .param("username", testAccount.getUsername()))
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andReturn()

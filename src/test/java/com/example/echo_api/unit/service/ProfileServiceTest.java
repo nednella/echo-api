@@ -16,8 +16,8 @@ import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Profile;
-import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.ProfileRepository;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.profile.ProfileServiceImpl;
@@ -39,19 +39,19 @@ class ProfileServiceTest {
     private ProfileServiceImpl profileService;
 
     /**
-     * Test ensures that the {@link ProfileServiceImpl#registerForUser(User)} method
-     * correctly creates a new profile for the supplied user.
+     * Test ensures that the {@link ProfileServiceImpl#registerForUser(Account)}
+     * method correctly creates a new profile for the supplied account.
      */
     @Test
     void ProfileService_RegisterForUser_ReturnProfile() {
         // arrange
-        User user = new User("test", "test");
-        Profile expected = new Profile(user);
+        Account account = new Account("test", "test");
+        Profile expected = new Profile(account);
 
         when(profileRepository.save(any(Profile.class))).thenReturn(expected);
 
         // act
-        Profile actual = profileService.registerForUser(user);
+        Profile actual = profileService.registerForAccount(account);
 
         // assert
         assertNotNull(actual);
@@ -66,8 +66,8 @@ class ProfileServiceTest {
     @Test
     void ProfileService_GetByUsername_ReturnProfileResponse() {
         // arrange
-        User user = new User("test", "test");
-        Profile profile = new Profile(user);
+        Account account = new Account("test", "test");
+        Profile profile = new Profile(account);
         ProfileDTO expected = ProfileMapper.toResponse(profile);
 
         when(profileRepository.findByUsername(profile.getUsername())).thenReturn(Optional.of(profile));
@@ -99,17 +99,17 @@ class ProfileServiceTest {
 
     /**
      * Test ensures that the {@link ProfileServiceImpl#getMe()} method correctly
-     * returns the authenticated user's profile.
+     * returns the authenticated account's profile.
      */
     @Test
     void ProfileService_GetMe_ReturnProfileResponse() {
         // arrange
-        User user = new User("test", "test");
-        Profile profile = new Profile(user);
+        Account account = new Account("test", "test");
+        Profile profile = new Profile(account);
         ProfileDTO expected = ProfileMapper.toResponse(profile);
 
-        when(sessionService.getAuthenticatedUser()).thenReturn(user);
-        when(profileRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(profile));
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
+        when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
 
         // act
         ProfileDTO actual = profileService.getMe();
@@ -118,45 +118,45 @@ class ProfileServiceTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
         verify(sessionService, times(1)).getAuthenticatedUser();
-        verify(profileRepository, times(1)).findByUsername(user.getUsername());
+        verify(profileRepository, times(1)).findByUsername(account.getUsername());
     }
 
     /**
      * Test ensures that the {@link ProfileServiceImpl#getMe()} method correctly
      * throws a {@link UsernameNotFoundException} when no such profile with the
-     * authenticated user's username exists.
+     * authenticated account's username exists.
      */
     @Test
     void ProfileService_GetMe_ThrowUsernameNotFound() {
         // arrange
-        User user = new User("test", "test");
+        Account account = new Account("test", "test");
 
-        when(sessionService.getAuthenticatedUser()).thenReturn(user);
-        when(profileRepository.findByUsername(user.getUsername())).thenThrow(new UsernameNotFoundException());
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
+        when(profileRepository.findByUsername(account.getUsername())).thenThrow(new UsernameNotFoundException());
 
         // act & assert
         assertThrows(UsernameNotFoundException.class, () -> profileService.getMe());
         verify(sessionService, times(1)).getAuthenticatedUser();
-        verify(profileRepository, times(1)).findByUsername(user.getUsername());
+        verify(profileRepository, times(1)).findByUsername(account.getUsername());
     }
 
     /**
      * Test ensures that the
      * {@link ProfileServiceImpl#updateMeProfileInfo(UpdateProfileDTO)} method
-     * correctly updates the authenticated user's profile information.
+     * correctly updates the authenticated account's profile information.
      */
     @Test
     void ProfileService_UpdateMeProfileInfo_ReturnVoid() {
         // arrange
-        User user = new User("test", "test");
-        Profile profile = new Profile(user);
+        Account account = new Account("test", "test");
+        Profile profile = new Profile(account);
         UpdateProfileDTO request = new UpdateProfileDTO(
             "John Doe",
             "Bio",
             "Location");
 
-        when(sessionService.getAuthenticatedUser()).thenReturn(user);
-        when(profileRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(profile));
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
+        when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
 
         // act
         profileService.updateMeProfile(request);
@@ -166,32 +166,32 @@ class ProfileServiceTest {
         assertEquals(request.bio(), profile.getBio());
         assertEquals(request.location(), profile.getLocation());
         verify(sessionService, times(1)).getAuthenticatedUser();
-        verify(profileRepository, times(1)).findByUsername(user.getUsername());
+        verify(profileRepository, times(1)).findByUsername(account.getUsername());
     }
 
     /**
      * Test ensures that the
      * {@link ProfileServiceImpl#updateMeProfileInfo(UpdateProfileDTO)} method
      * correctly throws a {@link UsernameNotFoundException} when no such profile
-     * with the authenticated user's username exists.
+     * with the authenticated account's username exists.
      */
     @Test
     void ProfileService_UpdateMeProfileInfo_ThrowUsernameNotFound() {
         // arrange
-        User user = new User("test", "test");
+        Account account = new Account("test", "test");
 
         UpdateProfileDTO request = new UpdateProfileDTO(
             "name",
             "bio",
             "location");
 
-        when(sessionService.getAuthenticatedUser()).thenReturn(user);
-        when(profileRepository.findByUsername(user.getUsername())).thenThrow(new UsernameNotFoundException());
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
+        when(profileRepository.findByUsername(account.getUsername())).thenThrow(new UsernameNotFoundException());
 
         // act & assert
         assertThrows(UsernameNotFoundException.class, () -> profileService.updateMeProfile(request));
         verify(sessionService, times(1)).getAuthenticatedUser();
-        verify(profileRepository, times(1)).findByUsername(user.getUsername());
+        verify(profileRepository, times(1)).findByUsername(account.getUsername());
     }
 
 }

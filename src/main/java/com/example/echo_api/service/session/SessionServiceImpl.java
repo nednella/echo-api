@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.example.echo_api.persistence.model.user.SecurityUser;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.SecurityAccount;
+import com.example.echo_api.persistence.model.account.Account;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Service implementation for managing the session and authentication state of a
- * {@link User}.
+ * {@link Account}.
  * 
  * @see AuthenticationManager
  * @see SecurityContextRepository
@@ -38,13 +38,13 @@ public class SessionServiceImpl implements SessionService {
         .getContextHolderStrategy();
 
     @Override
-    public User getAuthenticatedUser() {
+    public Account getAuthenticatedUser() {
         Authentication authentication = securityContextHolderStrategy.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
 
-        return ((SecurityUser) authentication.getPrincipal()).getUser();
+        return ((SecurityAccount) authentication.getPrincipal()).getAccount();
     }
 
     @Override
@@ -58,8 +58,8 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void reauthenticate(User user) {
-        SecurityUser auth = new SecurityUser(user);
+    public void reauthenticate(Account user) {
+        SecurityAccount auth = new SecurityAccount(user);
 
         UsernamePasswordAuthenticationToken authenticatedToken = UsernamePasswordAuthenticationToken
             .authenticated(auth, null, auth.getAuthorities());

@@ -2,32 +2,32 @@ package com.example.echo_api.service.account;
 
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.model.user.Role;
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.Role;
+import com.example.echo_api.persistence.model.account.Account;
 
 public interface AccountService {
 
     /**
-     * Creates a new {@link User} within the application, using the standard
+     * Creates a new {@link Account} within the application, using the standard
      * {@link Role}, {@code Role.USER}.
      * 
-     * @param username The username of the user to register.
-     * @param password The password of the user to register.
-     * @return The newly registered {@link User}.
+     * @param username The username of the account to register.
+     * @param password The password of the account to register.
+     * @return The newly registered {@link Account}.
      * @throws UsernameAlreadyExistsException If the username is already taken.
      */
-    public User register(String username, String password) throws UsernameAlreadyExistsException;
+    public Account register(String username, String password) throws UsernameAlreadyExistsException;
 
     /**
-     * Creates a new {@link User} within the application, using the supplied
+     * Creates a new {@link Account} within the application, using the supplied
      * {@link Role}.
      * 
-     * @param username The username of the user to register.
-     * @param password The password of the user to register.
-     * @return The newly registered {@link User}.
+     * @param username The username of the account to register.
+     * @param password The password of the account to register.
+     * @return The newly registered {@link Account}.
      * @throws UsernameAlreadyExistsException If the username is already taken.
      */
-    public User registerWithRole(String username, String password, Role role) throws UsernameAlreadyExistsException;
+    public Account registerWithRole(String username, String password, Role role) throws UsernameAlreadyExistsException;
 
     /**
      * Returns a boolean indicating whether the supplied {@code username} is
@@ -39,7 +39,7 @@ public interface AccountService {
     public boolean isUsernameAvailable(String username);
 
     /**
-     * Updates the authenticated user's username.
+     * Updates the authenticated account username.
      * 
      * @param username The new username for the authenticated user.
      * @throws UsernameAlreadyExistsException If the username is already taken.
@@ -47,13 +47,13 @@ public interface AccountService {
     public void updateUsername(String username) throws UsernameAlreadyExistsException;
 
     /**
-     * Update the authenticated user's password.
+     * Update the authenticated account password.
      * 
-     * @param currentPassword The current password of the authenticated user.
-     * @param newPassword     The new password for the authenticated user.
+     * @param currentPassword The current password of the authenticated accopunt.
+     * @param newPassword     The new password for the authenticated account.
      * @throws IncorrectCurrentPasswordException If the supplied
      *                                           {@code currentPassword} does not
-     *                                           match the authenticated user's
+     *                                           match the authenticated account's
      *                                           existing password.
      */
     public void updatePassword(String currentPassword, String newPassword) throws IncorrectCurrentPasswordException;

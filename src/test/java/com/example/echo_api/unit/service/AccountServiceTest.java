@@ -15,9 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Profile;
-import com.example.echo_api.persistence.model.user.User;
-import com.example.echo_api.persistence.repository.UserRepository;
+import com.example.echo_api.persistence.repository.AccountRepository;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.account.AccountServiceImpl;
 import com.example.echo_api.service.profile.ProfileService;
@@ -36,7 +36,7 @@ class AccountServiceTest {
     private SessionService sessionService;
 
     @Mock
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -44,34 +44,35 @@ class AccountServiceTest {
     @InjectMocks
     private AccountServiceImpl accountService;
 
-    private User testUser;
+    private Account account;
 
     /**
-     * Sets up a {@link User} object before each test.
+     * Sets up a {@link Account} object before each test.
      */
     @BeforeEach
     public void initUser() {
-        testUser = new User("testUsername", "testPassword");
+        account = new Account("testUsername", "testPassword");
     }
 
     /**
      * Test ensures that the {@link AccountServiceImpl#register(String, String)}
-     * method correctly creates a new user when the username does not already exist.
+     * method correctly creates a new account when the username does not already
+     * exist.
      */
     @Test
     void accountService_Register_ReturnVoid() {
         // arrange
-        when(userRepository.save(testUser)).thenReturn(testUser);
-        when(profileService.registerForUser(testUser)).thenReturn(new Profile(testUser));
-        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
+        when(accountRepository.save(account)).thenReturn(account);
+        when(profileService.registerForAccount(account)).thenReturn(new Profile(account));
+        when(accountRepository.existsByUsername(account.getUsername())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
         // act
-        accountService.register(testUser.getUsername(), testUser.getPassword());
+        accountService.register(account.getUsername(), account.getPassword());
 
         // assert
-        verify(userRepository, times(1)).save(testUser);
-        verify(passwordEncoder, times(1)).encode(testUser.getPassword());
+        verify(accountRepository, times(1)).save(account);
+        verify(passwordEncoder, times(1)).encode(account.getPassword());
     }
 
     /**
@@ -82,12 +83,12 @@ class AccountServiceTest {
     @Test
     void accountService_Register_ThrowUsernameAlreadyExists() {
         // arrange
-        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
+        when(accountRepository.existsByUsername(account.getUsername())).thenReturn(true);
 
         // act & assert
         assertThrows(UsernameAlreadyExistsException.class,
-            () -> accountService.register(testUser.getUsername(), testUser.getPassword()));
-        verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
+            () -> accountService.register(account.getUsername(), account.getPassword()));
+        verify(accountRepository, times(1)).existsByUsername(account.getUsername());
     }
 
     /**
@@ -97,14 +98,14 @@ class AccountServiceTest {
     @Test
     void accountService_IsUsernameAvailable_ReturnTrue() {
         // arrange
-        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
+        when(accountRepository.existsByUsername(account.getUsername())).thenReturn(true);
 
         // act
-        boolean taken = accountService.isUsernameAvailable(testUser.getUsername());
+        boolean taken = accountService.isUsernameAvailable(account.getUsername());
 
         // assert
         assertFalse(taken);
-        verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
+        verify(accountRepository, times(1)).existsByUsername(account.getUsername());
     }
 
     /**
@@ -114,14 +115,14 @@ class AccountServiceTest {
     @Test
     void accountService_IsUsernameAvailable_ReturnFalse() {
         // arrange
-        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
+        when(accountRepository.existsByUsername(account.getUsername())).thenReturn(false);
 
         // act
-        boolean taken = accountService.isUsernameAvailable(testUser.getUsername());
+        boolean taken = accountService.isUsernameAvailable(account.getUsername());
 
         // assert
         assertTrue(taken);
-        verify(userRepository, times(1)).existsByUsername(testUser.getUsername());
+        verify(accountRepository, times(1)).existsByUsername(account.getUsername());
     }
 
     /**
@@ -131,18 +132,18 @@ class AccountServiceTest {
     @Test
     void accountService_UpdateUsername_Success() {
         // arrange
-        when(userRepository.existsByUsername("new_username")).thenReturn(false);
-        when(sessionService.getAuthenticatedUser()).thenReturn(testUser);
-        when(userRepository.save(testUser)).thenReturn(testUser);
+        when(accountRepository.existsByUsername("new_username")).thenReturn(false);
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
+        when(accountRepository.save(account)).thenReturn(account);
 
         // act
         accountService.updateUsername("new_username");
 
         // assert
-        assertEquals("new_username", testUser.getUsername());
-        verify(userRepository, times(1)).existsByUsername("new_username");
+        assertEquals("new_username", account.getUsername());
+        verify(accountRepository, times(1)).existsByUsername("new_username");
         verify(sessionService, times(1)).getAuthenticatedUser();
-        verify(userRepository, times(1)).save(testUser);
+        verify(accountRepository, times(1)).save(account);
     }
 
     /**
@@ -153,12 +154,12 @@ class AccountServiceTest {
     @Test
     void accountService_UpdateUsername_ThrowUsernameAlreadyExists() {
         // arrange
-        when(userRepository.existsByUsername("new_username")).thenReturn(true);
+        when(accountRepository.existsByUsername("new_username")).thenReturn(true);
 
         // act & assert
         assertThrows(UsernameAlreadyExistsException.class,
             () -> accountService.updateUsername("new_username"));
-        verify(userRepository, times(1)).existsByUsername("new_username");
+        verify(accountRepository, times(1)).existsByUsername("new_username");
     }
 
     /**
@@ -174,22 +175,22 @@ class AccountServiceTest {
             "new",
             "new");
 
-        String oldPassword = testUser.getPassword();
+        String oldPassword = account.getPassword();
 
-        when(sessionService.getAuthenticatedUser()).thenReturn(testUser);
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(passwordEncoder.matches("current", oldPassword)).thenReturn(true);
         when(passwordEncoder.encode("new")).thenReturn("encodedPassword");
-        when(userRepository.save(testUser)).thenReturn(testUser);
+        when(accountRepository.save(account)).thenReturn(account);
 
         // act
         accountService.updatePassword(request.currentPassword(), request.newPassword());
 
         // assert
-        assertEquals("encodedPassword", testUser.getPassword());
+        assertEquals("encodedPassword", account.getPassword());
         verify(sessionService, times(1)).getAuthenticatedUser();
         verify(passwordEncoder, times(1)).matches("current", oldPassword);
         verify(passwordEncoder, times(1)).encode("new");
-        verify(userRepository, times(1)).save(testUser);
+        verify(accountRepository, times(1)).save(account);
     }
 
     /**
@@ -206,14 +207,14 @@ class AccountServiceTest {
             "new",
             "new");
 
-        when(sessionService.getAuthenticatedUser()).thenReturn(testUser);
-        when(passwordEncoder.matches("wrong_password", testUser.getPassword())).thenReturn(false);
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
+        when(passwordEncoder.matches("wrong_password", account.getPassword())).thenReturn(false);
 
         // act & assert
         assertThrows(IncorrectCurrentPasswordException.class,
             () -> accountService.updatePassword(request.currentPassword(), request.newPassword()));
         verify(sessionService, times(1)).getAuthenticatedUser();
-        verify(passwordEncoder, times(1)).matches("wrong_password", testUser.getPassword());
+        verify(passwordEncoder, times(1)).matches("wrong_password", account.getPassword());
     }
 
 }

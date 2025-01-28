@@ -1,4 +1,4 @@
-package com.example.echo_api.persistence.model.user;
+package com.example.echo_api.persistence.model.account;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,41 +14,41 @@ import lombok.RequiredArgsConstructor;
  * authentication model by implementing both {@link UserDetails}.
  * 
  * <p>
- * Instances of this class are created with a {@link User} object.
+ * Instances of this class are created with an {@link Account} object.
  * 
  * <p>
- * This class acts as a wrapper for the {@link User} in the Spring Security
+ * This class acts as a wrapper for the {@link Account} in the Spring Security
  * authentication flow, representing an authenticated user retrieved from the
  * database.
  * 
  */
 @RequiredArgsConstructor
-public class SecurityUser implements UserDetails {
+public class SecurityAccount implements UserDetails {
 
-    private final User user;
+    private final Account account;
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return account.getUsername();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return account.getPassword();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRole().toString()));
+        return List.of(new SimpleGrantedAuthority(account.getRole().toString()));
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return account.isEnabled();
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.example.echo_api.persistence.model.user.User;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.validation.account.annotations.Username;
 
 import jakarta.persistence.Column;
@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Entity class representing a {@link User} profile in the system.
+ * Entity class representing a {@link Account} profile in the system.
  */
 @Entity
 @Table
@@ -28,8 +28,8 @@ public class Profile {
     // ---- primary keys / foreign keys ----
 
     @Id
-    @Column(name = "user_id", unique = true, nullable = false)
-    private UUID userId; // PK, FK
+    @Column(name = "account_id", unique = true, nullable = false)
+    private UUID accountId; // PK, FK
 
     @Username
     @Column(unique = true, nullable = false)
@@ -71,9 +71,9 @@ public class Profile {
 
     // ---- constructors ----
 
-    public Profile(User user) {
-        this.userId = user.getId();
-        this.username = user.getUsername();
+    public Profile(Account account) {
+        this.accountId = account.getId();
+        this.username = account.getUsername();
     }
 
     // ---- setters ----

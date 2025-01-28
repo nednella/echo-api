@@ -38,7 +38,7 @@ class ProfileControllerIT extends IntegrationTest {
         // assert body
         ProfileDTO body = response.getBody();
         assertNotNull(body);
-        assertEquals(existingUser.getUsername(), body.username());
+        assertEquals(existingAccount.getUsername(), body.username());
     }
 
     @Test
@@ -65,7 +65,7 @@ class ProfileControllerIT extends IntegrationTest {
         String path = ApiConfig.Profile.GET_BY_USERNAME;
 
         ResponseEntity<ProfileDTO> response = restTemplate.getForEntity(
-            path, ProfileDTO.class, existingUser.getUsername());
+            path, ProfileDTO.class, existingAccount.getUsername());
 
         // assert response
         assertEquals(OK, response.getStatusCode());
@@ -74,7 +74,7 @@ class ProfileControllerIT extends IntegrationTest {
         // assert body
         ProfileDTO body = response.getBody();
         assertNotNull(body);
-        assertEquals(existingUser.getUsername(), body.username());
+        assertEquals(existingAccount.getUsername(), body.username());
     }
 
     @Test
