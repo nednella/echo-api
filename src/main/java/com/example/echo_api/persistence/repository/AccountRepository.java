@@ -5,14 +5,14 @@ import java.util.UUID;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.echo_api.persistence.model.account.User;
+import com.example.echo_api.persistence.model.account.Account;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends ListCrudRepository<User, UUID> {
+public interface AccountRepository extends ListCrudRepository<Account, UUID> {
 
-    Optional<User> findByUsername(String username);
+    Optional<Account> findByUsername(String username);
 
     boolean existsByUsername(String username);
 

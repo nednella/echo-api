@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
  * Entity class representing an account in the system.
  * 
  * <p>
- * This class is mapped to the {@code user} table in the database and stores
- * essential account information required for user authentication and account
+ * This class is mapped to the {@code account} table in the database and stores
+ * essential account information required for authentication and account
  * management in the system.
  *
  * <p>
@@ -27,11 +27,11 @@ import lombok.NoArgsConstructor;
  * auto-generated and managed by Hibernate.
  * 
  */
+@Entity
+@Table
 @Getter
 @NoArgsConstructor
-@Entity
-@Table(name = "\"user\"")
-public class User implements Serializable {
+public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,12 +64,12 @@ public class User implements Serializable {
 
     // ---- constructors ----
 
-    public User(String username, String password) {
+    public Account(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public User(String username, String password, Role role) {
+    public Account(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -96,15 +96,15 @@ public class User implements Serializable {
     // ---- equals & hashcode ----
 
     /**
-     * Compares this {@code User} object with that {@code User} object for equality.
+     * Compares {@link Account} objects for equality.
      * 
      * <p>
      * Equality is determined based on the unique {@code username} field, as the
      * unique {@code id} field is only generated once the user is persisted.
      * 
-     * @param o the object to be compared
+     * @param o The object to be compared.
      * @return {@code true} if the username of both users is equal, else
-     *         {@code false}
+     *         {@code false}.
      */
     @Override
     public boolean equals(Object o) {
@@ -115,18 +115,18 @@ public class User implements Serializable {
         if (this.getClass() != o.getClass())
             return false;
 
-        User that = (User) o;
+        Account that = (Account) o;
         return Objects.equals(this.username, that.username);
     }
 
     /**
-     * Generates a hashcode for this {@code User} object based on the unique
-     * username field.
+     * Generates a hashcode for {@link Account} objects based on the unique username
+     * field.
      * 
      * <p>
-     * Two equal {@code User} objects will always generate an equal
+     * Two equal {@link Account} objects will always generate an equal
      * {@code hashCode}, but two equal hashcodes do not guarantee that the
-     * {@code User} objects are also equal.
+     * {@link Account} objects are also equal.
      * 
      */
     @Override

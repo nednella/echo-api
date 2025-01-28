@@ -5,19 +5,19 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.echo_api.persistence.model.account.User;
+import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.service.account.AccountService;
 
 public interface SessionService {
 
     /**
-     * Retrieves the authenticated {@link User} entity from
+     * Retrieves the authenticated {@link Account} entity from
      * {@link SecurityContextHolder}.
      *
-     * @return The authenticated {@link User}, or {@code null} if no user is
+     * @return The authenticated {@link Account}, or {@code null} if no user is
      *         authenticated.
      */
-    public User getAuthenticatedUser();
+    public Account getAuthenticatedUser();
 
     /**
      * Custom authentication method, required when manually authenticating users
@@ -36,15 +36,15 @@ public interface SessionService {
 
     /**
      * Reauthentication method, required when there is a change to the authenticated
-     * {@code user} information via {@link AccountService}.
+     * {@link Account} information via {@link AccountService}.
      * 
      * <p>
      * The method reauthenticates the specified user by creating a new authenticated
      * token and updating {@link SecurityContext} in both the application and the
      * HTTP session.
      * 
-     * @param user The {@link User} to reauthenticate.
+     * @param user The {@link Account} to reauthenticate.
      */
-    public void reauthenticate(User user);
+    public void reauthenticate(Account user);
 
 }
