@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
-import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
+import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.validation.sequence.ValidationOrder;
 
@@ -25,8 +25,8 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping(ApiConfig.Profile.GET_ME)
-    public ResponseEntity<ProfileResponse> getMe() {
-        ProfileResponse response = profileService.getMe();
+    public ResponseEntity<ProfileDTO> getMe() {
+        ProfileDTO response = profileService.getMe();
         return ResponseEntity.ok(response);
     }
 
@@ -37,8 +37,8 @@ public class ProfileController {
     }
 
     @GetMapping(ApiConfig.Profile.GET_BY_USERNAME)
-    public ResponseEntity<ProfileResponse> getByUsername(@PathVariable("username") String username) {
-        ProfileResponse response = profileService.getByUsername(username);
+    public ResponseEntity<ProfileDTO> getByUsername(@PathVariable("username") String username) {
+        ProfileDTO response = profileService.getByUsername(username);
         return ResponseEntity.ok(response);
     }
 

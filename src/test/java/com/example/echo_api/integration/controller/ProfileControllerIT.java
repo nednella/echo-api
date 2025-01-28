@@ -16,7 +16,7 @@ import com.example.echo_api.integration.util.IntegrationTest;
 import com.example.echo_api.integration.util.TestUtils;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
-import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
+import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 
 /**
  * Integration test class for {@link AuthController}.
@@ -29,14 +29,14 @@ class ProfileControllerIT extends IntegrationTest {
         // api: GET /api/v1/profile/me ==> 200 : ProfileResponse
         String path = ApiConfig.Profile.GET_ME;
 
-        ResponseEntity<ProfileResponse> response = restTemplate.getForEntity(path, ProfileResponse.class);
+        ResponseEntity<ProfileDTO> response = restTemplate.getForEntity(path, ProfileDTO.class);
 
         // assert response
         assertEquals(OK, response.getStatusCode());
         assertNotNull(response.getBody());
 
         // assert body
-        ProfileResponse body = response.getBody();
+        ProfileDTO body = response.getBody();
         assertNotNull(body);
         assertEquals(existingUser.getUsername(), body.username());
     }
@@ -64,15 +64,15 @@ class ProfileControllerIT extends IntegrationTest {
         // api: GET /api/v1/profile/{username} ==> 200 : ProfileResponse
         String path = ApiConfig.Profile.GET_BY_USERNAME;
 
-        ResponseEntity<ProfileResponse> response = restTemplate.getForEntity(
-            path, ProfileResponse.class, existingUser.getUsername());
+        ResponseEntity<ProfileDTO> response = restTemplate.getForEntity(
+            path, ProfileDTO.class, existingUser.getUsername());
 
         // assert response
         assertEquals(OK, response.getStatusCode());
         assertNotNull(response.getBody());
 
         // assert body
-        ProfileResponse body = response.getBody();
+        ProfileDTO body = response.getBody();
         assertNotNull(body);
         assertEquals(existingUser.getUsername(), body.username());
     }

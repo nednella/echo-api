@@ -2,7 +2,7 @@ package com.example.echo_api.service.profile;
 
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
-import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
+import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.model.user.User;
 
@@ -21,18 +21,18 @@ public interface ProfileService {
      * Fetch a {@link Profile} by username to return to the client.
      * 
      * @param username The username of the profile to fetch.
-     * @return A {@link ProfileResponse} resembling the profile.
+     * @return A {@link ProfileDTO} resembling the profile.
      * @throws UsernameException If the username is not found.
      */
-    public ProfileResponse getByUsername(String username) throws UsernameException;
+    public ProfileDTO getByUsername(String username) throws UsernameException;
 
     /**
      * Fetches the {@link Profile} of the authenticated user to return to the
      * client.
      * 
-     * @return A {@link ProfileResponse} resembling the profile.
+     * @return A {@link ProfileDTO} resembling the profile.
      */
-    public ProfileResponse getMe();
+    public ProfileDTO getMe();
 
     /**
      * Updates the profile information of the authenticated user.

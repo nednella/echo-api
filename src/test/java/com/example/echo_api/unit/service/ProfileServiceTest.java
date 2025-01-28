@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
-import com.example.echo_api.persistence.dto.response.profile.ProfileResponse;
+import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.model.user.User;
@@ -68,12 +68,12 @@ class ProfileServiceTest {
         // arrange
         User user = new User("test", "test");
         Profile profile = new Profile(user);
-        ProfileResponse expected = ProfileMapper.toResponse(profile);
+        ProfileDTO expected = ProfileMapper.toResponse(profile);
 
         when(profileRepository.findByUsername(profile.getUsername())).thenReturn(Optional.of(profile));
 
         // act
-        ProfileResponse actual = profileService.getByUsername(profile.getUsername());
+        ProfileDTO actual = profileService.getByUsername(profile.getUsername());
 
         // assert
         assertNotNull(actual);
@@ -106,13 +106,13 @@ class ProfileServiceTest {
         // arrange
         User user = new User("test", "test");
         Profile profile = new Profile(user);
-        ProfileResponse expected = ProfileMapper.toResponse(profile);
+        ProfileDTO expected = ProfileMapper.toResponse(profile);
 
         when(sessionService.getAuthenticatedUser()).thenReturn(user);
         when(profileRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(profile));
 
         // act
-        ProfileResponse actual = profileService.getMe();
+        ProfileDTO actual = profileService.getMe();
 
         // assert
         assertNotNull(actual);
