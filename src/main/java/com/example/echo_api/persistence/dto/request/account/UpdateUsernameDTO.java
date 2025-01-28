@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
  *                 format specified by {@link Username}.
  */
 // @formatter:off
-public record UpdateUsernameRequest(
+public record UpdateUsernameDTO(
 
     @NotNull(message = "Username is required.", groups = BasicCheck.class)
     @Username(groups = AdvancedCheck.class)

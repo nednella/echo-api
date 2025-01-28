@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
-import com.example.echo_api.persistence.dto.request.account.UpdateUsernameRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdateUsernameDTO;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.validation.sequence.ValidationOrder;
 
@@ -24,29 +24,17 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    // @formatter:off
     @GetMapping(ApiConfig.Account.USERNAME_AVAILABLE)
-    public ResponseEntity<Boolean> isUsernameAvailable(
-        @RequestParam("username")
-        @Valid
-        UpdateUsernameRequest request
-    ) {
-        boolean available = accountService.isUsernameAvailable(request.username());
+    public ResponseEntity<Boolean> isUsernameAvailable(@RequestParam("username") String username) {
+        boolean available = accountService.isUsernameAvailable(username);
         return ResponseEntity.ok(available);
     }
-    // @formatter:on
 
-    // @formatter:off
     @PutMapping(ApiConfig.Account.UPDATE_USERNAME)
-    public ResponseEntity<Void> updateUsername(
-        @RequestParam("username")
-        @Valid
-        UpdateUsernameRequest request
-    ) {
+    public ResponseEntity<Void> updateUsername(@RequestParam("username") @Valid UpdateUsernameDTO request) {
         accountService.updateUsername(request.username());
         return ResponseEntity.noContent().build();
     }
-    // @formatter:on
 
     @PutMapping(ApiConfig.Account.UPDATE_PASSWORD)
     public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdatePasswordDTO request) {
