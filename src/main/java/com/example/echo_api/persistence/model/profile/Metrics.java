@@ -60,11 +60,11 @@ public class Metrics {
 
     // ---- incrementers ----
 
-    public void incrementFollowing() {
+    public void incrementFollowingCount() {
         this.followingCount++;
     }
 
-    public void incrementFollowers() {
+    public void incrementFollowerCount() {
         this.followerCount++;
     }
 
@@ -78,11 +78,11 @@ public class Metrics {
 
     // ---- decrementers ----
 
-    public void decrementFollowing() {
+    public void decrementFollowingCount() {
         this.followingCount--;
     }
 
-    public void decrementFollowers() {
+    public void decrementFollowerCount() {
         this.followerCount--;
     }
 

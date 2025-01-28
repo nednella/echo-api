@@ -27,6 +27,62 @@ public class MetricsServiceImpl implements MetricsService {
         return findById(profileId);
     }
 
+    @Override
+    public void incrementFollowing(UUID profileId) throws IdNotFoundException {
+        Metrics metrics = findById(profileId);
+        metrics.incrementFollowingCount();
+        metricsRepository.save(metrics);
+    }
+
+    @Override
+    public void incrementFollowers(UUID profileId) throws IdNotFoundException {
+        Metrics metrics = findById(profileId);
+        metrics.incrementFollowerCount();
+        metricsRepository.save(metrics);
+    }
+
+    @Override
+    public void incrementPosts(UUID profileId) throws IdNotFoundException {
+        Metrics metrics = findById(profileId);
+        metrics.incrementPostCount();
+        metricsRepository.save(metrics);
+    }
+
+    @Override
+    public void incrementMedia(UUID profileId) throws IdNotFoundException {
+        Metrics metrics = findById(profileId);
+        metrics.incrementMediaCount();
+        metricsRepository.save(metrics);
+    }
+
+    @Override
+    public void decrementFollowing(UUID profileId) throws IdNotFoundException {
+        Metrics metrics = findById(profileId);
+        metrics.decrementFollowingCount();
+        metricsRepository.save(metrics);
+    }
+
+    @Override
+    public void decrementFollowers(UUID profileId) throws IdNotFoundException {
+        Metrics metrics = findById(profileId);
+        metrics.decrementFollowerCount();
+        metricsRepository.save(metrics);
+    }
+
+    @Override
+    public void decrementPosts(UUID profileId) throws IdNotFoundException {
+        Metrics metrics = findById(profileId);
+        metrics.decrementPostCount();
+        metricsRepository.save(metrics);
+    }
+
+    @Override
+    public void decrementMedia(UUID profileId) throws IdNotFoundException {
+        Metrics metrics = findById(profileId);
+        metrics.decrementMediaCount();
+        metricsRepository.save(metrics);
+    }
+
     /**
      * Internal method for obtaining {@link Metrics} via {@code profile_id} from
      * {@link MetricsRepository}.
