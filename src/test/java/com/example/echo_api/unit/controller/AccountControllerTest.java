@@ -22,7 +22,7 @@ import com.example.echo_api.config.ValidationMessageConfig;
 import com.example.echo_api.controller.account.AccountController;
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
@@ -168,7 +168,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/password ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "current_password",
             "new-password-1",
             "new-password-1");
@@ -190,7 +190,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/password ==> 400 : Invalid Request (new password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "old-password",
             "new-password",
             "new-password");
@@ -224,7 +224,7 @@ class AccountControllerTest {
         // password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "old-password",
             "new-password-1",
             "this-does-not-match");
@@ -257,7 +257,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/password ==> 400 : Invalid Request (new password)
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "old-password-1",
             "old-password-1",
             "old-password-1");
@@ -290,7 +290,7 @@ class AccountControllerTest {
         // api: PUT /api/v1/account/password ==> 400 : IncorrectCurrentPassword
         String path = ApiConfig.Account.UPDATE_PASSWORD;
 
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "wrong-password",
             "new-password-1",
             "new-password-1");

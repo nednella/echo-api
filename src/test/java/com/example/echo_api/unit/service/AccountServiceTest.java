@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordException;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.persistence.repository.UserRepository;
@@ -169,7 +169,7 @@ class AccountServiceTest {
     @Test
     void accountService_UpdatePassword_Success() {
         // arrange
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "current",
             "new",
             "new");
@@ -201,7 +201,7 @@ class AccountServiceTest {
     @Test
     void accountService_UpdatePassword_ThrowIncorrectCurrentPassword() {
         // arrange
-        UpdatePasswordRequest request = new UpdatePasswordRequest(
+        UpdatePasswordDTO request = new UpdatePasswordDTO(
             "wrong_password",
             "new",
             "new");

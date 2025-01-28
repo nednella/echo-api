@@ -8,21 +8,21 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import com.example.echo_api.config.ValidationMessageConfig;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.validation.account.validators.NewPasswordUniqueValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 /**
- * Custom Jakarta Validation annotation for {@link UpdatePasswordRequest} forms.
+ * Custom Jakarta Validation annotation for {@link UpdatePasswordDTO} forms.
  * 
  * <p>
- * The annotated {@link UpdatePasswordRequest} record fields {@code newPassword}
- * and {@code currentPassword} must not match.
+ * The annotated {@link UpdatePasswordDTO} record fields {@code newPassword} and
+ * {@code currentPassword} must not match.
  * 
  * <p>
- * Accepts type annotations for {@link UpdatePasswordRequest}.
+ * Accepts type annotations for {@link UpdatePasswordDTO}.
  */
 @Target({ TYPE })
 @Retention(RUNTIME)

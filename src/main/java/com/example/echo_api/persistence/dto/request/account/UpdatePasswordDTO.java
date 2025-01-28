@@ -22,7 +22,7 @@ import jakarta.validation.constraints.NotNull;
 // @formatter:off
 @NewPasswordUnique(groups = AdvancedCheck.class)
 @ConfirmationPasswordMatch(groups = AdvancedCheck.class)
-public record UpdatePasswordRequest(
+public record UpdatePasswordDTO(
 
     @NotNull(message = "Current password is required.", groups = BasicCheck.class)
     @JsonProperty("current_password")

@@ -15,7 +15,7 @@ import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.integration.util.IntegrationTest;
 import com.example.echo_api.integration.util.TestUtils;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 
 /**
@@ -88,10 +88,10 @@ class AccountControllerIT extends IntegrationTest {
     void AccountController_UpdatePassword_Return204() {
         // api: PUT /api/v1/account/password ==> 204 : No Content
         String path = ApiConfig.Account.UPDATE_PASSWORD;
-        UpdatePasswordRequest update = new UpdatePasswordRequest(existingUser.getPassword(), "new-pw1", "new-pw1");
+        UpdatePasswordDTO update = new UpdatePasswordDTO(existingUser.getPassword(), "new-pw1", "new-pw1");
 
         // PUT 1
-        HttpEntity<UpdatePasswordRequest> request = TestUtils.createJsonRequestEntity(update);
+        HttpEntity<UpdatePasswordDTO> request = TestUtils.createJsonRequestEntity(update);
         ResponseEntity<Void> response1 = restTemplate.exchange(path, PUT, request, Void.class);
         assertEquals(NO_CONTENT, response1.getStatusCode());
 
@@ -110,9 +110,9 @@ class AccountControllerIT extends IntegrationTest {
     void AccountController_UpdatePassword_Return400IncorrectCurrentPassword() {
         // api: PUT /api/v1/account/password ==> 400 : IncorrectCurrentPassword
         String path = ApiConfig.Account.UPDATE_PASSWORD;
-        UpdatePasswordRequest update = new UpdatePasswordRequest("wrong-password", "new-pw1", "new-pw1");
+        UpdatePasswordDTO update = new UpdatePasswordDTO("wrong-password", "new-pw1", "new-pw1");
 
-        HttpEntity<UpdatePasswordRequest> request = TestUtils.createJsonRequestEntity(update);
+        HttpEntity<UpdatePasswordDTO> request = TestUtils.createJsonRequestEntity(update);
         ResponseEntity<ErrorResponse> response = restTemplate.exchange(path, PUT, request, ErrorResponse.class);
 
         // assert response

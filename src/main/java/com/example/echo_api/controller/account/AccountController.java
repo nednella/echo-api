@@ -5,7 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
-import com.example.echo_api.persistence.dto.request.account.UpdatePasswordRequest;
+import com.example.echo_api.persistence.dto.request.account.UpdatePasswordDTO;
 import com.example.echo_api.persistence.dto.request.account.UpdateUsernameRequest;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.validation.sequence.ValidationOrder;
@@ -49,7 +49,7 @@ public class AccountController {
     // @formatter:on
 
     @PutMapping(ApiConfig.Account.UPDATE_PASSWORD)
-    public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdatePasswordRequest request) {
+    public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdatePasswordDTO request) {
         accountService.updatePassword(request.currentPassword(), request.newPassword());
         return ResponseEntity.noContent().build();
     }
