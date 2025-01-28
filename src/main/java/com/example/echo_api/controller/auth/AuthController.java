@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.echo_api.config.ApiConfig;
 import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
-import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
 import com.example.echo_api.service.auth.AuthService;
 import com.example.echo_api.validation.sequence.ValidationOrder;
 
@@ -29,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping(ApiConfig.Auth.SIGNUP)
-    public ResponseEntity<Void> signup(@RequestBody @Valid SignupRequest request) {
+    public ResponseEntity<Void> signup(@RequestBody @Valid SignupDTO request) {
         authService.signup(request);
         return ResponseEntity.noContent().build();
     }

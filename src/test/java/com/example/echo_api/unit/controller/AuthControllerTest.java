@@ -25,7 +25,7 @@ import com.example.echo_api.controller.auth.AuthController;
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
-import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorResponse;
 import com.example.echo_api.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -282,7 +282,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String path = ApiConfig.Auth.SIGNUP;
 
-        SignupRequest request = new SignupRequest(
+        SignupDTO request = new SignupDTO(
             "admin",
             "password-1");
 
@@ -305,7 +305,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/signup ==> 400 : Invalid Request
         String path = ApiConfig.Auth.SIGNUP;
 
-        SignupRequest request = new SignupRequest(
+        SignupDTO request = new SignupDTO(
             "invalid_name!",
             "valid-pw-1");
 
@@ -337,7 +337,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/signup ==> 400 : Invalid Request
         String path = ApiConfig.Auth.SIGNUP;
 
-        SignupRequest request = new SignupRequest(
+        SignupDTO request = new SignupDTO(
             "valid_name",
             "invalid_password");
 
@@ -369,7 +369,7 @@ class AuthControllerTest {
         // api: POST /api/v1/auth/signup ==> 400 : UsernameAlreadyExists
         String path = ApiConfig.Auth.SIGNUP;
 
-        SignupRequest request = new SignupRequest(
+        SignupDTO request = new SignupDTO(
             "taken_name",
             "valid-pw-1");
 

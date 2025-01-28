@@ -4,7 +4,7 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
-import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
 
 public interface AuthService {
 
@@ -24,6 +24,6 @@ public interface AuthService {
      *                                        taken.
      * @throws AuthenticationException        If the authentication fails.
      */
-    public void signup(SignupRequest signup) throws UsernameAlreadyExistsException, AuthenticationException;
+    public void signup(SignupDTO signup) throws UsernameAlreadyExistsException, AuthenticationException;
 
 }

@@ -15,7 +15,7 @@ import org.springframework.security.authentication.LockedException;
 
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.dto.request.auth.LoginDTO;
-import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
 import com.example.echo_api.persistence.model.user.User;
 import com.example.echo_api.service.account.AccountService;
 import com.example.echo_api.service.auth.AuthService;
@@ -127,7 +127,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ReturnVoid() {
         // arrange
-        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
         doNothing()
@@ -147,7 +147,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ThrowUsernameAlreadyExists() {
         // arrange
-        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword()))
             .thenThrow(new UsernameAlreadyExistsException());
@@ -165,7 +165,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ThrowDisabledException() {
         // arrange
-        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
         doThrow(new DisabledException(""))
@@ -185,7 +185,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ThrowLockedException() {
         // arrange
-        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
         doThrow(new LockedException(""))
@@ -205,7 +205,7 @@ class AuthServiceTest {
     @Test
     void AuthService_Signup_ThrowBadCredentialsException() {
         // arrange
-        SignupRequest signup = new SignupRequest(testUser.getUsername(), testUser.getPassword());
+        SignupDTO signup = new SignupDTO(testUser.getUsername(), testUser.getPassword());
 
         when(accountService.register(testUser.getUsername(), testUser.getPassword())).thenReturn(testUser);
         doThrow(new BadCredentialsException(""))

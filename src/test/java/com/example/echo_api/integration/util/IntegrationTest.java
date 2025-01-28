@@ -18,7 +18,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.example.echo_api.config.ApiConfig;
-import com.example.echo_api.persistence.dto.request.auth.SignupRequest;
+import com.example.echo_api.persistence.dto.request.auth.SignupDTO;
 import com.example.echo_api.persistence.model.user.User;
 import com.redis.testcontainers.RedisContainer;
 
@@ -99,9 +99,9 @@ public abstract class IntegrationTest {
     private void obtainAuthenticatedSession(User user) {
         // api: POST /api/v1/auth/signup ==> 204 : No Content
         String path = ApiConfig.Auth.SIGNUP;
-        SignupRequest signup = new SignupRequest(user.getUsername(), user.getPassword());
+        SignupDTO signup = new SignupDTO(user.getUsername(), user.getPassword());
 
-        HttpEntity<SignupRequest> request = TestUtils.createJsonRequestEntity(signup);
+        HttpEntity<SignupDTO> request = TestUtils.createJsonRequestEntity(signup);
         ResponseEntity<Void> response = restTemplate.postForEntity(path, request, Void.class);
 
         assertEquals(NO_CONTENT, response.getStatusCode());
