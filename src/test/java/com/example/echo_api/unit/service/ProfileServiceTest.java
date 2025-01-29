@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
+import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Metrics;
@@ -23,6 +24,7 @@ import com.example.echo_api.service.metrics.MetricsService;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.profile.ProfileServiceImpl;
 import com.example.echo_api.service.session.SessionService;
+import com.example.echo_api.service.socialcontext.SocialContextService;
 
 /**
  * Unit test class for {@link ProfileService}.
@@ -35,6 +37,9 @@ class ProfileServiceTest {
 
     @Mock
     private MetricsService metricsService;
+
+    @Mock
+    private SocialContextService socialContextService;
 
     @Mock
     private ProfileRepository profileRepository;
@@ -52,10 +57,14 @@ class ProfileServiceTest {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
         Metrics metrics = new Metrics(profile);
-        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics);
+        SocialContextDTO context = new SocialContextDTO(false, false, false, false);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics, context);
 
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
+        when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
         when(profileRepository.findByUsername(profile.getUsername())).thenReturn(Optional.of(profile));
         when(metricsService.getMetrics(profile.getProfileId())).thenReturn(metrics);
+        when(socialContextService.getSocialContext(profile, profile)).thenReturn(context);
 
         // act
         ProfileDTO actual = profileService.getByUsername(profile.getUsername());
@@ -63,7 +72,7 @@ class ProfileServiceTest {
         // assert
         assertNotNull(actual);
         assertEquals(expected, actual);
-        verify(profileRepository, times(1)).findByUsername(profile.getUsername());
+        verify(profileRepository, times(2)).findByUsername(profile.getUsername());
     }
 
     /**
@@ -75,6 +84,10 @@ class ProfileServiceTest {
     void ProfileService_GetByUsername_ThrowUsernameNotFound() {
         // arrange
         String username = "non-existent-user";
+        Account account = new Account("test", "test");
+        Profile profile = new Profile(account);
+        when(sessionService.getAuthenticatedUser()).thenReturn(account);
+        when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
         when(profileRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         // act & assert
@@ -92,7 +105,7 @@ class ProfileServiceTest {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
         Metrics metrics = new Metrics(profile);
-        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics, null);
 
         when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));

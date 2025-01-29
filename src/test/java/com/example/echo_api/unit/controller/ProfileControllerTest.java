@@ -22,6 +22,7 @@ import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
+import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Metrics;
@@ -53,7 +54,7 @@ class ProfileControllerTest {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
         Metrics metrics = new Metrics(profile);
-        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics, null);
 
         when(profileService.getMe()).thenReturn(expected);
 
@@ -237,7 +238,8 @@ class ProfileControllerTest {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
         Metrics metrics = new Metrics(profile);
-        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics);
+        SocialContextDTO context = new SocialContextDTO(false, false, false, false);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics, context);
 
         when(profileService.getByUsername(expected.username())).thenReturn(expected);
 
