@@ -11,8 +11,4 @@ public interface RelationshipService {
 
     public void unfollow(Profile source, Profile target);
 
-    public boolean isFollowing(Profile source, Profile target);
-
-    public boolean isFollowedBy(Profile source, Profile target);
-
 }
