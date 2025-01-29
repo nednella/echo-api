@@ -1,6 +1,7 @@
 package com.example.echo_api.service.profile;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
@@ -12,6 +13,7 @@ import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.ProfileRepository;
 import com.example.echo_api.service.metrics.MetricsService;
 import com.example.echo_api.service.session.SessionService;
+import com.example.echo_api.service.socialcontext.SocialContextService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +30,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final SessionService sessionService;
     private final MetricsService metricsService;
+    private final SocialContextService socialContextService;
 
     private final ProfileRepository profileRepository;
 
@@ -50,6 +53,22 @@ public class ProfileServiceImpl implements ProfileService {
         Profile me = findMe();
         ProfileMapper.updateProfile(request, me);
         profileRepository.save(me);
+    }
+
+    @Override
+    @Transactional
+    public void follow(String username) throws UsernameNotFoundException {
+        Profile me = findMe();
+        Profile target = findByUsername(username);
+        socialContextService.follow(me, target);
+    }
+
+    @Override
+    @Transactional
+    public void unfollow(String username) throws UsernameNotFoundException {
+        Profile me = findMe();
+        Profile target = findByUsername(username);
+        socialContextService.unfollow(me, target);
     }
 
     /**

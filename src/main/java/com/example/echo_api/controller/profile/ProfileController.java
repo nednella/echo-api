@@ -58,11 +58,13 @@ public class ProfileController {
 
     @PostMapping(ApiConfig.Profile.FOLLOW_BY_USERNAME)
     public ResponseEntity<Void> followProfile(@PathVariable("username") String username) {
+        profileService.follow(username);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(ApiConfig.Profile.UNFOLLOW_BY_USERNAME)
     public ResponseEntity<Void> unfollowProfile(@PathVariable("username") String username) {
+        profileService.unfollow(username);
         return ResponseEntity.noContent().build();
     }
 
