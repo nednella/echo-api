@@ -2,10 +2,12 @@ package com.example.echo_api.persistence.dto.response.profile;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Represents a standardised response format for an {@link Account} profile.
+ * Represents a standardised response format for a user profile.
  *
  * @param username  The username of the account associated to the profile.
  * @param name      The profile name.
@@ -16,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param createdAt The timestamp when the profile was created (ISO-8601
  *                  format).
  * @param metrics   The profile metrics.
+ * @param context   The profile relationship between the requesting and the
+ *                  requested profiles.
  */
 // @formatter:off
 public record ProfileDTO(
@@ -26,7 +30,8 @@ public record ProfileDTO(
     @JsonProperty("avatar_url") String avatarUrl,
     @JsonProperty("banner_url") String bannerUrl,
     @JsonProperty("created_at") String createdAt,
-    @JsonProperty("profile_metrics") MetricsDTO metrics
+    @JsonProperty("profile_metrics") MetricsDTO metrics,
+    @JsonProperty("social_context") @JsonInclude(Include.NON_NULL) SocialContextDTO context
 ) {
 
     public ProfileDTO(
@@ -37,7 +42,8 @@ public record ProfileDTO(
         String avatarUrl,
         String bannerUrl,
         LocalDateTime createdAt,
-        MetricsDTO metrics
+        MetricsDTO metrics,
+        SocialContextDTO context
     ) {
         this(
             username,
@@ -47,7 +53,8 @@ public record ProfileDTO(
             avatarUrl,
             bannerUrl,
             createdAt != null ? createdAt.toString() : null,
-            metrics
+            metrics,
+            context
         );
     }
 
