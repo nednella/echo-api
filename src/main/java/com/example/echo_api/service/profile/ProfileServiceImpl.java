@@ -74,6 +74,20 @@ public class ProfileServiceImpl implements ProfileService {
         relationshipService.unfollow(me, target);
     }
 
+    @Override
+    public void block(String username) throws UsernameNotFoundException {
+        Profile me = findMe();
+        Profile target = findByUsername(username);
+        relationshipService.block(me, target);
+    }
+
+    @Override
+    public void unblock(String username) throws UsernameNotFoundException {
+        Profile me = findMe();
+        Profile target = findByUsername(username);
+        relationshipService.unblock(me, target);
+    }
+
     /**
      * Internal method for obtaining a {@link Profile} via {@code username} from
      * {@link ProfileRepository}.

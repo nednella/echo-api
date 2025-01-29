@@ -11,4 +11,8 @@ public interface RelationshipService {
 
     public void unfollow(Profile source, Profile target);
 
+    public void block(Profile source, Profile target);
+
+    public void unblock(Profile source, Profile target);
+
 }

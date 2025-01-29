@@ -54,4 +54,22 @@ public interface ProfileService {
      */
     public void unfollow(String username) throws UsernameNotFoundException;
 
+    /**
+     * Create a {@link Block} relationship between the authenticated profile and the
+     * target profile.
+     * 
+     * @param username The username of the target profile.
+     * @throws UsernameNotFoundException If the username is not found.
+     */
+    public void block(String username) throws UsernameNotFoundException;
+
+    /**
+     * Delete a {@link Block} relationship between the authenticated profile and the
+     * target profile.
+     * 
+     * @param username The username of the target profile.
+     * @throws UsernameNotFoundException If the username is not found.
+     */
+    public void unblock(String username) throws UsernameNotFoundException;
+
 }

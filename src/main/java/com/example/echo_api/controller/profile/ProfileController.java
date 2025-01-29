@@ -71,11 +71,13 @@ public class ProfileController {
     // ---- block ----
     @PostMapping(ApiConfig.Profile.BLOCK_BY_USERNAME)
     public ResponseEntity<Void> blockProfile(@PathVariable("username") String username) {
+        profileService.block(username);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(ApiConfig.Profile.UNBLOCK_BY_USERNAME)
     public ResponseEntity<Void> unblockProfile(@PathVariable("username") String username) {
+        profileService.unblock(username);
         return ResponseEntity.noContent().build();
     }
 
