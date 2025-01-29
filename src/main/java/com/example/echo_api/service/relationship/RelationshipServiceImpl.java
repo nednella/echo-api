@@ -1,6 +1,7 @@
 package com.example.echo_api.service.relationship;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.echo_api.exception.custom.relationship.BlockedException;
 import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
@@ -47,6 +48,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
+    @Transactional
     public void block(Profile source, Profile target) {
         handleBlock(source, target);
         blockService.block(source.getProfileId(), target.getProfileId());
