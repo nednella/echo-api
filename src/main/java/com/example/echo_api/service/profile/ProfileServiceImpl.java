@@ -2,7 +2,6 @@ package com.example.echo_api.service.profile;
 
 import org.springframework.stereotype.Service;
 
-import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
@@ -33,7 +32,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
 
     @Override
-    public ProfileDTO getByUsername(String username) throws UsernameException {
+    public ProfileDTO getByUsername(String username) throws UsernameNotFoundException {
         Profile profile = findByUsername(username);
         Metrics metrics = metricsService.getMetrics(profile.getProfileId());
         return ProfileMapper.toDTO(profile, metrics);
@@ -59,9 +58,9 @@ public class ProfileServiceImpl implements ProfileService {
      * 
      * @param username The username to search within the repository.
      * @return The found {@link Profile}.
-     * @throws UsernameException If no profile by that username exists.
+     * @throws UsernameNotFoundException If no profile by that username exists.
      */
-    private Profile findByUsername(String username) throws UsernameException {
+    private Profile findByUsername(String username) throws UsernameNotFoundException {
         return profileRepository.findByUsername(username)
             .orElseThrow(UsernameNotFoundException::new);
     }
