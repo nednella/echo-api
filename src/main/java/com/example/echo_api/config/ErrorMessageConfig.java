@@ -22,6 +22,9 @@ public final class ErrorMessageConfig {
     public static final String USERNAME_ARLEADY_EXISTS = "Username already exists.";
     /* Password */
     public static final String INCORRECT_CURRENT_PASSWORD = "Incorrect current password.";
+    /* Social Context */
+    public static final String ALREADY_FOLLOWING = "You are already following this user.";
+    public static final String NOT_FOLLOWING = "You are not following this user.";
 
     /* 401 UNAUTHORISED */
     public static final String UNAUTHORISED = "Unauthorised request.";
