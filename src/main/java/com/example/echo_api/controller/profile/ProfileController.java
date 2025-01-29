@@ -24,13 +24,13 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
-    @GetMapping(ApiConfig.Profile.GET_ME)
+    @GetMapping(ApiConfig.Profile.ME)
     public ResponseEntity<ProfileDTO> getMe() {
         ProfileDTO response = profileService.getMe();
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(ApiConfig.Profile.UPDATE_ME)
+    @PutMapping(ApiConfig.Profile.ME)
     public ResponseEntity<Void> updateMeProfile(@RequestBody @Valid UpdateProfileDTO request) {
         profileService.updateMeProfile(request);
         return ResponseEntity.noContent().build();

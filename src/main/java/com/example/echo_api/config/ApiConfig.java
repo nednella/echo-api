@@ -30,8 +30,7 @@ public final class ApiConfig {
     @NoArgsConstructor(access = PRIVATE)
     public static final class Profile {
         private static final String ROOT = BASE_URL + "/profile";
-        public static final String GET_ME = ROOT + "/me";
-        public static final String UPDATE_ME = ROOT + "/me";
+        public static final String ME = ROOT + "/me";
         public static final String GET_BY_USERNAME = ROOT + "/{username}";
     }
 

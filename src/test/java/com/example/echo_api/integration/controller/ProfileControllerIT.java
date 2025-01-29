@@ -27,7 +27,7 @@ class ProfileControllerIT extends IntegrationTest {
     @Test
     void ProfileController_GetMe_ReturnProfileDTO() {
         // api: GET /api/v1/profile/me ==> 200 : ProfileDTO
-        String path = ApiConfig.Profile.GET_ME;
+        String path = ApiConfig.Profile.ME;
 
         ResponseEntity<ProfileDTO> response = restTemplate.getForEntity(path, ProfileDTO.class);
 
@@ -44,7 +44,7 @@ class ProfileControllerIT extends IntegrationTest {
     @Test
     void ProfileController_UpdateMe_Return204NoContent() {
         // api: PUT /api/v1/profile/me ==> 204 : No Content
-        String path = ApiConfig.Profile.UPDATE_ME;
+        String path = ApiConfig.Profile.ME;
 
         UpdateProfileDTO body = new UpdateProfileDTO(
             "name",
