@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Entity class representing a {@link Account} profile in the system.
+ * Entity class representing an {@link Account} profile in the system.
  */
 @Entity
 @Table
@@ -28,8 +28,8 @@ public class Profile {
     // ---- primary keys / foreign keys ----
 
     @Id
-    @Column(name = "account_id", unique = true, nullable = false)
-    private UUID accountId; // PK, FK
+    @Column(name = "profile_id", unique = true, nullable = false)
+    private UUID profileId; // PK, FK
 
     @Username
     @Column(unique = true, nullable = false)
@@ -49,18 +49,6 @@ public class Profile {
     @Column(name = "banner_url")
     private String bannerUrl;
 
-    @Column(name = "following_count")
-    private int followingCount = 0;
-
-    @Column(name = "follower_count")
-    private int followerCount = 0;
-
-    @Column(name = "post_count")
-    private int postCount = 0;
-
-    @Column(name = "media_count")
-    private int mediaCount = 0;
-
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -72,7 +60,7 @@ public class Profile {
     // ---- constructors ----
 
     public Profile(Account account) {
-        this.accountId = account.getId();
+        this.profileId = account.getId();
         this.username = account.getUsername();
     }
 
@@ -96,42 +84,6 @@ public class Profile {
 
     public void setBannerUrl(String bannerUrl) {
         this.bannerUrl = bannerUrl;
-    }
-
-    // ---- incrementers ----
-
-    public void incrementFollowing() {
-        this.followingCount++;
-    }
-
-    public void incrementFollowers() {
-        this.followerCount++;
-    }
-
-    public void incrementPostCount() {
-        this.postCount++;
-    }
-
-    public void incrementMediaCount() {
-        this.mediaCount++;
-    }
-
-    // ---- decrementers ----
-
-    public void decrementFollowing() {
-        this.followingCount--;
-    }
-
-    public void decrementFollowers() {
-        this.followerCount--;
-    }
-
-    public void decrementPostCount() {
-        this.postCount--;
-    }
-
-    public void decrementMediaCount() {
-        this.mediaCount--;
     }
 
 }

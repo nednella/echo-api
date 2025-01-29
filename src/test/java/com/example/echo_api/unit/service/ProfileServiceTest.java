@@ -1,7 +1,6 @@
 package com.example.echo_api.unit.service;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -17,8 +16,10 @@ import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
+import com.example.echo_api.persistence.model.profile.Metrics;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.ProfileRepository;
+import com.example.echo_api.service.metrics.MetricsService;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.profile.ProfileServiceImpl;
 import com.example.echo_api.service.session.SessionService;
@@ -33,44 +34,28 @@ class ProfileServiceTest {
     private SessionService sessionService;
 
     @Mock
+    private MetricsService metricsService;
+
+    @Mock
     private ProfileRepository profileRepository;
 
     @InjectMocks
     private ProfileServiceImpl profileService;
 
     /**
-     * Test ensures that the {@link ProfileServiceImpl#registerForUser(Account)}
-     * method correctly creates a new profile for the supplied account.
-     */
-    @Test
-    void ProfileService_RegisterForUser_ReturnProfile() {
-        // arrange
-        Account account = new Account("test", "test");
-        Profile expected = new Profile(account);
-
-        when(profileRepository.save(any(Profile.class))).thenReturn(expected);
-
-        // act
-        Profile actual = profileService.registerForAccount(account);
-
-        // assert
-        assertNotNull(actual);
-        assertEquals(expected, actual);
-        verify(profileRepository, times(1)).save(any(Profile.class));
-    }
-
-    /**
      * Test ensures that the {@link ProfileServiceImpl#getByUsername(String)} method
      * correctly returns the profile when the username exists.
      */
     @Test
-    void ProfileService_GetByUsername_ReturnProfileResponse() {
+    void ProfileService_GetByUsername_ReturnProfileDTO() {
         // arrange
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        ProfileDTO expected = ProfileMapper.toResponse(profile);
+        Metrics metrics = new Metrics(profile);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics);
 
         when(profileRepository.findByUsername(profile.getUsername())).thenReturn(Optional.of(profile));
+        when(metricsService.getMetrics(profile.getProfileId())).thenReturn(metrics);
 
         // act
         ProfileDTO actual = profileService.getByUsername(profile.getUsername());
@@ -106,10 +91,12 @@ class ProfileServiceTest {
         // arrange
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        ProfileDTO expected = ProfileMapper.toResponse(profile);
+        Metrics metrics = new Metrics(profile);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics);
 
         when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
+        when(metricsService.getMetrics(profile.getProfileId())).thenReturn(metrics);
 
         // act
         ProfileDTO actual = profileService.getMe();

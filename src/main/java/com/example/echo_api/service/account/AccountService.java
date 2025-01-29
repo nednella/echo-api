@@ -4,12 +4,19 @@ import com.example.echo_api.exception.custom.password.IncorrectCurrentPasswordEx
 import com.example.echo_api.exception.custom.username.UsernameAlreadyExistsException;
 import com.example.echo_api.persistence.model.account.Role;
 import com.example.echo_api.persistence.model.account.Account;
+import com.example.echo_api.persistence.model.profile.Metrics;
+import com.example.echo_api.persistence.model.profile.Profile;
 
 public interface AccountService {
 
     /**
-     * Creates a new {@link Account} within the application, using the standard
-     * {@link Role}, {@code Role.USER}.
+     * Registers a new {@link Account} with the specified {@code username} and
+     * {@code password}.
+     * 
+     * <p>
+     * If the username is available, it creates an {@link Account} object, and
+     * associated {@link Profile} object, and an associated profile {@link Metrics}
+     * object.
      * 
      * @param username The username of the account to register.
      * @param password The password of the account to register.
@@ -19,12 +26,18 @@ public interface AccountService {
     public Account register(String username, String password) throws UsernameAlreadyExistsException;
 
     /**
-     * Creates a new {@link Account} within the application, using the supplied
-     * {@link Role}.
+     * Registers a new {@link Account} with the specified {@code username},
+     * {@code password} and {@code role}.
+     * 
+     * <p>
+     * If the username is available, it creates an {@link Account} object, and
+     * associated {@link Profile} object, and an associated profile {@link Metrics}
+     * object.
      * 
      * @param username The username of the account to register.
      * @param password The password of the account to register.
-     * @return The newly registered {@link Account}.
+     * @param role     The role to assign to the new account.
+     * @return The created {@link Account} object.
      * @throws UsernameAlreadyExistsException If the username is already taken.
      */
     public Account registerWithRole(String username, String password, Role role) throws UsernameAlreadyExistsException;

@@ -7,18 +7,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Represents a standardised response format for an {@link Account} profile.
  *
- * @param username       The username of the account associated to the profile.
- * @param name           The profile name.
- * @param bio            The profile bio.
- * @param location       The profile location.
- * @param avatarUrl      The URL of the profile avatar image.
- * @param bannerUrl      The URL of the profile banner image.
- * @param followingCount The number of profiles this profile is following.
- * @param followerCount  The number of followers this profile has.
- * @param postCount      The number of posts this profile has made.
- * @param mediaCount     The number of media items this profile has uploaded.
- * @param createdAt      The timestamp when the profile was created (ISO-8601
- *                       format).
+ * @param username  The username of the account associated to the profile.
+ * @param name      The profile name.
+ * @param bio       The profile bio.
+ * @param location  The profile location.
+ * @param avatarUrl The URL of the profile avatar image.
+ * @param bannerUrl The URL of the profile banner image.
+ * @param createdAt The timestamp when the profile was created (ISO-8601
+ *                  format).
+ * @param metrics   The profile metrics.
  */
 // @formatter:off
 public record ProfileDTO(
@@ -28,11 +25,8 @@ public record ProfileDTO(
     String location,
     @JsonProperty("avatar_url") String avatarUrl,
     @JsonProperty("banner_url") String bannerUrl,
-    @JsonProperty("following_count") int followingCount,
-    @JsonProperty("follower_count") int followerCount,
-    @JsonProperty("post_count") int postCount,
-    @JsonProperty("media_count") int mediaCount,
-    @JsonProperty("created_at") String createdAt
+    @JsonProperty("created_at") String createdAt,
+    @JsonProperty("profile_metrics") MetricsDTO metrics
 ) {
 
     public ProfileDTO(
@@ -42,11 +36,8 @@ public record ProfileDTO(
         String location,
         String avatarUrl,
         String bannerUrl,
-        int followingCount,
-        int followerCount,
-        int postCount,
-        int mediaCount,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        MetricsDTO metrics
     ) {
         this(
             username,
@@ -55,11 +46,8 @@ public record ProfileDTO(
             location,
             avatarUrl,
             bannerUrl,
-            followingCount,
-            followerCount,
-            postCount,
-            mediaCount,
-            createdAt != null ? createdAt.toString() : null
+            createdAt != null ? createdAt.toString() : null,
+            metrics
         );
     }
 

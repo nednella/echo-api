@@ -7,10 +7,10 @@ package com.example.echo_api.exception.custom.username;
 public abstract class UsernameException extends RuntimeException {
 
     /**
-     * Constructs a {@code PasswordException} with the specified message and no root
+     * Constructs a {@code UsernameException} with the specified message and no root
      * cause.
      * 
-     * @param msg the detail message
+     * @param msg The detail message.
      */
     protected UsernameException(String msg) {
         super(msg);

@@ -25,8 +25,8 @@ import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 class ProfileControllerIT extends IntegrationTest {
 
     @Test
-    void ProfileController_GetMe_ReturnProfileResponse() {
-        // api: GET /api/v1/profile/me ==> 200 : ProfileResponse
+    void ProfileController_GetMe_ReturnProfileDTO() {
+        // api: GET /api/v1/profile/me ==> 200 : ProfileDTO
         String path = ApiConfig.Profile.GET_ME;
 
         ResponseEntity<ProfileDTO> response = restTemplate.getForEntity(path, ProfileDTO.class);
@@ -60,8 +60,8 @@ class ProfileControllerIT extends IntegrationTest {
     }
 
     @Test
-    void ProfileController_GetByUsername_ReturnProfileResponse() {
-        // api: GET /api/v1/profile/{username} ==> 200 : ProfileResponse
+    void ProfileController_GetByUsername_ReturnProfileDTO() {
+        // api: GET /api/v1/profile/{username} ==> 200 : ProfileDTO
         String path = ApiConfig.Profile.GET_BY_USERNAME;
 
         ResponseEntity<ProfileDTO> response = restTemplate.getForEntity(

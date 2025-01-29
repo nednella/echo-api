@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.example.echo_api.config.ErrorMessageConfig;
+import com.example.echo_api.exception.custom.account.AccountException;
 import com.example.echo_api.exception.custom.password.PasswordException;
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
@@ -86,9 +87,9 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
             msg);
     }
 
-    /* Username/Password Exception */
-    @ExceptionHandler({ UsernameException.class, PasswordException.class })
-    ResponseEntity<ErrorDTO> handleUsernamePasswordException(HttpServletRequest request, Exception ex) {
+    /* Custom Bad Request Exception */
+    @ExceptionHandler({ AccountException.class, UsernameException.class, PasswordException.class })
+    ResponseEntity<ErrorDTO> handleCustomBadRequestException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
         return createExceptionHandler(

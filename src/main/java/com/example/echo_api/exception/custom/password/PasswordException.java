@@ -10,7 +10,7 @@ public abstract class PasswordException extends RuntimeException {
      * Constructs a {@code PasswordException} with the specified message and no root
      * cause.
      * 
-     * @param msg the detail message
+     * @param msg The detail message.
      */
     protected PasswordException(String msg) {
         super(msg);
