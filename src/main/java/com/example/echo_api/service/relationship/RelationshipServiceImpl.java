@@ -2,7 +2,7 @@ package com.example.echo_api.service.relationship;
 
 import org.springframework.stereotype.Service;
 
-import com.example.echo_api.exception.custom.socialcontext.BlockedException;
+import com.example.echo_api.exception.custom.relationship.BlockedException;
 import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.service.block.BlockService;

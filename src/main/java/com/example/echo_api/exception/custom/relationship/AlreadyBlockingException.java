@@ -1,4 +1,4 @@
-package com.example.echo_api.exception.custom.socialcontext;
+package com.example.echo_api.exception.custom.relationship;
 
 import com.example.echo_api.config.ErrorMessageConfig;
 

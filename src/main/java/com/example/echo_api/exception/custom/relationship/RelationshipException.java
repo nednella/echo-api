@@ -1,4 +1,4 @@
-package com.example.echo_api.exception.custom.socialcontext;
+package com.example.echo_api.exception.custom.relationship;
 
 /**
  * Abstract superclass for all exceptions related to {@link Profile}

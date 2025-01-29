@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.echo_api.exception.custom.socialcontext.AlreadyFollowingException;
-import com.example.echo_api.exception.custom.socialcontext.NotFollowingException;
+import com.example.echo_api.exception.custom.relationship.AlreadyFollowingException;
+import com.example.echo_api.exception.custom.relationship.NotFollowingException;
 import com.example.echo_api.persistence.model.follow.Follow;
 import com.example.echo_api.persistence.repository.FollowRepository;
 import com.example.echo_api.service.metrics.MetricsService;

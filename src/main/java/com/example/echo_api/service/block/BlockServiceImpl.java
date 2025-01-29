@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.example.echo_api.exception.custom.socialcontext.AlreadyFollowingException;
-import com.example.echo_api.exception.custom.socialcontext.NotFollowingException;
+import com.example.echo_api.exception.custom.relationship.AlreadyFollowingException;
+import com.example.echo_api.exception.custom.relationship.NotFollowingException;
 import com.example.echo_api.persistence.model.block.Block;
 import com.example.echo_api.persistence.repository.BlockRepository;
 

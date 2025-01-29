@@ -12,8 +12,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.exception.custom.account.AccountException;
 import com.example.echo_api.exception.custom.password.PasswordException;
-import com.example.echo_api.exception.custom.socialcontext.BlockedException;
-import com.example.echo_api.exception.custom.socialcontext.RelationshipException;
+import com.example.echo_api.exception.custom.relationship.BlockedException;
+import com.example.echo_api.exception.custom.relationship.RelationshipException;
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
 
