@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
-import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
+import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Metrics;
@@ -23,8 +23,8 @@ import com.example.echo_api.persistence.repository.ProfileRepository;
 import com.example.echo_api.service.metrics.MetricsService;
 import com.example.echo_api.service.profile.ProfileService;
 import com.example.echo_api.service.profile.ProfileServiceImpl;
+import com.example.echo_api.service.relationship.RelationshipService;
 import com.example.echo_api.service.session.SessionService;
-import com.example.echo_api.service.socialcontext.SocialContextService;
 
 /**
  * Unit test class for {@link ProfileService}.
@@ -39,7 +39,7 @@ class ProfileServiceTest {
     private MetricsService metricsService;
 
     @Mock
-    private SocialContextService socialContextService;
+    private RelationshipService relationshipService;
 
     @Mock
     private ProfileRepository profileRepository;
@@ -57,14 +57,14 @@ class ProfileServiceTest {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
         Metrics metrics = new Metrics(profile);
-        SocialContextDTO context = new SocialContextDTO(false, false, false, false);
-        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics, context);
+        RelationshipDTO relationship = new RelationshipDTO(false, false, false, false);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics, relationship);
 
         when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
         when(profileRepository.findByUsername(profile.getUsername())).thenReturn(Optional.of(profile));
         when(metricsService.getMetrics(profile.getProfileId())).thenReturn(metrics);
-        when(socialContextService.getSocialContext(profile, profile)).thenReturn(context);
+        when(relationshipService.getRelationship(profile, profile)).thenReturn(relationship);
 
         // act
         ProfileDTO actual = profileService.getByUsername(profile.getUsername());

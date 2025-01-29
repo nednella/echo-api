@@ -5,7 +5,7 @@ import static lombok.AccessLevel.PRIVATE;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.MetricsDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
-import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
+import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
 import com.example.echo_api.persistence.model.profile.Metrics;
 import com.example.echo_api.persistence.model.profile.Profile;
 
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PRIVATE)
 public class ProfileMapper {
 
-    public static ProfileDTO toDTO(Profile profile, Metrics metrics, SocialContextDTO context) {
+    public static ProfileDTO toDTO(Profile profile, Metrics metrics, RelationshipDTO relationship) {
         return new ProfileDTO(
             profile.getUsername(),
             profile.getName(),
@@ -24,7 +24,7 @@ public class ProfileMapper {
             profile.getBannerUrl(),
             profile.getCreatedAt(),
             toMetricsDTO(metrics),
-            context);
+            relationship);
     }
 
     private static MetricsDTO toMetricsDTO(Metrics metrics) {

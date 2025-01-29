@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
-import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
+import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Metrics;
@@ -20,8 +20,8 @@ class ProfileMapperTest {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
         Metrics metrics = new Metrics(profile);
-        SocialContextDTO context = new SocialContextDTO(false, false, false, false);
-        ProfileDTO response = ProfileMapper.toDTO(profile, metrics, context);
+        RelationshipDTO relationship = new RelationshipDTO(false, false, false, false);
+        ProfileDTO response = ProfileMapper.toDTO(profile, metrics, relationship);
 
         assertNotNull(response);
         assertEquals(account.getUsername(), response.username());
@@ -34,10 +34,10 @@ class ProfileMapperTest {
         assertEquals(metrics.getFollowerCount(), response.metrics().followerCount());
         assertEquals(metrics.getPostCount(), response.metrics().postCount());
         assertEquals(metrics.getMediaCount(), response.metrics().mediaCount());
-        assertEquals(context.following(), response.context().following());
-        assertEquals(context.followedBy(), response.context().followedBy());
-        assertEquals(context.blocking(), response.context().blocking());
-        assertEquals(context.blockedBy(), response.context().blockedBy());
+        assertEquals(relationship.following(), response.relationship().following());
+        assertEquals(relationship.followedBy(), response.relationship().followedBy());
+        assertEquals(relationship.blocking(), response.relationship().blocking());
+        assertEquals(relationship.blockedBy(), response.relationship().blockedBy());
     }
 
     @Test

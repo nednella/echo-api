@@ -4,7 +4,7 @@ package com.example.echo_api.exception.custom.socialcontext;
  * Abstract superclass for all exceptions related to {@link Profile}
  * relationship interactions.
  */
-public abstract class SocialContextException extends RuntimeException {
+public abstract class RelationshipException extends RuntimeException {
 
     /**
      * Constructs a {@code SocialContextException} with the specified message and no
@@ -12,7 +12,7 @@ public abstract class SocialContextException extends RuntimeException {
      * 
      * @param msg The detail message.
      */
-    protected SocialContextException(String msg) {
+    protected RelationshipException(String msg) {
         super(msg);
     }
 

@@ -6,15 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
-import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
+import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Metrics;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.ProfileRepository;
 import com.example.echo_api.service.metrics.MetricsService;
+import com.example.echo_api.service.relationship.RelationshipService;
 import com.example.echo_api.service.session.SessionService;
-import com.example.echo_api.service.socialcontext.SocialContextService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final SessionService sessionService;
     private final MetricsService metricsService;
-    private final SocialContextService socialContextService;
+    private final RelationshipService relationshipService;
 
     private final ProfileRepository profileRepository;
 
@@ -40,8 +40,8 @@ public class ProfileServiceImpl implements ProfileService {
         Profile me = findMe();
         Profile target = findByUsername(username);
         Metrics metrics = metricsService.getMetrics(target.getProfileId());
-        SocialContextDTO context = socialContextService.getSocialContext(me, target);
-        return ProfileMapper.toDTO(target, metrics, context);
+        RelationshipDTO relationship = relationshipService.getRelationship(me, target);
+        return ProfileMapper.toDTO(target, metrics, relationship);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ProfileServiceImpl implements ProfileService {
     public void follow(String username) throws UsernameNotFoundException {
         Profile me = findMe();
         Profile target = findByUsername(username);
-        socialContextService.follow(me, target);
+        relationshipService.follow(me, target);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ProfileServiceImpl implements ProfileService {
     public void unfollow(String username) throws UsernameNotFoundException {
         Profile me = findMe();
         Profile target = findByUsername(username);
-        socialContextService.unfollow(me, target);
+        relationshipService.unfollow(me, target);
     }
 
     /**

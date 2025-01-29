@@ -1,11 +1,11 @@
-package com.example.echo_api.service.socialcontext;
+package com.example.echo_api.service.relationship;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.echo_api.exception.custom.socialcontext.AlreadyFollowingException;
 import com.example.echo_api.exception.custom.socialcontext.NotFollowingException;
-import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
+import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
 import com.example.echo_api.persistence.model.follow.Follow;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.FollowRepository;
@@ -22,17 +22,17 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class SocialContextServiceImpl implements SocialContextService {
+public class RelationshipServiceImpl implements RelationshipService {
 
     private final MetricsService metricsService;
 
     private final FollowRepository followRepository;
 
     @Override
-    public SocialContextDTO getSocialContext(Profile source, Profile target) {
+    public RelationshipDTO getRelationship(Profile source, Profile target) {
         boolean isFollowing = isFollowing(source, target);
         boolean isFollowedBy = isFollowedBy(source, target);
-        return new SocialContextDTO(isFollowing, isFollowedBy, false, false);
+        return new RelationshipDTO(isFollowing, isFollowedBy, false, false);
     }
 
     @Override
