@@ -50,13 +50,15 @@ CREATE TABLE
         following_id  UUID NOT NULL,
         created_at    TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (follower_id, following_id),
-        CONSTRAINT fk_follower_id FOREIGN KEY (follower_id) REFERENCES "user"(id) ON DELETE CASCADE,
-        CONSTRAINT fk_following_id FOREIGN KEY (following_id) REFERENCES "user"(id) ON DELETE CASCADE,
+        CONSTRAINT fk_follower_id FOREIGN KEY (follower_id) REFERENCES "profile"(profile_id) ON DELETE CASCADE,
+        CONSTRAINT fk_following_id FOREIGN KEY (following_id) REFERENCES "profile"(profile_id) ON DELETE CASCADE,
         CONSTRAINT no_self_follow CHECK (follower_id != following_id) NOT VALID
     );
+
 CREATE INDEX 
     IF NOT EXISTS idx_follow_follower_id
         ON "follow"(follower_id);
+
 CREATE INDEX 
     IF NOT EXISTS idx_follow_following_id
         ON "follow"(following_id);
