@@ -33,7 +33,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     @Transactional
-    public void follow(UUID source, UUID target) {
+    public void follow(UUID source, UUID target) throws SelfActionException, AlreadyFollowingException {
         if (isSelfAction(source, target)) {
             throw new SelfActionException(ErrorMessageConfig.SELF_FOLLOW);
         }
@@ -48,7 +48,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     @Transactional
-    public void unfollow(UUID source, UUID target) {
+    public void unfollow(UUID source, UUID target) throws SelfActionException, NotFollowingException {
         if (isSelfAction(source, target)) {
             throw new SelfActionException(ErrorMessageConfig.SELF_UNFOLLOW);
         }

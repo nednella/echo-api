@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.example.echo_api.config.ErrorMessageConfig;
-import com.example.echo_api.exception.custom.relationship.AlreadyFollowingException;
-import com.example.echo_api.exception.custom.relationship.NotFollowingException;
+import com.example.echo_api.exception.custom.relationship.AlreadyBlockingException;
+import com.example.echo_api.exception.custom.relationship.NotBlockingException;
 import com.example.echo_api.exception.custom.relationship.SelfActionException;
 import com.example.echo_api.persistence.model.block.Block;
 import com.example.echo_api.persistence.repository.BlockRepository;
@@ -28,24 +28,24 @@ public class BlockServiceImpl implements BlockService {
     private final BlockRepository blockRepository;
 
     @Override
-    public void block(UUID source, UUID target) {
+    public void block(UUID source, UUID target) throws SelfActionException, AlreadyBlockingException {
         if (isSelfAction(source, target)) {
             throw new SelfActionException(ErrorMessageConfig.SELF_BLOCK);
         }
         if (isBlocking(source, target)) {
-            throw new AlreadyFollowingException();
+            throw new AlreadyBlockingException();
         }
 
         blockRepository.save(new Block(source, target));
     }
 
     @Override
-    public void unblock(UUID source, UUID target) {
+    public void unblock(UUID source, UUID target) throws SelfActionException, NotBlockingException {
         if (isSelfAction(source, target)) {
             throw new SelfActionException(ErrorMessageConfig.SELF_UNBLOCK);
         }
         if (!isBlocking(source, target)) {
-            throw new NotFollowingException();
+            throw new NotBlockingException();
         }
 
         blockRepository.delete(new Block(source, target));
