@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.echo_api.exception.custom.socialcontext.AlreadyFollowingException;
 import com.example.echo_api.exception.custom.socialcontext.NotFollowingException;
+import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
 import com.example.echo_api.persistence.model.follow.Follow;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.FollowRepository;
@@ -26,6 +27,13 @@ public class SocialContextServiceImpl implements SocialContextService {
     private final MetricsService metricsService;
 
     private final FollowRepository followRepository;
+
+    @Override
+    public SocialContextDTO getSocialContext(Profile source, Profile target) {
+        boolean isFollowing = isFollowing(source, target);
+        boolean isFollowedBy = isFollowedBy(source, target);
+        return new SocialContextDTO(isFollowing, isFollowedBy, false, false);
+    }
 
     @Override
     @Transactional
