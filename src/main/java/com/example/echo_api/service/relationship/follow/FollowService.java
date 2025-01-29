@@ -1,4 +1,4 @@
-package com.example.echo_api.service.follow;
+package com.example.echo_api.service.relationship.follow;
 
 import java.util.UUID;
 

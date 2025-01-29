@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.echo_api.exception.custom.relationship.BlockedException;
 import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
 import com.example.echo_api.persistence.model.profile.Profile;
-import com.example.echo_api.service.block.BlockService;
-import com.example.echo_api.service.follow.FollowService;
+import com.example.echo_api.service.relationship.block.BlockService;
+import com.example.echo_api.service.relationship.follow.FollowService;
 
 import lombok.RequiredArgsConstructor;
 
