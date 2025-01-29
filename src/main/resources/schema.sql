@@ -62,3 +62,22 @@ CREATE INDEX
 CREATE INDEX 
     IF NOT EXISTS idx_follow_following_id
         ON "follow"(following_id);
+
+CREATE TABLE
+    IF NOT EXISTS "block" (
+        blocker_id   UUID NOT NULL,
+        blocking_id  UUID NOT NULL,
+        created_at   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (blocker_id, blocking_id),
+        CONSTRAINT fk_blocker_id FOREIGN KEY (blocker_id) REFERENCES "profile"(profile_id) ON DELETE CASCADE,
+        CONSTRAINT fk_blocking_id FOREIGN KEY (blocking_id) REFERENCES "profile"(profile_id) ON DELETE CASCADE,
+        CONSTRAINT no_self_block CHECK (blocker_id != blocking_id) NOT VALID
+    );
+
+CREATE INDEX 
+    IF NOT EXISTS idx_block_blocker_id
+        ON "block"(blocker_id);
+
+CREATE INDEX 
+    IF NOT EXISTS idx_block_blocking_id
+        ON "block"(blocking_id);
