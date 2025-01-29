@@ -12,6 +12,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.example.echo_api.config.ErrorMessageConfig;
 import com.example.echo_api.exception.custom.account.AccountException;
 import com.example.echo_api.exception.custom.password.PasswordException;
+import com.example.echo_api.exception.custom.socialcontext.BlockedException;
 import com.example.echo_api.exception.custom.socialcontext.SocialContextException;
 import com.example.echo_api.exception.custom.username.UsernameException;
 import com.example.echo_api.persistence.dto.response.error.ErrorDTO;
@@ -106,7 +107,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
     }
 
     /* 401 */
-    @ExceptionHandler({ InsufficientAuthenticationException.class })
+    @ExceptionHandler({ InsufficientAuthenticationException.class, BlockedException.class })
     ResponseEntity<ErrorDTO> handleInsufficientAuthenticationException(HttpServletRequest request, Exception ex) {
         log.debug("Handling exception: {}", ex.getMessage());
 
@@ -114,7 +115,7 @@ public class GlobalControllerAdvice extends AbstractControllerAdvice {
             request,
             HttpStatus.UNAUTHORIZED,
             ErrorMessageConfig.UNAUTHORISED,
-            null);
+            ex instanceof BlockedException ? ex.getMessage() : null);
     }
 
     /* 403 */

@@ -25,10 +25,13 @@ public final class ErrorMessageConfig {
     /* Social Context */
     public static final String ALREADY_FOLLOWING = "You are already following this user.";
     public static final String NOT_FOLLOWING = "You are not following this user.";
+    public static final String ALREADY_BLOCKING = "You are already blocking this user.";
+    public static final String NOT_BLOCKING = "You are not blocking this user.";
 
     /* 401 UNAUTHORISED */
     public static final String UNAUTHORISED = "Unauthorised request.";
     public static final String ACCOUNT_STATUS = "Account status is abnormal.";
+    public static final String BLOCKED = "Action prohibited - this user has blocked you.";
 
     /* 403 FORBIDDEN */
     public static final String FORBIDDEN = "Access denied.";
