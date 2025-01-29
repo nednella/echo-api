@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
+import com.example.echo_api.persistence.dto.response.profile.SocialContextDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Metrics;
@@ -36,16 +37,18 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ProfileDTO getByUsername(String username) throws UsernameNotFoundException {
-        Profile profile = findByUsername(username);
-        Metrics metrics = metricsService.getMetrics(profile.getProfileId());
-        return ProfileMapper.toDTO(profile, metrics);
+        Profile me = findMe();
+        Profile target = findByUsername(username);
+        Metrics metrics = metricsService.getMetrics(target.getProfileId());
+        SocialContextDTO context = socialContextService.getSocialContext(me, target);
+        return ProfileMapper.toDTO(target, metrics, context);
     }
 
     @Override
     public ProfileDTO getMe() {
         Profile me = findMe();
         Metrics metrics = metricsService.getMetrics(me.getProfileId());
-        return ProfileMapper.toDTO(me, metrics);
+        return ProfileMapper.toDTO(me, metrics, null);
     }
 
     @Override
