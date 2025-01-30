@@ -1,7 +1,6 @@
 package com.example.echo_api.service.relationship.follow;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,14 +10,15 @@ import com.example.echo_api.exception.custom.relationship.AlreadyFollowingExcept
 import com.example.echo_api.exception.custom.relationship.NotFollowingException;
 import com.example.echo_api.exception.custom.relationship.SelfActionException;
 import com.example.echo_api.persistence.model.follow.Follow;
+import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.FollowRepository;
 import com.example.echo_api.service.metrics.MetricsService;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * Service implementation for managing CRD operations of {@link Follow}
- * relationships.
+ * Service implementation for managing and validating CRD operations of
+ * {@link Follow} relationships.
  * 
  * @see Follow
  * @see FollowRepository
@@ -33,7 +33,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     @Transactional
-    public void follow(UUID source, UUID target) throws SelfActionException, AlreadyFollowingException {
+    public void follow(Profile source, Profile target) throws SelfActionException, AlreadyFollowingException {
         if (isSelfAction(source, target)) {
             throw new SelfActionException(ErrorMessageConfig.SELF_FOLLOW);
         }
@@ -48,7 +48,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     @Transactional
-    public void unfollow(UUID source, UUID target) throws SelfActionException, NotFollowingException {
+    public void unfollow(Profile source, Profile target) throws SelfActionException, NotFollowingException {
         if (isSelfAction(source, target)) {
             throw new SelfActionException(ErrorMessageConfig.SELF_UNFOLLOW);
         }
@@ -62,24 +62,24 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public boolean isFollowing(UUID source, UUID target) {
-        return followRepository.existsByFollowerIdAndFollowingId(source, target);
+    public boolean isFollowing(Profile source, Profile target) {
+        return followRepository.existsByFollowerIdAndFollowingId(source.getProfileId(), target.getProfileId());
     }
 
     @Override
-    public boolean isFollowedBy(UUID source, UUID target) {
+    public boolean isFollowedBy(Profile source, Profile target) {
         return isFollowing(target, source);
     }
 
     /**
-     * Internal method for checking if the UUIDs match.
+     * Internal method for checking if {@link Profile} pairs match.
      * 
-     * @param source The source {@link UUID}.
-     * @param target The target {@link UUID}.
-     * @return Boolean indicating whether the UUIDs are a match.
+     * @param source The source {@link Profile}.
+     * @param target The target {@link Profile}.
+     * @return Boolean indicating whether the profiles are a match.
      */
-    private boolean isSelfAction(UUID source, UUID target) {
-        return Objects.equals(source, target);
+    private boolean isSelfAction(Profile source, Profile target) {
+        return Objects.equals(source.getProfileId(), target.getProfileId());
     }
 
 }

@@ -33,10 +33,10 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public RelationshipDTO getRelationship(Profile source, Profile target) {
-        boolean isFollowing = followService.isFollowing(source.getProfileId(), target.getProfileId());
-        boolean isFollowedBy = followService.isFollowedBy(source.getProfileId(), target.getProfileId());
-        boolean isBlocking = blockService.isBlocking(source.getProfileId(), target.getProfileId());
-        boolean isBlockedBy = blockService.isBlockedBy(source.getProfileId(), target.getProfileId());
+        boolean isFollowing = followService.isFollowing(source, target);
+        boolean isFollowedBy = followService.isFollowedBy(source, target);
+        boolean isBlocking = blockService.isBlocking(source, target);
+        boolean isBlockedBy = blockService.isBlockedBy(source, target);
         return new RelationshipDTO(isFollowing, isFollowedBy, isBlocking, isBlockedBy);
     }
 
@@ -45,28 +45,28 @@ public class RelationshipServiceImpl implements RelationshipService {
     public void follow(Profile source, Profile target)
         throws BlockedException, SelfActionException, AlreadyFollowingException
     {
-        if (blockService.isBlockedBy(source.getProfileId(), target.getProfileId())) {
+        if (blockService.isBlockedBy(source, target)) {
             throw new BlockedException();
         }
-        followService.follow(source.getProfileId(), target.getProfileId());
+        followService.follow(source, target);
     }
     // @formatter:on
 
     @Override
     public void unfollow(Profile source, Profile target) throws SelfActionException, NotFollowingException {
-        followService.unfollow(source.getProfileId(), target.getProfileId());
+        followService.unfollow(source, target);
     }
 
     @Override
     @Transactional
     public void block(Profile source, Profile target) throws SelfActionException, AlreadyBlockingException {
         handleBlock(source, target);
-        blockService.block(source.getProfileId(), target.getProfileId());
+        blockService.block(source, target);
     }
 
     @Override
     public void unblock(Profile source, Profile target) throws SelfActionException, NotBlockingException {
-        blockService.unblock(source.getProfileId(), target.getProfileId());
+        blockService.unblock(source, target);
     }
 
     /**
@@ -77,11 +77,11 @@ public class RelationshipServiceImpl implements RelationshipService {
      * @param target The target {@link Profile}.
      */
     private void handleBlock(Profile source, Profile target) {
-        if (followService.isFollowing(source.getProfileId(), target.getProfileId())) {
-            followService.unfollow(source.getProfileId(), target.getProfileId());
+        if (followService.isFollowing(source, target)) {
+            followService.unfollow(source, target);
         }
-        if (followService.isFollowedBy(source.getProfileId(), target.getProfileId())) {
-            followService.unfollow(target.getProfileId(), source.getProfileId());
+        if (followService.isFollowedBy(source, target)) {
+            followService.unfollow(target, source);
         }
     }
 

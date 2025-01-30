@@ -63,7 +63,7 @@ class ProfileServiceTest {
         when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
         when(profileRepository.findByUsername(profile.getUsername())).thenReturn(Optional.of(profile));
-        when(metricsService.getMetrics(profile.getProfileId())).thenReturn(metrics);
+        when(metricsService.getMetrics(profile)).thenReturn(metrics);
         when(relationshipService.getRelationship(profile, profile)).thenReturn(relationship);
 
         // act
@@ -109,7 +109,7 @@ class ProfileServiceTest {
 
         when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
-        when(metricsService.getMetrics(profile.getProfileId())).thenReturn(metrics);
+        when(metricsService.getMetrics(profile)).thenReturn(metrics);
 
         // act
         ProfileDTO actual = profileService.getMe();

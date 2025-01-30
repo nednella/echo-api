@@ -39,7 +39,7 @@ public class ProfileServiceImpl implements ProfileService {
     public ProfileDTO getByUsername(String username) throws UsernameNotFoundException {
         Profile me = findMe();
         Profile target = findByUsername(username);
-        Metrics metrics = metricsService.getMetrics(target.getProfileId());
+        Metrics metrics = metricsService.getMetrics(target);
         RelationshipDTO relationship = relationshipService.getRelationship(me, target);
         return ProfileMapper.toDTO(target, metrics, relationship);
     }
@@ -47,7 +47,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileDTO getMe() {
         Profile me = findMe();
-        Metrics metrics = metricsService.getMetrics(me.getProfileId());
+        Metrics metrics = metricsService.getMetrics(me);
         return ProfileMapper.toDTO(me, metrics, null);
     }
 

@@ -1,7 +1,6 @@
 package com.example.echo_api.service.relationship.block;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -10,13 +9,14 @@ import com.example.echo_api.exception.custom.relationship.AlreadyBlockingExcepti
 import com.example.echo_api.exception.custom.relationship.NotBlockingException;
 import com.example.echo_api.exception.custom.relationship.SelfActionException;
 import com.example.echo_api.persistence.model.block.Block;
+import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.BlockRepository;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * Service implementation for managing CRD operations of {@link Block}
- * relationships.
+ * Service implementation for managing and validating CRD operations of
+ * {@link Block} relationships.
  * 
  * @see Block
  * @see BlockRepository
@@ -28,7 +28,7 @@ public class BlockServiceImpl implements BlockService {
     private final BlockRepository blockRepository;
 
     @Override
-    public void block(UUID source, UUID target) throws SelfActionException, AlreadyBlockingException {
+    public void block(Profile source, Profile target) throws SelfActionException, AlreadyBlockingException {
         if (isSelfAction(source, target)) {
             throw new SelfActionException(ErrorMessageConfig.SELF_BLOCK);
         }
@@ -40,7 +40,7 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
-    public void unblock(UUID source, UUID target) throws SelfActionException, NotBlockingException {
+    public void unblock(Profile source, Profile target) throws SelfActionException, NotBlockingException {
         if (isSelfAction(source, target)) {
             throw new SelfActionException(ErrorMessageConfig.SELF_UNBLOCK);
         }
@@ -52,24 +52,24 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
-    public boolean isBlocking(UUID source, UUID target) {
-        return blockRepository.existsByBlockerIdAndBlockingId(source, target);
+    public boolean isBlocking(Profile source, Profile target) {
+        return blockRepository.existsByBlockerIdAndBlockingId(source.getProfileId(), target.getProfileId());
     }
 
     @Override
-    public boolean isBlockedBy(UUID source, UUID target) {
+    public boolean isBlockedBy(Profile source, Profile target) {
         return isBlocking(target, source);
     }
 
     /**
-     * Internal method for checking if the UUIDs match.
+     * Internal method for checking if {@link Profile} pairs match.
      * 
-     * @param source The source {@link UUID}.
-     * @param target The target {@link UUID}.
-     * @return Boolean indicating whether the UUIDs are a match.
+     * @param source The source {@link Profile}.
+     * @param target The target {@link Profile}.
+     * @return Boolean indicating whether the profiles are a match.
      */
-    private boolean isSelfAction(UUID source, UUID target) {
-        return Objects.equals(source, target);
+    private boolean isSelfAction(Profile source, Profile target) {
+        return Objects.equals(source.getProfileId(), target.getProfileId());
     }
 
 }

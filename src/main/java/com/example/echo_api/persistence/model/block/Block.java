@@ -35,9 +35,9 @@ public class Block {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Block(UUID blockerId, UUID blockingId) {
-        this.blockerId = blockerId;
-        this.blockingId = blockingId;
+    public Block(Profile blocker, Profile blocking) {
+        this.blockerId = blocker.getProfileId();
+        this.blockingId = blocking.getProfileId();
     }
 
 }
