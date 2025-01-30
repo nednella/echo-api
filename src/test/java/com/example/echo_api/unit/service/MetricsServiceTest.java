@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.echo_api.exception.custom.account.IdNotFoundException;
+import com.example.echo_api.persistence.dto.response.profile.MetricsDTO;
+import com.example.echo_api.persistence.mapper.MetricsMapper;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Metrics;
 import com.example.echo_api.persistence.model.profile.Profile;
@@ -32,22 +34,24 @@ class MetricsServiceTest {
     private MetricsServiceImpl metricsService;
 
     private static Profile profile;
-    private static Metrics expected;
+    private static Metrics metrics;
+    private static MetricsDTO expected;
 
     @BeforeAll
     static void setup() {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
-        expected = new Metrics(profile);
+        Metrics metrics = new Metrics(profile);
+        expected = MetricsMapper.toDTO(metrics);
     }
 
     @Test
     void MetricsService_GetMetrics_ReturnMetrics() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act
-        Metrics actual = metricsService.getMetrics(profile);
+        MetricsDTO actual = metricsService.getMetrics(profile);
 
         // assert
         assertNotNull(actual);
@@ -71,7 +75,7 @@ class MetricsServiceTest {
     @Test
     void MetricsService_IncrementFollowing_ReturnVoid() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act & assert
         assertDoesNotThrow(() -> metricsService.incrementFollowing(profile));
@@ -91,7 +95,7 @@ class MetricsServiceTest {
     @Test
     void MetricsService_DecrementFollowing_ReturnVoid() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act & assert
         assertDoesNotThrow(() -> metricsService.decrementFollowing(profile));
@@ -113,7 +117,7 @@ class MetricsServiceTest {
     @Test
     void MetricsService_IncrementFollowers_ReturnVoid() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act & assert
         assertDoesNotThrow(() -> metricsService.incrementFollowers(profile));
@@ -133,7 +137,7 @@ class MetricsServiceTest {
     @Test
     void MetricsService_DecrementFollowers_ReturnVoid() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act & assert
         assertDoesNotThrow(() -> metricsService.decrementFollowers(profile));
@@ -155,7 +159,7 @@ class MetricsServiceTest {
     @Test
     void MetricsService_IncrementPosts_ReturnVoid() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act & assert
         assertDoesNotThrow(() -> metricsService.incrementPosts(profile));
@@ -175,7 +179,7 @@ class MetricsServiceTest {
     @Test
     void MetricsService_DecrementPosts_ReturnVoid() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act & assert
         assertDoesNotThrow(() -> metricsService.decrementPosts(profile));
@@ -197,7 +201,7 @@ class MetricsServiceTest {
     @Test
     void MetricsService_IncrementMedia_ReturnVoid() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act & assert
         assertDoesNotThrow(() -> metricsService.incrementMedia(profile));
@@ -217,7 +221,7 @@ class MetricsServiceTest {
     @Test
     void MetricsService_DecrementMedia_ReturnVoid() {
         // arrange
-        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(expected));
+        when(metricsRepository.findById(profile.getProfileId())).thenReturn(Optional.of(metrics));
 
         // act & assert
         assertDoesNotThrow(() -> metricsService.decrementMedia(profile));

@@ -5,11 +5,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
+import com.example.echo_api.persistence.dto.response.profile.MetricsDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
-import com.example.echo_api.persistence.model.profile.Metrics;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.ProfileRepository;
 import com.example.echo_api.service.metrics.MetricsService;
@@ -39,7 +39,7 @@ public class ProfileServiceImpl implements ProfileService {
     public ProfileDTO getByUsername(String username) throws UsernameNotFoundException {
         Profile me = findMe();
         Profile target = findByUsername(username);
-        Metrics metrics = metricsService.getMetrics(target);
+        MetricsDTO metrics = metricsService.getMetrics(target);
         RelationshipDTO relationship = relationshipService.getRelationship(me, target);
         return ProfileMapper.toDTO(target, metrics, relationship);
     }
@@ -47,7 +47,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileDTO getMe() {
         Profile me = findMe();
-        Metrics metrics = metricsService.getMetrics(me);
+        MetricsDTO metrics = metricsService.getMetrics(me);
         return ProfileMapper.toDTO(me, metrics, null);
     }
 

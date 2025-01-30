@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.example.echo_api.exception.custom.account.IdNotFoundException;
+import com.example.echo_api.persistence.dto.response.profile.MetricsDTO;
+import com.example.echo_api.persistence.mapper.MetricsMapper;
 import com.example.echo_api.persistence.model.profile.Metrics;
 import com.example.echo_api.persistence.model.profile.Profile;
 import com.example.echo_api.persistence.repository.MetricsRepository;
@@ -23,8 +25,9 @@ public class MetricsServiceImpl implements MetricsService {
     private final MetricsRepository metricsRepository;
 
     @Override
-    public Metrics getMetrics(Profile profile) throws IdNotFoundException {
-        return findById(profile.getProfileId());
+    public MetricsDTO getMetrics(Profile profile) throws IdNotFoundException {
+        Metrics metrics = findById(profile.getProfileId());
+        return MetricsMapper.toDTO(metrics);
     }
 
     @Override

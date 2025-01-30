@@ -1,6 +1,7 @@
 package com.example.echo_api.service.metrics;
 
 import com.example.echo_api.exception.custom.account.IdNotFoundException;
+import com.example.echo_api.persistence.dto.response.profile.MetricsDTO;
 import com.example.echo_api.persistence.model.profile.Metrics;
 import com.example.echo_api.persistence.model.profile.Profile;
 
@@ -13,7 +14,7 @@ public interface MetricsService {
      * @return profile {@link Metrics}.
      * @throws IdNotFoundException If the {@code profile_id} is not found.
      */
-    public Metrics getMetrics(Profile profile) throws IdNotFoundException;
+    public MetricsDTO getMetrics(Profile profile) throws IdNotFoundException;
 
     /**
      * Updates profile {@link Metrics} by incrementing {@code followingCount}.

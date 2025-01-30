@@ -13,8 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.echo_api.exception.custom.username.UsernameNotFoundException;
 import com.example.echo_api.persistence.dto.request.profile.UpdateProfileDTO;
+import com.example.echo_api.persistence.dto.response.profile.MetricsDTO;
 import com.example.echo_api.persistence.dto.response.profile.ProfileDTO;
 import com.example.echo_api.persistence.dto.response.profile.RelationshipDTO;
+import com.example.echo_api.persistence.mapper.MetricsMapper;
 import com.example.echo_api.persistence.mapper.ProfileMapper;
 import com.example.echo_api.persistence.model.account.Account;
 import com.example.echo_api.persistence.model.profile.Metrics;
@@ -57,14 +59,15 @@ class ProfileServiceTest {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
         Metrics metrics = new Metrics(profile);
-        RelationshipDTO relationship = new RelationshipDTO(false, false, false, false);
-        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics, relationship);
+        MetricsDTO metricsDto = MetricsMapper.toDTO(metrics);
+        RelationshipDTO relationshipDto = new RelationshipDTO(false, false, false, false);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metricsDto, relationshipDto);
 
         when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
         when(profileRepository.findByUsername(profile.getUsername())).thenReturn(Optional.of(profile));
-        when(metricsService.getMetrics(profile)).thenReturn(metrics);
-        when(relationshipService.getRelationship(profile, profile)).thenReturn(relationship);
+        when(metricsService.getMetrics(profile)).thenReturn(metricsDto);
+        when(relationshipService.getRelationship(profile, profile)).thenReturn(relationshipDto);
 
         // act
         ProfileDTO actual = profileService.getByUsername(profile.getUsername());
@@ -105,11 +108,12 @@ class ProfileServiceTest {
         Account account = new Account("test", "test");
         Profile profile = new Profile(account);
         Metrics metrics = new Metrics(profile);
-        ProfileDTO expected = ProfileMapper.toDTO(profile, metrics, null);
+        MetricsDTO metricsDto = MetricsMapper.toDTO(metrics);
+        ProfileDTO expected = ProfileMapper.toDTO(profile, metricsDto, null);
 
         when(sessionService.getAuthenticatedUser()).thenReturn(account);
         when(profileRepository.findByUsername(account.getUsername())).thenReturn(Optional.of(profile));
-        when(metricsService.getMetrics(profile)).thenReturn(metrics);
+        when(metricsService.getMetrics(profile)).thenReturn(metricsDto);
 
         // act
         ProfileDTO actual = profileService.getMe();
