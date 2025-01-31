@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = PRIVATE)
 public final class ApiConfig {
+
     private static final String BASE_URL = "/api/v1";
 
     @NoArgsConstructor(access = PRIVATE)

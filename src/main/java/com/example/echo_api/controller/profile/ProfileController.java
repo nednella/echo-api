@@ -45,16 +45,21 @@ public class ProfileController {
         return ResponseEntity.ok(response);
     }
 
-    // --- follow ----
+    // --- following/follower list ----
+
     @GetMapping(ApiConfig.Profile.GET_FOLLOWERS_BY_USERNAME)
     public ResponseEntity<Void> getFollowers(@PathVariable("username") String username) {
+        // TODO: implement
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(ApiConfig.Profile.GET_FOLLOWING_BY_USERNAME)
     public ResponseEntity<Void> getFollowing(@PathVariable("username") String username) {
+        // TODO: implement
         return ResponseEntity.noContent().build();
     }
+
+    // --- follow ----
 
     @PostMapping(ApiConfig.Profile.FOLLOW_BY_USERNAME)
     public ResponseEntity<Void> followProfile(@PathVariable("username") String username) {
@@ -69,6 +74,7 @@ public class ProfileController {
     }
 
     // ---- block ----
+
     @PostMapping(ApiConfig.Profile.BLOCK_BY_USERNAME)
     public ResponseEntity<Void> blockProfile(@PathVariable("username") String username) {
         profileService.block(username);
