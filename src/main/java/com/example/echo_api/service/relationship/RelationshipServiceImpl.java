@@ -20,6 +20,10 @@ import lombok.RequiredArgsConstructor;
  * Service implementation for managing relationships between {@link Profile}
  * pairs.
  * 
+ * <p>
+ * The service exists to alleviate circular dependencies that would form between
+ * relationship CRUD services.
+ * 
  * @see Profile
  * @see FollowService
  * @see BlockService
@@ -71,7 +75,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     /**
      * Internal method for removing any existing relationships between profiles when
-     * {@code source} request to block {@code target}.
+     * {@code source} requests to block {@code target}.
      * 
      * @param source The source {@link Profile}.
      * @param target The target {@link Profile}.
