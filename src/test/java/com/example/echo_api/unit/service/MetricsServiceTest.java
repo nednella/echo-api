@@ -22,7 +22,7 @@ import com.example.echo_api.persistence.repository.MetricsRepository;
 import com.example.echo_api.service.metrics.MetricsServiceImpl;
 
 /**
- * Unit test class for {@link MetricsServiceTest}.
+ * Unit test class for {@link MetricsService}.
  */
 @ExtendWith(MockitoExtension.class)
 class MetricsServiceTest {
