@@ -198,4 +198,80 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).findByUsername(account.getUsername());
     }
 
+    // ---- follow ----
+
+    @Test
+    void ProfileService_Follow_Retun204NoContent() {
+    }
+
+    @Test
+    void ProfileService_Follow_Throw400UsernameNotFound() {
+    }
+
+    @Test
+    void ProfileService_Follow_ThrowSelfActionException() {
+    }
+
+    @Test
+    void ProfileService_Follow_ThrowAlreadyFollowingException() {
+    }
+
+    @Test
+    void ProfileService_Follow_ThrowBlockedException() {
+    }
+
+    // ---- unfollow ----
+
+    @Test
+    void ProfileService_Unfollow_Retun204NoContent() {
+    }
+
+    @Test
+    void ProfileService_Unfollow_Throw400UsernameNotFound() {
+    }
+
+    @Test
+    void ProfileService_Unfollow_ThrowSelfActionException() {
+    }
+
+    @Test
+    void ProfileService_Unfollow_ThrowNotFollowingException() {
+    }
+
+    // ---- block ----
+
+    @Test
+    void ProfileService_Block_Retun204NoContent() {
+    }
+
+    @Test
+    void ProfileService_Block_Throw400UsernameNotFound() {
+    }
+
+    @Test
+    void ProfileService_Block_ThrowSelfActionException() {
+    }
+
+    @Test
+    void ProfileService_Block_ThrowAlreadyBlockingException() {
+    }
+
+    // ---- unblock ----
+
+    @Test
+    void ProfileService_Unblock_Retun204NoContent() {
+    }
+
+    @Test
+    void ProfileService_Unblock_Throw400UsernameNotFound() {
+    }
+
+    @Test
+    void ProfileService_Unblock_ThrowSelfActionException() {
+    }
+
+    @Test
+    void ProfileService_Unblock_ThrowNotBlockingException() {
+    }
+
 }

@@ -96,4 +96,80 @@ class ProfileControllerIT extends IntegrationTest {
         assertEquals(ErrorMessageConfig.USERNAME_NOT_FOUND, error.message());
     }
 
+    // ---- follow ----
+
+    @Test
+    void ProfileController_Follow_Retun204NoContent() {
+    }
+
+    @Test
+    void ProfileController_Follow_Throw400UsernameNotFound() {
+    }
+
+    @Test
+    void ProfileController_Follow_ThrowSelfActionException() {
+    }
+
+    @Test
+    void ProfileController_Follow_ThrowAlreadyFollowingException() {
+    }
+
+    @Test
+    void ProfileController_Follow_ThrowBlockedException() {
+    }
+
+    // ---- unfollow ----
+
+    @Test
+    void ProfileController_Unfollow_Retun204NoContent() {
+    }
+
+    @Test
+    void ProfileController_Unfollow_Throw400UsernameNotFound() {
+    }
+
+    @Test
+    void ProfileController_Unfollow_ThrowSelfActionException() {
+    }
+
+    @Test
+    void ProfileController_Unfollow_ThrowNotFollowingException() {
+    }
+
+    // ---- block ----
+
+    @Test
+    void ProfileController_Block_Retun204NoContent() {
+    }
+
+    @Test
+    void ProfileController_Block_Throw400UsernameNotFound() {
+    }
+
+    @Test
+    void ProfileController_Block_ThrowSelfActionException() {
+    }
+
+    @Test
+    void ProfileController_Block_ThrowAlreadyBlockingException() {
+    }
+
+    // ---- unblock ----
+
+    @Test
+    void ProfileController_Unblock_Retun204NoContent() {
+    }
+
+    @Test
+    void ProfileController_Unblock_Throw400UsernameNotFound() {
+    }
+
+    @Test
+    void ProfileController_Unblock_ThrowSelfActionException() {
+    }
+
+    @Test
+    void ProfileController_Unblock_ThrowNotBlockingException() {
+    }
+
 }
